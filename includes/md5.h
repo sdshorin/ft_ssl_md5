@@ -1,5 +1,5 @@
 
-
+# include "libft.h"
 
 typedef unsigned int uint32_t;
 

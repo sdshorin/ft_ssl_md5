@@ -21,43 +21,116 @@ int get_data_num(round_num) {
     return (((round_num)*7) % 16);
 }
 
-
-void proceed_block(md5_hash *md5, void *data)
+char *md5_hash_to_string(md5_hash *md5)
 {
-	md5->data_sum_size += 64;
-    _process_block(md5, data);
-} 
-
-void proceed_last_block(md5_hash *md5, void *data, int block_size)
-{
-    void *filled_data;
-    md5->data_sum_size += block_size;
-    filled_data + (char)0x80; block_size++;
-    int zero_append_size = (56 - block_size % 64)
-    if zero_append_size < 0:
-        zero_append_size += 64
-    
-    filled_data = data + (char)0x00 * zero_append_size + (char*) md5->data_sum_size // 8 байт
-} 
-
-void _process_block(md5_hash *md5, void *data) // 64 byte block
-{
-    uint32_t *block;
+    char *hex_char;
+    char *hash_str;
     int i;
+    char *md5_pointer;
 
+    hex_char = "0123456789abcdef";
     i = 0;
-    block = (uint32_t*)data;
-    while (i < 64) {
-        round_md5(md5, block[get_data_num(i)], i);
-        i++;
+    md5_pointer = (char*)md5;
+    hash_str = ft_memalloc(33);
+    while (i < 16)
+    {
+        hash_str[i] = hex_char[md5_pointer[i] >> 4];
+        hash_str[i + 1] = hex_char[md5_pointer[i] & 0x0F];
     }
-        a += aa, b += bb, c += cc, d += dd;
-
+    return hash_str;
 }
 
 
 
-int get_byte_rotation(round_num) {
+char *md5_get_hash_from_string(char *str)
+{
+    int len;
+    md5_hash md5;
+
+    md5_init_buffer(&md5);
+    len = ft_strlen(str);
+    while (len - 64 > 0)
+    {
+        md5_proceed_block(&md5, (void*)str);
+        len -= 64;
+        str += 64;
+    }
+    md5_proceed_last_block(&md5, (void*)str, len);
+    return (hash_to_string(&md5));
+}
+
+
+
+
+md5_hash *md5_proceed_block(md5_hash *md5, void *data)
+{
+	md5->data_sum_size += 64;
+    _md5_process_block(md5, data);
+    return (md5);
+} 
+
+md5_hash *md5_proceed_last_block(md5_hash *md5, void *data, int block_size)
+{
+    void *filled_data;
+    int zero_append_size;
+
+    md5->data_sum_size += block_size;
+    zero_append_size = (56 - block_size % 64);
+    if (zero_append_size < 0)
+        zero_append_size += 64;
+    filled_data = ft_memalloc(block_size + zero_append_size + 8);
+    if (!filled_data)
+        exit(1);
+    ft_memmove(filled_data, data, block_size);
+    ft_memmove(filled_data + block_size + zero_append_size, (void*)md5->data_sum_size, 8);
+    if (block_size + zero_append_size + 8 > 64)
+    {
+        _md5_process_block(md5, filled_data);
+        _md5_process_block(md5, filled_data + 64);
+    }
+    else
+        _md5_process_block(md5, filled_data);
+    free(filled_data);
+    return (md5);
+} 
+
+
+void md5_add_hash(md5_hash *base, md5_hash * additional)
+{
+    base->a += additional->a;
+    base->b += additional->b;
+    base->c += additional->c;
+    base->d += additional->d;
+}
+
+void md5_copy_hash(md5_hash *hash_copy, const md5_hash * md5)
+{
+    hash_copy->a = md5->a;
+    hash_copy->b = md5->c;
+    hash_copy->c = md5->c;
+    hash_copy->d = md5->d;
+}
+
+md5_hash *_md5_process_block(md5_hash *md5, void *data) // 64 byte block
+{
+    uint32_t *block;
+    int i;
+    md5_hash hash_copy;
+
+    i = 0;
+    md5_copy_hash(&hash_copy, md5);
+    block = (uint32_t*)data;
+    while (i < 64) {
+        md5_round(md5, block[md5_get_data_num(i)], i);
+        i++;
+    }
+    md5_add_hash(md5, &hash_copy);
+    return (md5);
+}
+
+
+
+int md5_get_byte_rotation(round_num) {
     static int s[16] = {
         7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21
     };
@@ -70,7 +143,7 @@ int get_byte_rotation(round_num) {
     return (s[round_num % 4 + 12]);
 }
 
-void rotate_reg(md5_hash *self) {
+void md5_rotate_reg(md5_hash *self) {
     uint32_t temp;
 
     temp = self->a;
@@ -81,7 +154,7 @@ void rotate_reg(md5_hash *self) {
 }
 
 
-uint32_t get_T(int n) {
+uint32_t md5_get_T(int n) {
 	static uint32_t T[65] = { 0,
     0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
     0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
@@ -96,12 +169,12 @@ uint32_t get_T(int n) {
 }
 
 
-void round_md5(md5_hash *round, uint32_t data_c, int round_num) {
+void md5_round(md5_hash *round, uint32_t data_c, int round_num) {
     // uint32_t data_c;
     int s;
 
-    rotate_reg(round);
-    s = get_byte_rotation(round_num);
+    md5_rotate_reg(round);
+    s = md5_get_byte_rotation(round_num);
     // data_c = data[get_data_num(round_num)];
 
     if (round_num < 16)
@@ -112,7 +185,7 @@ void round_md5(md5_hash *round, uint32_t data_c, int round_num) {
         round->a += H(round->b, round->c, round->d);
     else
         round->a += I(round->b, round->c, round->d);
-    round->a += data_c + get_T(round_num);
+    round->a += data_c + md5_get_T(round_num);
 
     round->a = ROTATE(round->a, s);
     round->a += round->b;
@@ -125,4 +198,9 @@ void round_md5(md5_hash *round, uint32_t data_c, int round_num) {
 
 
 
-int main(){}
+int main(){
+    char *result = md5_get_hash_from_string("test");
+    printf("hash: %s", result);
+
+
+}
