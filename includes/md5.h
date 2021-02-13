@@ -21,12 +21,12 @@ typedef struct md5_hash_struct {
 
 } md5_hash;
 
-// typedef struct md5_round {
-// 	uint32_t a;
-// 	uint32_t b;
-// 	uint32_t c;
-// 	uint32_t d;
-// } md5_round; 
-void _process_block(md5_hash *md5, void *data);
-void round_md5(md5_hash *round, uint32_t data_c, int round_num);
+
+
+md5_hash *md5_proceed_block(md5_hash *md5, void *data);
+md5_hash *md5_proceed_last_block(md5_hash *md5, void *data, int block_size);
+md5_hash *_md5_process_block(md5_hash *md5, void *data);
+md5_hash *md5_proceed_last_block(md5_hash *md5, void *data, int block_size);
+void md5_round(md5_hash *round, uint32_t data_c, int round_num);
+uint32_t md5_get_T(int n);
 

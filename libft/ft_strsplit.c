@@ -81,7 +81,7 @@ char			**ft_strsplit(char const *s, char c)
 		return (NULL);
 	result[words_cnt] = NULL;
 	word = 0;
-	while (s != '\0')
+	while (s != 0)
 	{
 		while (*s == c)
 			s++;
