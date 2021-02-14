@@ -1,9 +1,10 @@
 
-# include "libft.h"
 
-typedef unsigned int uint32_t;
 
-# define ROTATE(x, n)	((x << n) | (x >> (32 - n)))
+#include "ft_ssl_md5.h"
+
+
+# define ROTATEL(x, n)	((x << n) | (x >> (32 - n)))
 # define F(x, y, z) ((x & y) | (~x & z))
 # define G(x, y, z) ((x & z) | (~z & y))
 # define H(x, y, z) (x ^ z ^ y)

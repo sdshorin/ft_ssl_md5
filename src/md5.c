@@ -6,10 +6,6 @@
 
 
 
-
-
-
-
 void md5_init_buffer(md5_hash *md5)
 {
 	md5->a = 0x67452301;
@@ -102,30 +98,64 @@ md5_hash *md5_proceed_block(md5_hash *md5, void *data)
     return (md5);
 } 
 
-md5_hash *md5_proceed_last_block(md5_hash *md5, void *data, int block_size)
+void ft_swipe(unsigned char *a, unsigned char *b)
+{
+    if (*a == *b)
+        return ;
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
+}
+
+
+void swipe_endian(long unsigned int *all_data_size)
+{
+    unsigned char *data;
+    data = (unsigned char*)all_data_size;
+
+    ft_swipe(data, data + 7);
+    ft_swipe(data + 1, data + 6);
+    ft_swipe(data + 2, data + 5);
+    ft_swipe(data + 3, data + 4);
+}
+
+
+int create_last_block(void **data, int block_size, long unsigned int all_data_size, unsigned char is_big_endian)
 {
     void *filled_data;
     int zero_append_size;
 
-    md5->data_sum_size += block_size;
-    md5->data_sum_size *=8;
     zero_append_size = (56 - (block_size + 1) % 64);
     if (zero_append_size < 0)
         zero_append_size += 64;
     filled_data = ft_memalloc(block_size + 1 + zero_append_size + 8);
     if (!filled_data)
         exit(1);
-    ft_memmove(filled_data, data, block_size);
+    ft_memmove(filled_data, *data, block_size);
     *(unsigned char*)(filled_data + block_size) = 0x80;
-    ft_memmove(filled_data + block_size + zero_append_size + 1, (void*)&md5->data_sum_size, 8);
-    if (block_size + zero_append_size + 8 > 64)
+    if (is_big_endian)
+        swipe_endian(&all_data_size);
+    ft_memmove(filled_data + block_size + zero_append_size + 1, (void*)&all_data_size, 8);
+    *data = filled_data;
+    return (block_size + 1 + zero_append_size + 8);
+}
+
+
+md5_hash *md5_proceed_last_block(md5_hash *md5, void *data, int block_size)
+{
+    int last_block_size;
+
+    md5->data_sum_size += block_size;
+    md5->data_sum_size *=8;
+    last_block_size = create_last_block(&data, block_size, md5->data_sum_size, 0);
+    if (last_block_size > 64)
     {
-        _md5_process_block(md5, filled_data);
-        _md5_process_block(md5, filled_data + 64);
+        _md5_process_block(md5, data);
+        _md5_process_block(md5, data + 64);
     }
     else
-        _md5_process_block(md5, filled_data);
-    free(filled_data);
+        _md5_process_block(md5, data);
+    free(data);
     return (md5);
 } 
 
@@ -218,7 +248,7 @@ void md5_round(md5_hash *round, uint32_t data_c, int round_num) {
         round->a += I(round->b, round->c, round->d);
     round->a += data_c + md5_get_T(round_num);
 
-    round->a = ROTATE(round->a, s);
+    round->a = ROTATEL(round->a, s);
     round->a += round->b;
     md5_rotate_reg(round);
 }
