@@ -306,12 +306,12 @@ char *sha2_get_hash_from_string(char *str)
 
 
 
-int main(){
-    char *result = sha2_get_hash_from_string("tty");
-    printf("hash: %s\n", result);
+// int main(){
+//     char *result = sha2_get_hash_from_string("tty");
+//     printf("hash: %s\n", result);
 
 
-}
+// }
 
 
 

@@ -1,7 +1,7 @@
 
 .PHONY: all clean fclean re
 
-NAME = lem-in
+NAME = ft_ssl
 NAME_LIBFT = libft.a
 
 LIBFT = $(addprefix $(LIBFT_DIR),$(NAME_LIBFT))
@@ -11,9 +11,9 @@ INC_DIR = ./includes/
 LIBFT_DIR = ./libft/
 LFT = -L $(LIBFT_DIR) -lft
 
-SRCS_LIST = main.c find_way.c answer_ants_run.c destroyers.c get_ants.c get_data.c get_links.c \
-get_rooms.c init_data.c store_input_strings.c queue.c
-HEADERS_LIST = lemin.h
+SRCS_LIST = main.c factory.c hash_32_loop.c sha256_utils.c \
+hash_32_interface.c hash_32_main.c sha256_base.c utils.c #md5.c sha2.c
+HEADERS_LIST = ft_ssl_md5.h hash_32.h
 
 SRCS = $(addprefix $(SRC_DIR),$(SRCS_LIST))
 
@@ -22,7 +22,7 @@ OBJS = $(SRCS:.c=.o)
 INCLUDES = -I $(INC_DIR) -I $(LIBFT_DIR)
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -g #-Wall -Wextra -Werror -g
 
 all: $(NAME)
 
