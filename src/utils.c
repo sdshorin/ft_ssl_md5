@@ -48,28 +48,25 @@ void hexDump(void *addr, int len)
 }
 
 
-
-
-
-void uint32_to_hash(char *dest, uint32_t num)
+void uint32_to_hash(hash32 *hash, char *dest, uint32_t reg)
 {
     int i;
     char *hex_char;
     unsigned char *bytes;
+    int n;
 
     i = 0;
     hex_char = "0123456789abcdef";
-    bytes = (unsigned char*)&num;
+    bytes = (unsigned char*)&reg;
     uint32_t  *yyy= (uint32_t  *)bytes;
 
     while (i < 4)
     {
-        unsigned char ttt = bytes[i];
-        char check = bytes[3 - i] >> 4;
-        char check2 = bytes[3 - i] & 0x0F;
-		//// Печать с другого конца!!
-        dest[i * 2] = hex_char[bytes[3 - i] >> 4];
-        dest[i * 2+ 1] = hex_char[bytes[3 - i] & 0x0F];
+        n = i;
+        if (hash->invert_bytes_in_string)
+            n = 3 - i;
+        dest[i * 2] = hex_char[bytes[n] >> 4];
+        dest[i * 2+ 1] = hex_char[bytes[n] & 0x0F];
         i++;
     }
 }

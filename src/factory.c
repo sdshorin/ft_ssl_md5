@@ -7,7 +7,6 @@ hash32 *sha256_create() {
     static const virtual_table vtable = {
         sha256_round, sha256_prepare_block, sha256_copy_hash,
         sha256_add_hash, sha256_hash_to_string
-		// sha256_add_data_size, TYPE_SHA_256, 1, 1
     };
     static hash32 base = { &vtable, 0, TYPE_SHA_256, 1, 1, 1, 0 };
 
@@ -29,5 +28,24 @@ hash32 *sha256_create() {
     return &sha2->base;
 }
 
+hash32 *md5_create() {
+    static const virtual_table vtable = {
+        md5_round, 0, md5_copy_hash,
+        md5_add_hash, md5_hash_to_string
+    };
+    static hash32 base = { &vtable, 0, TYPE_MD5, 0, 0, 0, 0 };
 
+    md5_hash *md5 = (md5_hash*)malloc(sizeof(md5_hash));
+    md5_hash *backup = (md5_hash*)malloc(sizeof(md5_hash));
+	if (!md5 || !backup)
+		exit(1);
+    ft_memcpy(&md5->base, &base, sizeof(base));
+    ft_memcpy(&backup->base, &base, sizeof(base));
+	md5->a = 0x67452301;
+    md5->b = 0xefcdab89;
+    md5->c = 0x98badcfe;
+    md5->d = 0x10325476;
+	md5->base.backup = (hash32*)backup;
+    return &md5->base;
+}
 

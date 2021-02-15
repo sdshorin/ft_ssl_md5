@@ -6,6 +6,7 @@
 
 
 # define TYPE_SHA_256 0
+# define TYPE_MD5 1
 
 typedef struct hash32 hash32;
 typedef struct virtual_table virtual_table;
@@ -47,6 +48,7 @@ void proceed_last_block_32(hash32 *hash, void *data, int block_size);
 
 
 
+// sha256.c
 typedef struct sha256_hash {
 	hash32 base;
 	uint32_t h0;
@@ -58,8 +60,7 @@ typedef struct sha256_hash {
 	uint32_t h6;
 	uint32_t h7;
 } sha256_hash;
-
-// sha256.c
+// sha256_base.c
 void sha256_round(hash32 *hash, uint32_t *memory, int round_num);
 void sha256_prepare_block(uint32_t *block, void *data);
 void sha256_copy_hash(hash32* copy, hash32* source);
@@ -70,12 +71,47 @@ char *sha256_hash_to_string(hash32* hash);
 uint32_t sha256_get_k(int n);
 
 
+
+# define ROTATEL(x, n)	((x << n) | (x >> (32 - n)))
+# define F(x, y, z) ((x & y) | (~x & z))
+# define G(x, y, z) ((x & z) | (~z & y))
+# define H(x, y, z) (x ^ z ^ y)
+# define I(x, y, z) (y ^ (~z | x))
+
+
+// md5
+typedef struct md5_hash_struct {
+	hash32 base;
+	uint32_t a;
+	uint32_t b;
+	uint32_t c;
+	uint32_t d;
+} md5_hash;
+
+// md5_base.c
+void md5_round(hash32 *hash, uint32_t *memory, int round_num);
+// void md5_prepare_block(uint32_t *block, void *data);
+void md5_copy_hash(hash32* copy, hash32* source);
+void md5_add_hash(hash32* base, hash32* to_add);
+char *md5_hash_to_string(hash32* hash);
+
+// md5_utils.c
+uint32_t md5_get_T(int n);
+int md5_get_byte_rotation(int round_num);
+void md5_rotate_reg(md5_hash *self);
+uint32_t md5_get_T(int n);
+
+
+
+
 // factory.c 
 hash32 *sha256_create();
+hash32 *md5_create();
+
 
 
 // utils.c
-void uint32_to_hash(char *dest, uint32_t num);
+void uint32_to_hash(hash32 *hash, char *dest, uint32_t num);
 void swipe_endian_long(long unsigned int *all_data_size);
 void swipe_endian(uint32_t *all_data_size);
 

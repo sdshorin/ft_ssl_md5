@@ -9,7 +9,8 @@ char *get_hash_from_string_32(char *str)
     hash32 *hash;
 
 
-	hash = sha256_create();
+	// hash = sha256_create();
+	hash = md5_create();
 
     // sha2_init_buffer(&sha2);
     len = ft_strlen(str);
