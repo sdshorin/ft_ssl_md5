@@ -1,6 +1,6 @@
 
 
-#include "hash_32.h"
+#include "ft_ssl_md5.h"
 
 
 hash32 *sha256_create() {
@@ -48,4 +48,16 @@ hash32 *md5_create() {
 	md5->base.backup = (hash32*)backup;
     return &md5->base;
 }
+
+
+
+hash32 *factory_get_hash(char *command)
+{
+    if (!ft_strcmp(command, "md5"))
+		return (md5_create());
+	else if (!ft_strcmp(command, "sha256"))
+		return (sha256_create());
+	return (md5_create());
+}
+
 

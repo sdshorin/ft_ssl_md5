@@ -1,5 +1,6 @@
 
-#include "hash_32.h"
+// #include "hash_32.h"
+# include "ft_ssl_md5.h"
 
 
 int md5_get_data_num(round_num) {

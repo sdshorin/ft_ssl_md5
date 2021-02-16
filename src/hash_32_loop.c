@@ -1,6 +1,6 @@
 
 
-#include "hash_32.h"
+#include "ft_ssl_md5.h"
 
 
 
@@ -69,8 +69,6 @@ void proceed_last_block_32(hash32 *hash, void *data, int block_size)
 {
     int last_block_size;
 
-    // sha2->data_sum_size += block_size;
-	// add_data_size_32(hash, block_size)
 	hash->data_sum_size += block_size;
     hash->data_sum_size *=8;
     last_block_size = create_last_block_32(hash, &data, block_size);
@@ -82,7 +80,6 @@ void proceed_last_block_32(hash32 *hash, void *data, int block_size)
     else
         _process_block_32(hash, data);
     free(data);
-    // return (sha2);
 }
 
 
