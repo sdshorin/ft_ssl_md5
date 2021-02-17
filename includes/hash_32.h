@@ -6,6 +6,7 @@
 
 # define TYPE_SHA_256 0
 # define TYPE_MD5 1
+# define TYPE_SHA_224 2
 typedef unsigned int uint32_t;
 typedef struct hash32 hash32;
 typedef struct virtual_table virtual_table;
@@ -79,6 +80,9 @@ uint32_t sha256_get_k(int n);
 # define S0(a) (ROTATER(a, 2) ^ ROTATER(a, 13) ^ ROTATER(a, 22))
 // maj = (a and b) xor (a and c) xor (b and c)
 # define MAJ(a, b, c) ((a & b) ^ (a & c) ^ (b & c))
+
+// sha224
+char *sha224_hash_to_string(hash32* hash);
 
 
 //md5

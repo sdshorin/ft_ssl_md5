@@ -15,7 +15,7 @@ char *sha256_hash_to_string(hash32 *hash_base)
 
     i = 0;
 	hash = (sha256_hash*) hash_base;
-    hash_str = ft_memalloc(64); // защита!!!!
+    hash_str = ft_memalloc(65); // защита!!!!
 	if (!hash_str)
 		exit(1);
     uint32_to_hash(hash_base, hash_str, hash->h0);

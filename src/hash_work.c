@@ -9,6 +9,8 @@ int is_32_hash(char *hash_name)
 		return (1);
 	else if (!ft_strcmp(hash_name, "sha256"))
 		return (1);
+	else if (!ft_strcmp(hash_name, "sha224"))
+		return (1);
 	return (0);
 }
 
@@ -18,6 +20,8 @@ int is_hash_command(char *command)
 	if (!ft_strcmp(command, "md5"))
 		return (1);
 	else if (!ft_strcmp(command, "sha256"))
+		return (1);
+	else if (!ft_strcmp(command, "sha224"))
 		return (1);
 	return (0);
 }
@@ -98,8 +102,10 @@ void print_hash_from_input(char *command, hash_flags *flags)
 	input_str = read_string_from_input();
 	hash = factory_get_hash(command);
 	if (is_32_hash(command))
-		hash_str = get_hash_from_file_32(hash, 0);
-	if (flags->q_flag)
+		hash_str = get_hash_from_string_32(hash, input_str);
+	if (flags->p_flag && input_str[ft_strlen(input_str) - 1] == '\n')
+		ft_putstr(input_str);
+	else if (flags->p_flag)
 		ft_putendl(input_str);
 	ft_putendl(hash_str);
 	free(hash);

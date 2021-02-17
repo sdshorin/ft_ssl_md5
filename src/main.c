@@ -15,10 +15,16 @@ void init_hash_flags(hash_flags *flags) {
 	flags->q_flag = 0;
 	flags->r_flag = 0;
 	flags->s_flag = 0;
-	flags->print_hash_from_input = 0;
+	flags->printed_hash_from_input = 0;
 	flags->flags_parsed = 0;
 }
 
+void print_hash_from_command_line_p(char *command, hash_flags *flags)
+{
+	flags->p_flag = 1;
+	flags->printed_hash_from_input = 1;
+	print_hash_from_input(command, flags);
+}
 
 int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
 {
@@ -32,14 +38,14 @@ int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
 		else if (!ft_strcmp("-r", *argv))
 			flags->r_flag = 1;
 		else if (!ft_strcmp("-p", *argv))
-			flags->p_flag = 1;
+			print_hash_from_command_line_p(command, flags);
 		else if (!ft_strcmp("-s", *argv))
 			if (++i == argc)
 				exit_error_no_string();
 			else
 			{
 				print_str_hash(command, flags, *(++argv));
-				flags->print_hash_from_input = 1;
+				flags->printed_hash_from_input = 1;
 			}
 		else
 			exit_error_unknown_flag(*argv);
@@ -69,9 +75,9 @@ void exe_hash_command(int argc, char **argv)
 		print_file_hash(command, &flags, *argv);
 		argv++;
 		argc--;
-		flags.print_hash_from_input = 1;
+		flags.printed_hash_from_input = 1;
 	}
-	if (!flags.print_hash_from_input)
+	if (!flags.printed_hash_from_input)
 		print_hash_from_input(command, &flags);
 }
 

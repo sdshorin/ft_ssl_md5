@@ -12,7 +12,7 @@ typedef struct hash_flags {
 	unsigned char r_flag;
 	unsigned char s_flag;
 	unsigned char flags_parsed;
-	unsigned char print_hash_from_input;
+	unsigned char printed_hash_from_input;
 	char *command;
 } hash_flags;
 

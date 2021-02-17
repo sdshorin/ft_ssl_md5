@@ -3,8 +3,15 @@
 
 void print_hash_type(char *type)
 {
+	char c;
 	while (*type)
-		write(1, ft_toupper(*type++), 1);
+	{
+		c = *type;
+		if (c > 96 && c < 123)
+			c -= 32;
+		write(1, &c, 1);
+		type++;
+	}
 }
 
 void print_source(char *source, int is_file)
