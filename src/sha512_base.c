@@ -71,7 +71,7 @@ void sha512_prepare_block(uint64 *block, void *data)
 	ft_memmove((void*)block, data, 128);
 	while (i < 16)
 		swipe_endian_64(&block[i++]);
-	while (i < 64)
+	while (i < 80)
 	{
 		s0 = ROTATER64(block[i - 15], 1) ^ ROTATER64(block[i - 15], 8) ^ (block[i - 15] >> 7);
 		s1 = ROTATER64(block[i - 2], 19) ^ ROTATER64(block[i - 2], 61) ^ (block[i - 2] >> 6);

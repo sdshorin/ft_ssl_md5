@@ -72,7 +72,7 @@ int create_last_block_64(hash *hash, void **data, int block_size)
 
 void _process_block_64(hash *hash, void *data) // 64 byte block
 {
-    uint64 block[64];
+    uint64 block[80];
     int i;
 
     i = 0;
