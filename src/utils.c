@@ -1,7 +1,7 @@
 
 #include "libft.h"
 
-#include "hash_32.h"
+#include "hash.h"
 
 
 void hexDump(void *addr, int len) 
@@ -48,7 +48,7 @@ void hexDump(void *addr, int len)
 }
 
 
-void uint32_to_hash(hash32 *hash, char *dest, uint32_t reg)
+void uint32_to_hash(hash *hash, char *dest, uint32_t reg)
 {
     int i;
     char *hex_char;
@@ -72,6 +72,27 @@ void uint32_to_hash(hash32 *hash, char *dest, uint32_t reg)
 }
 
 
+void uint64_to_hash(hash *hash, char *dest, uint64 reg)
+{
+    int i;
+    char *hex_char;
+    unsigned char *bytes;
+    int n;
+
+    i = 0;
+    hex_char = "0123456789abcdef";
+    bytes = (unsigned char*)&reg;
+    while (i < 8)
+    {
+        n = i;
+        if (hash->invert_bytes_in_string)
+            n = 7 - i;
+        dest[i * 2] = hex_char[bytes[n] >> 4];
+        dest[i * 2+ 1] = hex_char[bytes[n] & 0x0F];
+        i++;
+    }
+}
+
 
 
 void ft_swipe(unsigned char *a, unsigned char *b)
@@ -84,7 +105,7 @@ void ft_swipe(unsigned char *a, unsigned char *b)
 }
 
 
-void swipe_endian_long(long unsigned int *all_data_size)
+void swipe_endian_64(long unsigned int *all_data_size)
 {
     unsigned char *data;
     data = (unsigned char*)all_data_size;
@@ -95,7 +116,7 @@ void swipe_endian_long(long unsigned int *all_data_size)
     ft_swipe(data + 3, data + 4);
 }
 
-void swipe_endian(uint32_t *all_data_size)
+void swipe_endian_32(uint32_t *all_data_size)
 {
     unsigned char *data;
     data = (unsigned char*)all_data_size;

@@ -7,7 +7,7 @@
 
 
 
-char *sha256_hash_to_string(hash32 *hash_base)
+char *sha256_hash_to_string(hash *hash_base)
 {
     char *hash_str;
     int i;
@@ -42,7 +42,7 @@ void sha256_prepare_block(uint32_t *block, void *data)
 	i = 0;
 	ft_memmove((void*)block, data, 64);
 	while (i < 16)
-		swipe_endian(&block[i++]);
+		swipe_endian_32(&block[i++]);
 	while (i < 64)
 	{
 		s0 = ROTATER(block[i - 15], 7) ^ ROTATER(block[i - 15], 18) ^ (block[i - 15] >> 3);
@@ -55,7 +55,7 @@ void sha256_prepare_block(uint32_t *block, void *data)
 
 // a,  b,  c,  d,  e,  f,  g,  h
 // h0, h1, h2, h3, h4, h5, h6, h7
-void sha256_round(hash32 *hash_base, uint32_t *memory, int i) //uint32_t data)
+void sha256_round(hash *hash_base, uint32_t *memory, int i) //uint32_t data)
 {
 	sha256_hash *hash;
 
@@ -89,7 +89,7 @@ void sha256_round(hash32 *hash_base, uint32_t *memory, int i) //uint32_t data)
 
 
 
-void sha256_copy_hash(hash32* hash_base, hash32 *source_base)
+void sha256_copy_hash(hash* hash_base, hash *source_base)
 {
 	sha256_hash *hash_copy;
 	sha256_hash *source;
@@ -107,7 +107,7 @@ void sha256_copy_hash(hash32* hash_base, hash32 *source_base)
 	hash_copy->h7 = source->h7;
 }
 
-void sha256_add_hash(hash32 *hash_base, hash32 *hash_to_add)
+void sha256_add_hash(hash *hash_base, hash *hash_to_add)
 {
 	sha256_hash *hash;
 	sha256_hash *to_add;

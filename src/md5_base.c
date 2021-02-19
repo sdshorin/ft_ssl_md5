@@ -1,5 +1,5 @@
 
-// #include "hash_32.h"
+// #include "hash.h"
 # include "ft_ssl_md5.h"
 
 
@@ -16,7 +16,7 @@ int md5_get_data_num(round_num) {
 
 
 
-char *md5_hash_to_string(hash32 *md5_p)
+char *md5_hash_to_string(hash *md5_p)
 {
     char *hash_str;
     md5_hash *md5;
@@ -34,7 +34,7 @@ char *md5_hash_to_string(hash32 *md5_p)
 
 
 
-void md5_add_hash(hash32 *hash_base, hash32 *hash_to_add)
+void md5_add_hash(hash *hash_base, hash *hash_to_add)
 {
 	md5_hash *hash;
 	md5_hash *to_add;
@@ -47,7 +47,7 @@ void md5_add_hash(hash32 *hash_base, hash32 *hash_to_add)
     hash->d += to_add->d;
 }
 
-void md5_copy_hash(hash32* hash_base, hash32 *source_base)
+void md5_copy_hash(hash* hash_base, hash *source_base)
 {
 	md5_hash *hash_copy;
 	md5_hash *source;
@@ -60,7 +60,7 @@ void md5_copy_hash(hash32* hash_base, hash32 *source_base)
     hash_copy->d = source->d;
 }
 
-void md5_round(hash32 *hash, uint32_t *memory, int round_num)
+void md5_round(hash *hash, uint32_t *memory, int round_num)
 {
     md5_hash *round;
     int s;

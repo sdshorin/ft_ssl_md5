@@ -3,12 +3,40 @@
 #include "ft_ssl_md5.h"
 
 
-hash32 *sha256_create() {
+
+hash *sha512_create() {
     static const virtual_table vtable = {
-        sha256_round, sha256_prepare_block, sha256_copy_hash,
-        sha256_add_hash, sha256_hash_to_string
+        0, sha512_round, 0, sha512_prepare_block, sha512_copy_hash,
+        sha512_add_hash, sha512_hash_to_string, 0, _process_block_64,
+        0, create_last_block_64
     };
-    static hash32 base = { &vtable, 0, TYPE_SHA_256, 1, 1, 1, 0 };
+    static hash base = { &vtable, 0, TYPE_SHA_512, 1, 1, 1, 128, 0 };
+
+    sha512_hash *sha2 = (sha512_hash*)malloc(sizeof(sha512_hash));
+    sha512_hash *backup = (sha512_hash*)malloc(sizeof(sha512_hash));
+	if (!sha2 || !backup)
+		exit(1);
+    ft_memcpy(&sha2->base, &base, sizeof(base));
+    ft_memcpy(&backup->base, &base, sizeof(base));
+	sha2->h0 = 0x6a09e667f3bcc908ULL;
+	sha2->h1 = 0xbb67ae8584caa73bULL;
+	sha2->h2 = 0x3c6ef372fe94f82bULL;
+	sha2->h3 = 0xa54ff53a5f1d36f1ULL;
+	sha2->h4 = 0x510e527fade682d1ULL;
+	sha2->h5 = 0x9b05688c2b3e6c1fULL;
+	sha2->h6 = 0x1f83d9abfb41bd6bULL;
+	sha2->h7 = 0x5be0cd19137e2179ULL;
+	sha2->base.backup = (hash*)backup;
+    return &sha2->base;
+}
+
+hash *sha256_create() {
+    static const virtual_table vtable = {
+        sha256_round, 0, sha256_prepare_block, 0, sha256_copy_hash,
+        sha256_add_hash, sha256_hash_to_string, _process_block_32, 0,
+        create_last_block_32, 0
+    };
+    static hash base = { &vtable, 0, TYPE_SHA_256, 1, 1, 1, 64, 0 };
 
     sha256_hash *sha2 = (sha256_hash*)malloc(sizeof(sha256_hash));
     sha256_hash *backup = (sha256_hash*)malloc(sizeof(sha256_hash));
@@ -24,17 +52,18 @@ hash32 *sha256_create() {
 	sha2->h5 = 0x9b05688c;
 	sha2->h6 = 0x1f83d9ab;
 	sha2->h7 = 0x5be0cd19;
-	sha2->base.backup = (hash32*)backup;
+	sha2->base.backup = (hash*)backup;
     return &sha2->base;
 }
 
 
-hash32 *sha224_create() {
+hash *sha224_create() {
     static const virtual_table vtable = {
-        sha256_round, sha256_prepare_block, sha256_copy_hash,
-        sha256_add_hash, sha224_hash_to_string
+        sha256_round, 0, sha256_prepare_block, 0, sha256_copy_hash,
+        sha256_add_hash, sha224_hash_to_string, _process_block_32, 0,
+        create_last_block_32, 0
     };
-    static hash32 base = { &vtable, 0, TYPE_SHA_224, 1, 1, 1, 0 };
+    static hash base = { &vtable, 0, TYPE_SHA_224, 1, 1, 1, 64, 0 };
 
     sha256_hash *sha2 = (sha256_hash*)malloc(sizeof(sha256_hash));
     sha256_hash *backup = (sha256_hash*)malloc(sizeof(sha256_hash));
@@ -50,16 +79,17 @@ hash32 *sha224_create() {
 	sha2->h5 = 0x68581511;
 	sha2->h6 = 0x64F98FA7;
 	sha2->h7 = 0xBEFA4FA4;
-	sha2->base.backup = (hash32*)backup;
+	sha2->base.backup = (hash*)backup;
     return &sha2->base;
 }
 
-hash32 *md5_create() {
+hash *md5_create() {
     static const virtual_table vtable = {
-        md5_round, 0, md5_copy_hash,
-        md5_add_hash, md5_hash_to_string
+        md5_round, 0, 0, 0, md5_copy_hash,
+        md5_add_hash, md5_hash_to_string, _process_block_32, 0,
+        create_last_block_32, 0
     };
-    static hash32 base = { &vtable, 0, TYPE_MD5, 0, 0, 0, 0 };
+    static hash base = { &vtable, 0, TYPE_MD5, 0, 0, 0, 64, 0 };
 
     md5_hash *md5 = (md5_hash*)malloc(sizeof(md5_hash));
     md5_hash *backup = (md5_hash*)malloc(sizeof(md5_hash));
@@ -71,13 +101,13 @@ hash32 *md5_create() {
     md5->b = 0xefcdab89;
     md5->c = 0x98badcfe;
     md5->d = 0x10325476;
-	md5->base.backup = (hash32*)backup;
+	md5->base.backup = (hash*)backup;
     return &md5->base;
 }
 
 
 
-hash32 *factory_get_hash(char *command)
+hash *factory_get_hash(char *command)
 {
     if (!ft_strcmp(command, "md5"))
 		return (md5_create());
@@ -85,6 +115,8 @@ hash32 *factory_get_hash(char *command)
 		return (sha256_create());
     else if (!ft_strcmp(command, "sha224"))
 		return (sha224_create());
+    else if (!ft_strcmp(command, "sha512"))
+		return (sha512_create());
 	return (md5_create());
 }
 

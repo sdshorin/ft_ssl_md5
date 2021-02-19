@@ -3,7 +3,7 @@
 
 # include "libft.h"
 #include <fcntl.h>
-# include "hash_32.h"
+# include "hash.h"
 
 
 typedef struct hash_flags {
@@ -18,14 +18,14 @@ typedef struct hash_flags {
 
 void hexDump(void *addr, int len);
 
-hash32 *factory_get_hash(char *command);
+hash *factory_get_hash(char *command);
 void print_hash(char* hash, char *source, hash_flags *flags, int is_file);
-int is_32_hash(char *hash_name);
+// int is_32_hash(char *hash_name);
 int is_hash_command(char *command);
 
 
-void print_str_hash(char *command, hash_flags *flags, char *str);
-void print_file_hash(char *command, hash_flags *flags, char *file_path);
+void print_hash_from_string(char *command, hash_flags *flags, char *str);
+void print_hash_from_file(char *command, hash_flags *flags, char *file_path);
 void print_hash_from_input(char *command, hash_flags *flags);
 
 

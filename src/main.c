@@ -44,7 +44,7 @@ int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
 				exit_error_no_string();
 			else
 			{
-				print_str_hash(command, flags, *(++argv));
+				print_hash_from_string(command, flags, *(++argv));
 				flags->printed_hash_from_input = 1;
 			}
 		else
@@ -72,7 +72,7 @@ void exe_hash_command(int argc, char **argv)
 	argc -= commands_offset;
 	while (argc)
 	{
-		print_file_hash(command, &flags, *argv);
+		print_hash_from_file(command, &flags, *argv);
 		argv++;
 		argc--;
 		flags.printed_hash_from_input = 1;

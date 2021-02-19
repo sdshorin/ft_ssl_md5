@@ -6,7 +6,7 @@
 
 
 
-char *sha224_hash_to_string(hash32 *hash_base)
+char *sha224_hash_to_string(hash *hash_base)
 {
     char *hash_str;
     int i;

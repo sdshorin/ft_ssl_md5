@@ -1,4 +1,4 @@
-#include "hash_32.h"
+#include "hash.h"
 
 
 
