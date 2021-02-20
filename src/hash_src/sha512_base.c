@@ -1,9 +1,5 @@
 
-
-// # include "sha2.h"
 #include "ft_ssl_md5.h"
-
-
 
 uint64 sha512_k[80] = {
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f,
@@ -57,10 +53,6 @@ char *sha512_hash_to_string(hash *hash_base)
     return hash_str;
 }
 
-
-
-
-
 void sha512_prepare_block(uint64 *block, void *data)
 {
 	int i;
@@ -80,51 +72,32 @@ void sha512_prepare_block(uint64 *block, void *data)
 	}
 }
 
-
-// a,  b,  c,  d,  e,  f,  g,  h
-// h0, h1, h2, h3, h4, h5, h6, h7
-void sha512_round(hash *hash_base, uint64 *memory, int i) //uint32_t data)
+void sha512_round(hash *hash_base, uint64 *memory, int i)
 {
 	sha512_hash *hash;
+	uint64 temp1;
+	uint64 temp2;
 
 	hash = (sha512_hash*)hash_base;
-// S1 = (e rightrotate 6) xor (e rightrotate 11) xor (e rightrotate 25)
-// ch = (e and f) xor ((not e) and g)
-	uint64 temp1;
 	temp1 = hash->h7 + S1_512(hash->h4) + CH(hash->h4, hash->h5, hash->h6) + memory[i] + sha512_k[i];
-// S0 = (a rightrotate 2) xor (a rightrotate 13) xor (a rightrotate 22)
-// maj = (a and b) xor (a and c) xor (b and c)
-// temp2 := S0 + maj
-	uint64 temp2;
 	temp2 = S0_512(hash->h0) + MAJ(hash->h0, hash->h1, hash->h2);
-// h = g
 	hash->h7 = hash->h6;
-// g = f
 	hash->h6 = hash->h5;
-// f = e
 	hash->h5 = hash->h4;
-// e = d + temp1
 	hash->h4 = hash->h3 + temp1;
-// d = c
 	hash->h3 = hash->h2;
-// c = b
 	hash->h2 = hash->h1;
-// b = a
 	hash->h1 = hash->h0;
-// a = temp1 + temp2
 	hash->h0 = temp1 + temp2;
 }
-
-
 
 void sha512_copy_hash(hash* hash_base, hash *source_base)
 {
 	sha512_hash *hash_copy;
 	sha512_hash *source;
+
 	hash_copy = (sha512_hash*)hash_base;
 	source = (sha512_hash*)source_base;
-
-	// ft_memmove((void*)hash_copy, (void*)sha2, sizeof(sha2_hash));
 	hash_copy->h0 = source->h0;
 	hash_copy->h1 = source->h1;
 	hash_copy->h2 = source->h2;
@@ -139,9 +112,9 @@ void sha512_add_hash(hash *hash_base, hash *hash_to_add)
 {
 	sha512_hash *hash;
 	sha512_hash *to_add;
+
 	hash = (sha512_hash*)hash_base;
 	to_add = (sha512_hash*)hash_to_add;
-
 	hash->h0 += to_add->h0;
 	hash->h1 += to_add->h1;
 	hash->h2 += to_add->h2;
@@ -151,9 +124,3 @@ void sha512_add_hash(hash *hash_base, hash *hash_to_add)
 	hash->h6 += to_add->h6;
 	hash->h7 += to_add->h7;
 }
-
-
-
-
-
-

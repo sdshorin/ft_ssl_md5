@@ -1,9 +1,5 @@
 #include "hash.h"
 
-
-
-
-
 int md5_get_byte_rotation(round_num)
 {
     static int s[16] = {
@@ -29,7 +25,6 @@ void md5_rotate_reg(md5_hash *self)
     self->a = temp;
 }
 
-
 uint32_t md5_get_T(int n)
 {
 	static uint32_t T[65] = {
@@ -42,5 +37,6 @@ uint32_t md5_get_T(int n)
     0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
     0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
 	};
+
 	return T[n];
 }

@@ -1,7 +1,6 @@
 
 # include "ft_ssl_md5.h"
 
-
 void uint32_to_hash(hash *hash, char *dest, uint32_t reg)
 {
     int i;
@@ -13,7 +12,6 @@ void uint32_to_hash(hash *hash, char *dest, uint32_t reg)
     hex_char = "0123456789abcdef";
     bytes = (unsigned char*)&reg;
     uint32_t  *yyy= (uint32_t  *)bytes;
-
     while (i < 4)
     {
         n = i;
@@ -24,7 +22,6 @@ void uint32_to_hash(hash *hash, char *dest, uint32_t reg)
         i++;
     }
 }
-
 
 void uint64_to_hash(hash *hash, char *dest, uint64 reg)
 {
@@ -47,8 +44,6 @@ void uint64_to_hash(hash *hash, char *dest, uint64 reg)
     }
 }
 
-
-
 void ft_swipe(unsigned char *a, unsigned char *b)
 {
     if (*a == *b)
@@ -58,12 +53,11 @@ void ft_swipe(unsigned char *a, unsigned char *b)
     *a ^= *b;
 }
 
-
 void swipe_endian_64(long unsigned int *all_data_size)
 {
     unsigned char *data;
-    data = (unsigned char*)all_data_size;
 
+    data = (unsigned char*)all_data_size;
     ft_swipe(data, data + 7);
     ft_swipe(data + 1, data + 6);
     ft_swipe(data + 2, data + 5);
@@ -73,8 +67,8 @@ void swipe_endian_64(long unsigned int *all_data_size)
 void swipe_endian_32(uint32_t *all_data_size)
 {
     unsigned char *data;
-    data = (unsigned char*)all_data_size;
 
+    data = (unsigned char*)all_data_size;
     ft_swipe(data, data + 3);
     ft_swipe(data + 1, data + 2);
 }

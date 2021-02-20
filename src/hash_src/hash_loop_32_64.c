@@ -41,7 +41,7 @@ void _process_block_32(hash *hash, void *data) // 64 byte block
 	}
 	else
 		while (i < 64)
-        	round_32(hash, (uint32_t*)data, i++); // change this 
+        	round_32(hash, (uint32_t*)data, i++); // change this
     add_hash(hash, hash->backup);
 }
 
@@ -85,13 +85,6 @@ void _process_block_64(hash *hash, void *data) // 64 byte block
 	}
 	else
 		while (i < 80)
-        	round_64(hash, (uint64*)data, i++); // change this 
-      
+        	round_64(hash, (uint64*)data, i++);
     add_hash(hash, hash->backup);
 }
-
-
-
-
-
-

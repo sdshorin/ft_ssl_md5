@@ -1,8 +1,7 @@
 
-// # include "ft_ssl_md5.h"
 
-// # include "md5.h"
-// # include "sha2.h"
+#ifndef HASH_H
+# define HASH_H
 
 # define TYPE_SHA_256 0
 # define TYPE_MD5 1
@@ -33,7 +32,7 @@ struct virtual_table {
     void (*prepare_block_64)(uint64 *block, void *data);
     void (*copy_hash)( hash* copy, hash* source);
     void (*add_hash)(hash* base, hash* to_add);
-	char *(*hash_to_string)(hash* hash);	
+	char *(*hash_to_string)(hash* hash);
 	void (*_process_block_32)(hash *hash, void *data);
 	void (*_process_block_64)(hash *hash, void *data);
 	int (*create_last_block_32)(hash *hash, void **data, int block_size);
@@ -153,8 +152,12 @@ char *sha512_256_hash_to_string(hash *hash_base);
 
 
 
-// factory.c 
+// factory.c
+hash *sha512_256_create();
+hash *sha384_create();
+hash *sha512_create();
 hash *sha256_create();
+hash *sha224_create();
 hash *md5_create();
 
 
@@ -170,3 +173,5 @@ void swipe_endian_32(uint32_t *all_data_size);
 // main
 char *get_hash_from_string(hash *hash, char *str);
 char *get_hash_from_file(hash *hash, int fd);
+
+#endif

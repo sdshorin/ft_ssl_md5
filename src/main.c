@@ -3,12 +3,10 @@
 
 #include "ft_ssl_md5.h"
 
-
 void print_usage()
 {
 	ft_putendl("usage: ft_ssl command [command opts] [command args]");
 }
-
 
 void init_hash_flags(hash_flags *flags) {
 	flags->p_flag = 0;
@@ -54,7 +52,6 @@ int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
 	}
 	return (i);
 }
-
 
 void exe_hash_command(int argc, char **argv)
 {

@@ -1,6 +1,5 @@
 # include "ft_ssl_md5.h"
 
-
 void print_hash_type(char *type)
 {
 	char c;
@@ -23,7 +22,6 @@ void print_source(char *source, int is_file)
 		write(1, "\"", 1);
 }
 
-
 void print_hash(char* hash, char *source, hash_flags *flags, int is_file)
 {
 	if (!flags->q_flag && !flags->r_flag)
@@ -44,4 +42,3 @@ void print_hash(char* hash, char *source, hash_flags *flags, int is_file)
 	else
 		ft_putendl(hash);
 }
-

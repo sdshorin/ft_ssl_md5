@@ -1,7 +1,6 @@
 
 # include "ft_ssl_md5.h"
 
-
 char *sha512_256_hash_to_string(hash *hash_base)
 {
     char *hash_str;
@@ -60,5 +59,3 @@ char *sha224_hash_to_string(hash *hash_base)
     uint32_to_hash(hash_base, hash_str + 48, hash->h6);
     return hash_str;
 }
-
-

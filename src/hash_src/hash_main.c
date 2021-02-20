@@ -6,8 +6,7 @@ void proceed_block(hash *hash, void *data)
 {
 	hash->data_sum_size += hash->block_b;
     _process_block(hash, data);
-} 
-
+}
 
 void proceed_last_block(hash *hash, void *data, int block_size)
 {
@@ -26,8 +25,6 @@ void proceed_last_block(hash *hash, void *data, int block_size)
     free(data);
 }
 
-
-
 char *get_hash_from_string(hash *hash, char *str)
 {
     int len;
@@ -43,17 +40,13 @@ char *get_hash_from_string(hash *hash, char *str)
     return (hash_to_string(hash));
 }
 
-
 char *get_hash_from_file(hash *hash, int fd)
 {
-    char			buff[128];
-    int ch_read;
-		
+    char    buff[128];
+    int     ch_read;
+
     while ((ch_read = read(fd, buff, hash->block_b)) == hash->block_b)
         proceed_block(hash, (void*)buff);
     proceed_last_block(hash, (void*)buff, ch_read);
     return (hash_to_string(hash));
 }
-
-
-

@@ -1,7 +1,4 @@
-
-// #include "hash.h"
 # include "ft_ssl_md5.h"
-
 
 int md5_get_data_num(round_num) {
     if (round_num < 16)
@@ -12,9 +9,6 @@ int md5_get_data_num(round_num) {
         return (((round_num)*3 + 5) % 16);
     return (((round_num)*7) % 16);
 }
-
-
-
 
 char *md5_hash_to_string(hash *md5_p)
 {
@@ -32,15 +26,13 @@ char *md5_hash_to_string(hash *md5_p)
     return hash_str;
 }
 
-
-
 void md5_add_hash(hash *hash_base, hash *hash_to_add)
 {
 	md5_hash *hash;
 	md5_hash *to_add;
+
 	hash = (md5_hash*)hash_base;
 	to_add = (md5_hash*)hash_to_add;
-
     hash->a += to_add->a;
     hash->b += to_add->b;
     hash->c += to_add->c;
@@ -76,9 +68,7 @@ void md5_round(hash *hash, uint32_t *memory, int round_num)
     else
         round->a += I(round->b, round->c, round->d);
     round->a += memory[md5_get_data_num(round_num)] + md5_get_T(round_num);
-
     round->a = ROTATEL(round->a, s);
     round->a += round->b;
     md5_rotate_reg(round);
 }
-

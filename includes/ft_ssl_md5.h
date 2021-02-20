@@ -1,5 +1,6 @@
 
-
+#ifndef FT_SSL_MD5_H
+# define FT_SSL_MD5_H
 
 # include "libft.h"
 #include <fcntl.h>
@@ -32,6 +33,4 @@ void print_unexpected_arg();
 void exit_error_no_string();
 void exit_error_unknown_flag(char *flag);
 
-
-
-
+#endif

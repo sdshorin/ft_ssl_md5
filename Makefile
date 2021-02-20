@@ -12,13 +12,13 @@ INC_DIR = ./includes/
 LIBFT_DIR = ./libft/
 LFT = -L $(LIBFT_DIR) -lft
 
-HASH_SRCS_LIST = hash_work.c sha256_base.c factory.c \
-sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
+HASH_SRCS_LIST = hash_from_source.c sha256_base.c factory.c \
+factory_2.c sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
 hash_interface_32_64.c md5_utils.c  hash_loop_32_64.c \
-print_hash.c hash_main.c sha2.c
+hash_interface_32_64_2.c print_hash.c hash_main.c sha2.c
 
 
-SRCS_LIST = main.c utils.c exeptions.c 
+SRCS_LIST = main.c utils.c exeptions.c
 HEADERS_LIST = ft_ssl_md5.h hash.h
 
 SRCS = $(addprefix $(HASH_SRC_DIR),$(HASH_SRCS_LIST)) $(addprefix $(SRC_DIR),$(SRCS_LIST))

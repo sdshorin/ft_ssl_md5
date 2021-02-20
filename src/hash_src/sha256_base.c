@@ -1,11 +1,6 @@
 
 
-// # include "sha2.h"
 #include "ft_ssl_md5.h"
-
-
-
-
 
 char *sha256_hash_to_string(hash *hash_base)
 {
@@ -29,10 +24,6 @@ char *sha256_hash_to_string(hash *hash_base)
     return hash_str;
 }
 
-
-
-
-
 void sha256_prepare_block(uint32_t *block, void *data)
 {
 	int i;
@@ -52,42 +43,24 @@ void sha256_prepare_block(uint32_t *block, void *data)
 	}
 }
 
-
-// a,  b,  c,  d,  e,  f,  g,  h
-// h0, h1, h2, h3, h4, h5, h6, h7
-void sha256_round(hash *hash_base, uint32_t *memory, int i) //uint32_t data)
+void sha256_round(hash *hash_base, uint32_t *memory, int i)
 {
 	sha256_hash *hash;
+	uint32_t temp1;
+	uint32_t temp2;
 
 	hash = (sha256_hash*)hash_base;
-// S1 = (e rightrotate 6) xor (e rightrotate 11) xor (e rightrotate 25)
-// ch = (e and f) xor ((not e) and g)
-	uint32_t temp1;
 	temp1 = hash->h7 + S1(hash->h4) + CH(hash->h4, hash->h5, hash->h6) + memory[i] + sha256_get_k(i);
-// S0 = (a rightrotate 2) xor (a rightrotate 13) xor (a rightrotate 22)
-// maj = (a and b) xor (a and c) xor (b and c)
-// temp2 := S0 + maj
-	uint32_t temp2;
 	temp2 = S0(hash->h0) + MAJ(hash->h0, hash->h1, hash->h2);
-// h = g
 	hash->h7 = hash->h6;
-// g = f
 	hash->h6 = hash->h5;
-// f = e
 	hash->h5 = hash->h4;
-// e = d + temp1
 	hash->h4 = hash->h3 + temp1;
-// d = c
 	hash->h3 = hash->h2;
-// c = b
 	hash->h2 = hash->h1;
-// b = a
 	hash->h1 = hash->h0;
-// a = temp1 + temp2
 	hash->h0 = temp1 + temp2;
 }
-
-
 
 void sha256_copy_hash(hash* hash_base, hash *source_base)
 {
@@ -96,7 +69,6 @@ void sha256_copy_hash(hash* hash_base, hash *source_base)
 	hash_copy = (sha256_hash*)hash_base;
 	source = (sha256_hash*)source_base;
 
-	// ft_memmove((void*)hash_copy, (void*)sha2, sizeof(sha2_hash));
 	hash_copy->h0 = source->h0;
 	hash_copy->h1 = source->h1;
 	hash_copy->h2 = source->h2;
@@ -123,9 +95,3 @@ void sha256_add_hash(hash *hash_base, hash *hash_to_add)
 	hash->h6 += to_add->h6;
 	hash->h7 += to_add->h7;
 }
-
-
-
-
-
-

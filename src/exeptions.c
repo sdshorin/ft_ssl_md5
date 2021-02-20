@@ -1,7 +1,6 @@
 
 #include "ft_ssl_md5.h"
 
-
 void print_unexpected_arg(char* arg)
 {
 	ft_putstr("ft_ssl: Error: ");
@@ -26,6 +25,3 @@ void exit_error_unknown_flag(char *flag)
 	ft_putendl(flag);
 	exit(1);
 }
-
-
-
