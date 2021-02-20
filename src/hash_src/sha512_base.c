@@ -43,7 +43,7 @@ char *sha512_hash_to_string(hash *hash_base)
 
     i = 0;
 	hash = (sha512_hash*) hash_base;
-    hash_str = ft_memalloc(129); // защита!!!!
+    hash_str = ft_memalloc(129);
 	if (!hash_str)
 		exit(1);
      uint64_to_hash(hash_base, hash_str, hash->h0);

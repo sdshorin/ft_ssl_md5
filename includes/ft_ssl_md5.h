@@ -16,7 +16,6 @@ typedef struct hash_flags {
 	char *command;
 } hash_flags;
 
-void hexDump(void *addr, int len);
 
 hash *factory_get_hash(char *command);
 void print_hash(char* hash, char *source, hash_flags *flags, int is_file);

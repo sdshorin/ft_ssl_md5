@@ -7,18 +7,21 @@ NAME_LIBFT = libft.a
 LIBFT = $(addprefix $(LIBFT_DIR),$(NAME_LIBFT))
 
 SRC_DIR = ./src/
+HASH_SRC_DIR = ./src/hash_src/
 INC_DIR = ./includes/
 LIBFT_DIR = ./libft/
 LFT = -L $(LIBFT_DIR) -lft
 
-SRCS_LIST = exeptions.c hash_work.c sha256_base.c factory.c \
-main.c sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
-hash_interface_32_64.c md5_utils.c utils.c hash_loop_32_64.c \
+HASH_SRCS_LIST = hash_work.c sha256_base.c factory.c \
+sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
+hash_interface_32_64.c md5_utils.c  hash_loop_32_64.c \
 print_hash.c hash_main.c sha2.c
 
+
+SRCS_LIST = main.c utils.c exeptions.c 
 HEADERS_LIST = ft_ssl_md5.h hash.h
 
-SRCS = $(addprefix $(SRC_DIR),$(SRCS_LIST))
+SRCS = $(addprefix $(HASH_SRC_DIR),$(HASH_SRCS_LIST)) $(addprefix $(SRC_DIR),$(SRCS_LIST))
 
 OBJS = $(SRCS:.c=.o)
 
@@ -47,7 +50,7 @@ $(LIBFT): FORCE
 	@make -C $(LIBFT_DIR)
 
 clean:
-	@/bin/rm -f $(OBJS) $(OBJS) $(OBJS)
+	@/bin/rm -f $(OBJS)
 	@echo "Object files deleted"
 	@make clean -C $(LIBFT_DIR)
 

@@ -10,7 +10,7 @@ char *sha512_256_hash_to_string(hash *hash_base)
 
     i = 0;
 	hash = (sha512_hash*) hash_base;
-    hash_str = ft_memalloc(65); // защита!!!!
+    hash_str = ft_memalloc(65);
 	if (!hash_str)
 		exit(1);
     uint64_to_hash(hash_base, hash_str, hash->h0);
@@ -28,7 +28,7 @@ char *sha384_hash_to_string(hash *hash_base)
 
     i = 0;
 	hash = (sha512_hash*) hash_base;
-    hash_str = ft_memalloc(97); // защита!!!!
+    hash_str = ft_memalloc(97);
 	if (!hash_str)
 		exit(1);
      uint64_to_hash(hash_base, hash_str, hash->h0);
