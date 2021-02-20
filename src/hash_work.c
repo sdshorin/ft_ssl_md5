@@ -25,6 +25,8 @@ int is_hash_command(char *command)
 		return (1);
 	else if (!ft_strcmp(command, "sha512"))
 		return (1);
+	else if (!ft_strcmp(command, "sha384"))
+		return (1);
 	return (0);
 }
 

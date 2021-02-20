@@ -14,7 +14,7 @@ LFT = -L $(LIBFT_DIR) -lft
 SRCS_LIST = exeptions.c hash_work.c sha256_base.c factory.c \
 main.c sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
 hash_interface_32_64.c md5_utils.c utils.c hash_loop_32_64.c \
-print_hash.c hash_main.c sha2.c
+print_hash.c hash_main.c sha2.c sha384.c
 
 HEADERS_LIST = ft_ssl_md5.h hash.h
 

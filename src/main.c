@@ -6,7 +6,7 @@
 
 void print_usage()
 {
-
+	ft_putendl("usage: ft_ssl command [command opts] [command args]");
 }
 
 
@@ -87,10 +87,7 @@ int main(int argc, char **argv){
 	else if (is_hash_command(argv[1]))
 		exe_hash_command(argc - 1, argv + 1);
 	else
-		print_unexpected_arg();
- 
-
-
+		print_unexpected_arg(argv[1]);
 }
 
 

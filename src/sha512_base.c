@@ -47,12 +47,12 @@ char *sha512_hash_to_string(hash *hash_base)
 	if (!hash_str)
 		exit(1);
      uint64_to_hash(hash_base, hash_str, hash->h0);
-     uint64_to_hash(hash_base, hash_str + 16, hash->h2);
-     uint64_to_hash(hash_base, hash_str + 32, hash->h4);
-     uint64_to_hash(hash_base, hash_str + 48, hash->h6);
-     uint64_to_hash(hash_base, hash_str + 64, hash->h5);
-     uint64_to_hash(hash_base, hash_str + 80, hash->h3);
-     uint64_to_hash(hash_base, hash_str + 96, hash->h1);
+     uint64_to_hash(hash_base, hash_str + 16, hash->h1);
+     uint64_to_hash(hash_base, hash_str + 32, hash->h2);
+     uint64_to_hash(hash_base, hash_str + 48, hash->h3);
+     uint64_to_hash(hash_base, hash_str + 64, hash->h4);
+     uint64_to_hash(hash_base, hash_str + 80, hash->h5);
+     uint64_to_hash(hash_base, hash_str + 96, hash->h6);
      uint64_to_hash(hash_base, hash_str + 112, hash->h7);
     return hash_str;
 }

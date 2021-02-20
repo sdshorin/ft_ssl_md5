@@ -3,6 +3,31 @@
 #include "ft_ssl_md5.h"
 
 
+hash *sha384_create() {
+    static const virtual_table vtable = {
+        0, sha512_round, 0, sha512_prepare_block, sha512_copy_hash,
+        sha512_add_hash, sha384_hash_to_string, 0, _process_block_64,
+        0, create_last_block_64
+    };
+    static hash base = { &vtable, 0, TYPE_SHA_384, 1, 1, 1, 128, 0 };
+
+    sha512_hash *sha2 = (sha512_hash*)malloc(sizeof(sha512_hash));
+    sha512_hash *backup = (sha512_hash*)malloc(sizeof(sha512_hash));
+	if (!sha2 || !backup)
+		exit(1);
+    ft_memcpy(&sha2->base, &base, sizeof(base));
+    ft_memcpy(&backup->base, &base, sizeof(base));
+	sha2->h0 = 0xCBBB9D5DC1059ED8;
+	sha2->h1 = 0x629A292A367CD507;
+	sha2->h2 = 0x9159015A3070DD17;
+	sha2->h3 = 0x152FECD8F70E5939;
+	sha2->h4 = 0x67332667FFC00B31;
+	sha2->h5 = 0x8EB44A8768581511;
+	sha2->h6 = 0xDB0C2E0D64F98FA7;
+	sha2->h7 = 0x47B5481DBEFA4FA4;
+	sha2->base.backup = (hash*)backup;
+    return &sha2->base;
+}
 
 hash *sha512_create() {
     static const virtual_table vtable = {
@@ -117,6 +142,8 @@ hash *factory_get_hash(char *command)
 		return (sha224_create());
     else if (!ft_strcmp(command, "sha512"))
 		return (sha512_create());
+    else if (!ft_strcmp(command, "sha384"))
+		return (sha384_create());
 	return (md5_create());
 }
 

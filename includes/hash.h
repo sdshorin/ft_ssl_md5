@@ -8,6 +8,7 @@
 # define TYPE_MD5 1
 # define TYPE_SHA_224 2
 # define TYPE_SHA_512 3
+# define TYPE_SHA_384 4
 typedef unsigned int uint32_t;
 typedef unsigned long int uint64;
 typedef struct hash hash;
@@ -146,6 +147,7 @@ void sha512_copy_hash(hash* hash_base, hash *source_base);
 void sha512_add_hash(hash *hash_base, hash *hash_to_add);
 
 
+char *sha384_hash_to_string(hash *hash_base);
 
 
 
