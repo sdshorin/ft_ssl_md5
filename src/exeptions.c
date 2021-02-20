@@ -9,7 +9,7 @@ void print_unexpected_arg(char* arg)
 	ft_putstr(" is an invalid command.");
 	ft_putendl("Standard commands:");
 	ft_putendl("Message Digest commands:");
-	ft_putendl("md5 sha256 sha512 sha384");
+	ft_putendl("md5 sha256 sha224 sha512 sha384 sha512/256 ");
 	ft_putendl("Cipher commands:");
 	ft_putendl("-p, -q, -r, -s");
 }
