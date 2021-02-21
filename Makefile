@@ -8,6 +8,7 @@ LIBFT = $(addprefix $(LIBFT_DIR),$(NAME_LIBFT))
 
 SRC_DIR = ./src/
 HASH_SRC_DIR = ./src/hash_src/
+BASE64_SRC_DIR = ./src/base64_src/
 INC_DIR = ./includes/
 LIBFT_DIR = ./libft/
 LFT = -L $(LIBFT_DIR) -lft
@@ -15,20 +16,24 @@ LFT = -L $(LIBFT_DIR) -lft
 HASH_SRCS_LIST = hash_from_source.c sha256_base.c factory.c \
 factory_2.c sha256_utils.c hash_interface.c md5_base.c sha512_base.c \
 hash_interface_32_64.c md5_utils.c  hash_loop_32_64.c \
-hash_interface_32_64_2.c print_hash.c hash_main.c sha2.c
+hash_interface_32_64_2.c print_hash.c hash_main.c sha2.c exe_hash_command.c
 
+BASE64_LIST = base64_decode_from_source.c base64_encode_from_source.c \
+base64_encode_process.c exe_base64_command.c
 
-SRCS_LIST = main.c utils.c utils_2.c exeptions.c
+SRCS_LIST = main.c utils.c exeptions.c
 HEADERS_LIST = ft_ssl_md5.h hash.h
 
-SRCS = $(addprefix $(HASH_SRC_DIR),$(HASH_SRCS_LIST)) $(addprefix $(SRC_DIR),$(SRCS_LIST))
+SRCS = $(addprefix $(SRC_DIR),$(SRCS_LIST)) \
+$(addprefix $(HASH_SRC_DIR),$(HASH_SRCS_LIST)) \
+$(addprefix $(BASE64_SRC_DIR),$(BASE64_LIST))
 
 OBJS = $(SRCS:.c=.o)
 
 INCLUDES = -I $(INC_DIR) -I $(LIBFT_DIR)
 
 CC = gcc
-CFLAGS = -g #-Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 all: $(NAME)
 

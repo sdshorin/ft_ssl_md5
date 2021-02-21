@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_2.c                                          :+:      :+:    :+:   */
+/*   base64_decode_from_source.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/21 02:14:01 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:12:11 by bjesse           ###   ########.fr       */
+/*   Created: 2021/02/21 22:53:30 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 23:15:13 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "ft_ssl_md5.h"
 
-void	init_hash_flags(t_hash_flags *flags)
+void	base64_decode_from_file(int fd_source, int fd_output)
 {
-	flags->p_flag = 0;
-	flags->q_flag = 0;
-	flags->r_flag = 0;
-	flags->s_flag = 0;
-	flags->printed_hash_from_input = 0;
-	flags->flags_parsed = 0;
+	fd_source = 0;
+	fd_output = 0;
+	// char	buff[BASE64_BLOCK_SIZE];
+	// int		ch_read;
+	// int		i;
+
+	// while ((ch_read = read(fd_source, buff, BASE64_BLOCK_SIZE))
+	// 										== BASE64_BLOCK_SIZE)
+	// 	process_base64_block(buff, fd_output);
+	// i = ch_read;
+	// while(i < BASE64_BLOCK_SIZE)
+	// 	buff[i++] = '\0';
+	// process_base64_last_block(buff, ch_read, fd_output);
 }

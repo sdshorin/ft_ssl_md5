@@ -6,11 +6,18 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:13:47 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 02:13:53 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/21 23:12:31 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
+
+void	exit_error_bad_file(char *file_name)
+{
+	ft_putstr("Cannot open file ");
+	ft_putendl(file_name);
+	exit(1);
+}
 
 void	print_unexpected_arg(char *arg)
 {
