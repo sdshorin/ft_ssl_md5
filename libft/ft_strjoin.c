@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 21:20:51 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/11 22:41:35 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/17 21:26:22 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,21 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	s1len;
-	size_t	s2len;
-	char	*result;
+	long int	len;
+	char		*ans;
+	char		*temp;
 
-	if (s1 == NULL || s2 == NULL)
+	if (!s1 || !s2)
 		return (NULL);
-	s1len = ft_strlen(s1);
-	s2len = ft_strlen(s2);
-	result = ft_strnew(s1len + s2len + 1);
-	if (result == NULL)
+	len = 1 + ft_strlen(s1) + ft_strlen(s2);
+	ans = (char*)malloc(len);
+	if (!ans)
 		return (NULL);
-	ft_strcpy(result, s1);
-	ft_strcpy(&(result[s1len]), s2);
-	return (result);
+	temp = ans;
+	while (*s1)
+		*temp++ = *s1++;
+	while (*s2)
+		*temp++ = *s2++;
+	*temp = '\0';
+	return (ans);
 }

@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnstr.c                                       :+:      :+:    :+:   */
+/*   ft_findchar.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 20:13:00 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/27 20:13:10 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/09/07 23:36:08 by bjesse            #+#    #+#             */
+/*   Updated: 2019/09/07 23:36:10 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_putnstr(char const *s, int len)
+char	ft_findchar(char *str, char target)
 {
-	if (s == NULL)
-		return ;
-	while (*s != '\0' && len > 0)
-	{
-		ft_putchar(*s);
-		s++;
-		len--;
-	}
+	while (*str && *str != target)
+		str++;
+	return (*str);
 }

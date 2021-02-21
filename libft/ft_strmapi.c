@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 19:43:14 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/11 22:11:05 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/25 22:44:07 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,22 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	size_t	i;
-	char	*result;
+	size_t	size;
+	char	*ans;
+	char	*temp;
+	int		now_index;
 
-	if (s != NULL && f != NULL)
-	{
-		i = 0;
-		while (s[i] != '\0')
-			i++;
-		result = (char *)malloc(sizeof(char) * (i + 1));
-		if (result == NULL)
-			return (NULL);
-		result[i] = '\0';
-		while (i > 0)
-		{
-			i--;
-			result[i] = f((unsigned int)i, s[i]);
-		}
-		return (result);
-	}
-	return (NULL);
+	now_index = 0;
+	if (!s || !f)
+		return (NULL);
+	size = ft_strlen(s);
+	if (size + 1 == 0)
+		return (NULL);
+	ans = ft_memalloc(size + 1);
+	if (!ans)
+		return (NULL);
+	temp = ans;
+	while (size-- > 0)
+		*temp++ = (*f)(now_index++, *s++);
+	return (ans);
 }

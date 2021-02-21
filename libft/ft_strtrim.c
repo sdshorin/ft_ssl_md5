@@ -3,40 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 21:34:44 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/12 21:00:01 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/17 21:27:18 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	is_whitespace(char c)
+static int	space_counter(char const *s)
 {
-	if (c == ' ' || c == '\n' || c == '\t')
-		return (1);
-	return (0);
+	int		space_num;
+	int		now_space;
+	int		is_start;
+
+	is_start = 1;
+	space_num = 0;
+	now_space = 0;
+	while (*s)
+	{
+		if (*s == ' ' || *s == '\n' || *s == '\t')
+			now_space++;
+		else
+		{
+			if (is_start)
+				space_num += now_space;
+			now_space = 0;
+			is_start = 0;
+		}
+		s++;
+	}
+	return (space_num + now_space);
 }
 
 char		*ft_strtrim(char const *s)
 {
-	size_t	trim_start;
-	size_t	trim_len;
-	size_t	trim_stop;
-	char	*result;
+	int		len;
+	char	*ans;
+	char	*temp;
 
-	if (s == NULL)
+	if (!s)
 		return (NULL);
-	trim_start = 0;
-	while (s[trim_start] != '\0' && is_whitespace(s[trim_start]) == 1)
-		trim_start++;
-	trim_stop = ft_strlen(s) - 1;
-	while (is_whitespace(s[trim_stop]) == 1 && trim_stop > trim_start)
-		trim_stop--;
-	trim_len = trim_stop - trim_start + 1;
-	if (trim_len == 0)
-		return (ft_strnew(1));
-	result = ft_strsub(s, trim_start, trim_len);
-	return (result);
+	len = ft_strlen(s) - space_counter(s);
+	ans = (char*)malloc(len + 1);
+	if (!ans)
+		return (NULL);
+	while (*s == ' ' || *s == '\n' || *s == '\t')
+		s++;
+	temp = ans;
+	while (len--)
+		*temp++ = *s++;
+	*temp = '\0';
+	return (ans);
 }

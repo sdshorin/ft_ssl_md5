@@ -3,71 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/09 22:48:18 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/17 21:17:47 by bjesse            #+#    #+#             */
+/*   Updated: 2019/06/15 18:58:19 by cyuriko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_digits(int n)
+static size_t	answer_len(int n)
 {
-	int result;
-	int neg;
+	size_t	len;
 
-	neg = 1;
-	result = 0;
-	if (n < 0)
-	{
-		result++;
-		neg = -1;
-		n *= -1;
-	}
+	len = 0;
 	if (n == 0)
 		return (1);
-	while (n > 0)
+	if (n < 0)
+		len += 1;
+	while (n)
 	{
-		result++;
-		n /= 10;
+		len += 1;
+		n = n / 10;
 	}
-	return (result * neg);
+	return (len);
 }
 
-static void	invert(int *len, int *neg, int *n)
+char			*ft_itoa(int n)
 {
-	if (*len < 0)
-	{
-		*len *= -1;
-		*neg = -1;
-		*n *= -1;
-	}
-}
+	size_t	len;
+	char	*ans;
+	long	num;
 
-char		*ft_itoa(int n)
-{
-	char	*result;
-	int		neg;
-	int		len;
-
-	neg = 1;
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	len = count_digits(n);
-	invert(&len, &neg, &n);
-	result = ft_strnew(len);
-	if (result == NULL)
+	len = answer_len(n);
+	ans = (char*)malloc(len + 1);
+	if (!ans)
 		return (NULL);
-	while (len-- > 0)
+	ans[len] = '\0';
+	if (n == 0)
+		ans[0] = '0';
+	num = n;
+	if (n < 0)
+		num = -(long)n;
+	while (num && len--)
 	{
-		if (neg == -1 && len == 0)
-		{
-			result[len] = '-';
-			break ;
-		}
-		result[len] = '0' + (n % 10);
-		n /= 10;
+		ans[len] = num % 10 + '0';
+		num = num / 10;
 	}
-	return (result);
+	if (n < 0)
+		*ans = '-';
+	return (ans);
 }

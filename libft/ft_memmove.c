@@ -3,31 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/06 15:57:44 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/07 17:09:41 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/07 20:50:21 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
+#include <stdlib.h>
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char		*destination;
-	const unsigned char	*source;
-	size_t				i;
+	unsigned char	*cdst;
+	unsigned char	*csrc;
+	int				des;
 
-	i = -1;
-	destination = (unsigned char *)dst;
-	source = (unsigned char *)src;
-	if (dst == NULL && src == NULL)
-		return (NULL);
-	if (source < destination)
-		while (++i < len)
-			destination[len - 1 - i] = source[len - 1 - i];
-	else
-		while (++i < len)
-			destination[i] = source[i];
+	cdst = (unsigned char*)dst;
+	csrc = (unsigned char*)src;
+	des = 1;
+	if (dst > src)
+	{
+		des = -1;
+		cdst += len - 1;
+		csrc += len - 1;
+	}
+	while (len-- > 0)
+	{
+		*cdst = *csrc;
+		cdst = cdst + des;
+		csrc = csrc + des;
+	}
 	return (dst);
 }

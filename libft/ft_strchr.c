@@ -3,29 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 16:09:12 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/08 22:13:12 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/10 22:33:23 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
 char	*ft_strchr(const char *s, int c)
 {
-	char cc;
-	char *result;
+	char			to_find;
+	char			*ans;
 
-	result = (char *)s;
-	cc = (char)c;
-	while (*result != '\0')
-	{
-		if (*result == cc)
-			return (result);
-		result++;
-	}
-	if (*result == cc)
-		return (result);
-	return (NULL);
+	ans = (char*)(void*)s;
+	to_find = (char)c;
+	while (*ans && *ans != to_find)
+		ans++;
+	if (*ans == to_find)
+		return (ans);
+	else
+		return (NULL);
 }

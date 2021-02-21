@@ -3,61 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 17:59:12 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/10 22:36:27 by bjesse            #+#    #+#             */
+/*   Updated: 2019/06/15 18:58:19 by cyuriko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-static int				isnonprint(int c)
+int	ft_atoi(const char *str)
 {
-	if (c == '\t' || c == '\v' || c == '\f' ||
-		c == '\r' || c == '\n' || c == ' ')
-		return (1);
-	return (0);
-}
+	unsigned long long		ans;
+	int						sig;
 
-static long long int	offset_neg(const char *str, int *ext_i)
-{
-	long long int	negativity;
-	int				i;
-
-	i = 0;
-	negativity = 1;
-	while (isnonprint((int)str[i]) == 1)
-		i++;
-	if (str[i] == '+' || str[i] == '-')
+	sig = 0;
+	ans = 0;
+	while (*str == ' ' || *str == '\n' || *str == '\t' || *str == '\r' ||
+			*str == '\v' || *str == '\f')
+		str++;
+	if (*str == '+' || *str == '-')
+		if (*str++ == '-')
+			sig = -1;
+	while (*str >= '0' && *str <= '9')
 	{
-		if (str[i] == '-')
-			negativity = -1;
-		i++;
+		if ((ans > 922337203685477580 || (ans == 922337203685477580 &&
+						*str > '7')) && sig == 0)
+			return (-1);
+		else if ((ans > 922337203685477580 || (ans == 922337203685477580 &&
+						*str > '8')) && sig == -1)
+			return (0);
+		ans = ans * 10 + (*str++ - '0');
 	}
-	*ext_i = i;
-	return (negativity);
-}
-
-int						ft_atoi(const char *str)
-{
-	int				i;
-	int				offset;
-	long long int	result;
-	long long int	negativity;
-
-	i = 0;
-	negativity = offset_neg(str, &i);
-	offset = i;
-	result = 0;
-	while (ft_isdigit((int)str[i]) == 1)
-	{
-		if ((i - offset) >= 19)
-			return (negativity == -1 ? 0 : -1);
-		result = (result * 10) + (long long int)(str[i] - '0');
-		i++;
-		if (result > 9223372036854775807)
-			return (negativity == -1 ? 0 : -1);
-	}
-	return (result * negativity);
+	if (sig == -1)
+		return (-(int)ans);
+	return ((int)ans);
 }

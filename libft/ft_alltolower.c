@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_alltolower.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/17 21:19:25 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/17 21:19:33 by bjesse           ###   ########.fr       */
+/*   Created: 2019/04/27 19:26:52 by bjesse            #+#    #+#             */
+/*   Updated: 2019/06/15 18:58:19 by cyuriko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr_fd(int n, int fd)
+char	*ft_alltolower(char *str)
 {
-	long	num;
+	char	*ans;
 
-	num = n;
-	if (n < 0)
+	ans = str;
+	while (*str)
 	{
-		num = -(long)n;
-		ft_putchar_fd('-', fd);
+		*str = (char)ft_tolower(*str);
+		str++;
 	}
-	if (num < 10)
-		ft_putchar_fd('0' + num, fd);
-	else
-	{
-		ft_putnbr_fd(num / 10, fd);
-		ft_putchar_fd('0' + num % 10, fd);
-	}
+	return (ans);
 }

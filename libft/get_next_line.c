@@ -10,21 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-
-# define BUFF_SIZE 1024
-
-int				get_next_line(const int fd, char **line);
-
-typedef struct	s_fd_list_struct
-{
-	char					*str;
-	int						fd;
-	int						end;
-	struct s_fd_list_struct	*next;
-	struct s_fd_list_struct	*prev;
-}				t_fd_list;
+#include "get_next_line.h"
 
 static t_fd_list	*new_t_fd_list(int fd)
 {

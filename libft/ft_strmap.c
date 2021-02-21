@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 18:59:51 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/11 21:46:30 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/25 22:43:38 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,20 @@
 
 char	*ft_strmap(char const *s, char (*f)(char))
 {
-	size_t	i;
-	char	*result;
+	size_t	size;
+	char	*ans;
+	char	*temp;
 
-	if (s != NULL && f != NULL)
-	{
-		i = 0;
-		while (s[i] != '\0')
-			i++;
-		result = (char *)malloc(sizeof(char) * (i + 1));
-		if (result == NULL)
-			return (NULL);
-		result[i] = '\0';
-		while (i > 0)
-		{
-			i--;
-			result[i] = f(s[i]);
-		}
-		return (result);
-	}
-	return (NULL);
+	if (!s || !f)
+		return (NULL);
+	size = ft_strlen(s);
+	if (size + 1 == 0)
+		return (NULL);
+	ans = ft_memalloc(size + 1);
+	if (!ans)
+		return (NULL);
+	temp = ans;
+	while (size-- > 0)
+		*temp++ = (*f)(*s++);
+	return (ans);
 }

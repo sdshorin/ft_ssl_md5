@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_str_replace.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/17 21:19:25 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/17 21:19:33 by bjesse           ###   ########.fr       */
+/*   Created: 2019/11/02 23:07:06 by bjesse            #+#    #+#             */
+/*   Updated: 2019/11/02 23:07:28 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr_fd(int n, int fd)
+void	ft_str_replace(char *str, char replace, char to)
 {
-	long	num;
-
-	num = n;
-	if (n < 0)
+	while (*str)
 	{
-		num = -(long)n;
-		ft_putchar_fd('-', fd);
-	}
-	if (num < 10)
-		ft_putchar_fd('0' + num, fd);
-	else
-	{
-		ft_putnbr_fd(num / 10, fd);
-		ft_putchar_fd('0' + num % 10, fd);
+		if (*str == replace)
+			*str = to;
+		str++;
 	}
 }

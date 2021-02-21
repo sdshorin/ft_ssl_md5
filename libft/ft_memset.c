@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   memset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/06 13:56:20 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/07 16:04:14 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/11 20:56:26 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
 void	*ft_memset(void *b, int c, size_t len)
 {
-	unsigned char *current;
+	unsigned char	byte;
+	unsigned char	*a;
 
-	current = (unsigned char *)b;
-	while (len > 0)
-	{
-		*current = (unsigned char)c;
-		current++;
-		len--;
-	}
+	a = (unsigned char*)b;
+	byte = (unsigned char)c;
+	while (len-- > 0)
+		*a++ = byte;
 	return (b);
 }

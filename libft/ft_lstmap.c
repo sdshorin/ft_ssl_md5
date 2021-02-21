@@ -3,50 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/13 14:11:42 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/17 21:42:07 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/17 21:58:04 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		remove_list(t_list *lst)
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	t_list	temp;
-
-	while (lst != NULL)
-	{
-		temp.next = lst->next;
-		free(lst->content);
-		free(lst);
-		lst = temp.next;
-	}
-}
-
-t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
-{
+	t_list	*ans;
 	t_list	*temp;
-	t_list	*new;
 
-	if (!lst)
+	if (!lst || !f)
 		return (NULL);
-	new = ft_lstnew((f(lst))->content, (f(lst))->content_size);
-	if (new == NULL)
-		return (NULL);
+	ans = (*f)(lst);
 	lst = lst->next;
-	temp = new;
-	while (lst)
+	temp = ans;
+	while (temp && lst)
 	{
-		new->next = ft_lstnew((f(lst))->content, (f(lst))->content_size);
-		if (!(new->next))
-		{
-			remove_list(temp);
-			return (NULL);
-		}
+		temp->next = (*f)(lst);
+		temp = temp->next;
 		lst = lst->next;
-		new = new->next;
 	}
-	return (temp);
+	if (!temp)
+		return (NULL);
+	return (ans);
 }

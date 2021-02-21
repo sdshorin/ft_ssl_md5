@@ -3,49 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 17:08:24 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/09 20:20:54 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/24 23:16:57 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
 #include "libft.h"
 
-static int	check(char *hhaystack, char *needle, size_t cur, size_t len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	size_t	i;
+	size_t		string_len;
 
-	i = 0;
-	while (needle[i] != '\0')
+	string_len = ft_strlen(needle);
+	if ((!*haystack && *needle) || ft_strlen(needle) > len)
+		return (NULL);
+	if (!*needle)
+		return ((char*)(void*)haystack);
+	len = len - ft_strlen(needle) + 1;
+	while (*haystack && len > 0)
 	{
-		if (needle[i] == hhaystack[i] && (cur + i < len))
-			i++;
-		else
-			return (0);
-	}
-	return (1);
-}
-
-char		*ft_strnstr(const char *haystack, const char *needle, size_t len)
-{
-	size_t	i;
-	char	*hhaystack;
-	char	*nneedle;
-
-	nneedle = (char *)needle;
-	hhaystack = (char *)haystack;
-	i = 0;
-	if (*needle == '\0')
-		return (hhaystack);
-	while (hhaystack[i] != '\0' && i < len)
-	{
-		if (hhaystack[i] != *nneedle)
-			i++;
-		else if (check(&(hhaystack[i]), nneedle, i, len) == 1)
-			return (&(hhaystack[i]));
-		else
-			i++;
+		if (len > 0 && ft_strncmp(haystack, needle, string_len) == 0)
+			return ((char*)(void*)haystack);
+		haystack++;
+		len--;
 	}
 	return (NULL);
 }

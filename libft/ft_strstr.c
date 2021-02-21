@@ -1,51 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strstr.c                                        :+:      :+:    :+:   */
+/*   strstr.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 16:38:55 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/10/15 14:48:24 by kpsylock         ###   ########.fr       */
+/*   Created: 2019/04/08 22:21:49 by bjesse            #+#    #+#             */
+/*   Updated: 2019/04/11 21:00:04 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
-static int	check(char *hhaystack, char *needle)
+char	*ft_strstr(const char *haystack, const char *needle)
 {
-	int	i;
+	const char	*temph;
+	const char	*tempn;
 
-	i = 0;
-	while (needle[i] != '\0')
+	if (!*haystack && *needle)
+		return (NULL);
+	if (!*needle)
+		return ((char*)(void*)haystack);
+	while (*haystack)
 	{
-		if (needle[i] == hhaystack[i])
-			i++;
-		else
-			return (0);
-	}
-	return (1);
-}
-
-char		*ft_strstr(const char *haystack, const char *needle)
-{
-	int		i;
-	char	*hhaystack;
-	char	*nneedle;
-
-	nneedle = (char *)needle;
-	hhaystack = (char *)haystack;
-	i = 0;
-	if (*needle == '\0')
-		return (hhaystack);
-	while (hhaystack[i] != '\0')
-	{
-		if (hhaystack[i] != *nneedle)
-			i++;
-		else if (check(&(hhaystack[i]), nneedle) == 1)
-			return (&(hhaystack[i]));
-		else
-			i++;
+		if (*haystack == *needle)
+		{
+			temph = haystack;
+			tempn = needle;
+			while (*tempn && *temph && *temph == *tempn)
+			{
+				temph++;
+				tempn++;
+			}
+			if (*tempn == '\0')
+				return ((char*)(void*)haystack);
+		}
+		haystack++;
 	}
 	return (NULL);
 }
