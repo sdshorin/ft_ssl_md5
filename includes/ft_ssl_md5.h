@@ -27,7 +27,7 @@ typedef struct	s_hash_flags {
 	char			*command;
 }				t_hash_flags;
 
-t_hash			*factory_get_hash(char *command);
+t_hash			*factory_get_hash_obj(char *command);
 void			print_hash(char *hash, char *source, t_hash_flags *flags,
 																int is_file);
 int				is_hash_command(char *command);

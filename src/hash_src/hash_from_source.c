@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:51:58 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:15:33 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/21 22:50:42 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_hash_from_string(char *command, t_hash_flags *flags, char *str)
 	t_hash	*hash;
 	char	*hash_str;
 
-	hash = factory_get_hash(command);
+	hash = factory_get_hash_obj(command);
 	hash_str = get_hash_from_string(hash, str);
 	print_hash(hash_str, str, flags, 0);
 	free(hash);
@@ -55,11 +55,12 @@ void	print_hash_from_file(char *command, t_hash_flags *flags,
 		ft_putendl(file_path);
 		return ;
 	}
-	hash = factory_get_hash(command);
+	hash = factory_get_hash_obj(command);
 	hash_str = get_hash_from_file(hash, fd);
 	print_hash(hash_str, file_path, flags, 1);
 	free(hash);
 	free(hash_str);
+	close(fd);
 }
 
 char	*read_string_from_input(void)
@@ -70,7 +71,7 @@ char	*read_string_from_input(void)
 
 	input_str = 0;
 	ft_bzero(buffer, 129);
-	while (read(0, buffer, 128) > 0)
+	while (read(0, buffer, 128) > 0 || !input_str)
 	{
 		temp_str = input_str;
 		if (input_str)
@@ -93,7 +94,7 @@ void	print_hash_from_input(char *command, t_hash_flags *flags)
 	char	*hash_str;
 
 	input_str = read_string_from_input();
-	hash = factory_get_hash(command);
+	hash = factory_get_hash_obj(command);
 	hash_str = get_hash_from_string(hash, input_str);
 	if (flags->p_flag && input_str[ft_strlen(input_str) - 1] == '\n')
 		ft_putstr(input_str);

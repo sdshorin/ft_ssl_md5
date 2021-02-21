@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:14:43 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 03:17:04 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/21 23:14:47 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ uint32_t	sha256_get_k(int n)
 	0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 	};
-	int				a;
 
 	return (k[n]);
 }

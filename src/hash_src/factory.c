@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:34:14 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 03:53:37 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/21 21:34:59 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_hash			*md5_create(void)
 	return (&md5->base);
 }
 
-t_hash			*factory_get_hash(char *command)
+t_hash			*factory_get_hash_obj(char *command)
 {
 	if (!ft_strcmp(command, "md5"))
 		return (md5_create());
