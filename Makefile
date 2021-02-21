@@ -18,7 +18,7 @@ hash_interface_32_64.c md5_utils.c  hash_loop_32_64.c \
 hash_interface_32_64_2.c print_hash.c hash_main.c sha2.c
 
 
-SRCS_LIST = main.c utils.c exeptions.c
+SRCS_LIST = main.c utils.c utils_2.c exeptions.c
 HEADERS_LIST = ft_ssl_md5.h hash.h
 
 SRCS = $(addprefix $(HASH_SRC_DIR),$(HASH_SRCS_LIST)) $(addprefix $(SRC_DIR),$(SRCS_LIST))

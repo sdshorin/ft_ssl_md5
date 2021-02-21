@@ -1,30 +1,31 @@
-
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/21 02:13:23 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 04:15:07 by bjesse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-void print_usage()
+void	print_usage(void)
 {
 	ft_putendl("usage: ft_ssl command [command opts] [command args]");
 }
 
-void init_hash_flags(hash_flags *flags) {
-	flags->p_flag = 0;
-	flags->q_flag = 0;
-	flags->r_flag = 0;
-	flags->s_flag = 0;
-	flags->printed_hash_from_input = 0;
-	flags->flags_parsed = 0;
-}
-
-void print_hash_from_command_line_p(char *command, hash_flags *flags)
+void	print_hash_from_command_line_p(char *command, t_hash_flags *flags)
 {
 	flags->p_flag = 1;
 	flags->printed_hash_from_input = 1;
 	print_hash_from_input(command, flags);
 }
 
-int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
+int		work_with_flags(char *command, t_hash_flags *flags, int argc,
+															char **argv)
 {
 	int i;
 
@@ -53,12 +54,12 @@ int work_with_flags(char *command, hash_flags *flags, int argc, char **argv)
 	return (i);
 }
 
-void exe_hash_command(int argc, char **argv)
+void	exe_hash_command(int argc, char **argv)
 {
-	hash_flags flags;
-	char *command;
-	int commands_offset;
-	
+	t_hash_flags	flags;
+	char			*command;
+	int				commands_offset;
+
 	init_hash_flags(&flags);
 	command = *argv;
 	flags.command = command;
@@ -78,7 +79,8 @@ void exe_hash_command(int argc, char **argv)
 		print_hash_from_input(command, &flags);
 }
 
-int main(int argc, char **argv){
+int		main(int argc, char **argv)
+{
 	if (argc < 2)
 		print_usage();
 	else if (is_hash_command(argv[1]))
@@ -86,5 +88,3 @@ int main(int argc, char **argv){
 	else
 		print_unexpected_arg(argv[1]);
 }
-
-

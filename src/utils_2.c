@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hash_interface.c                                   :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/21 02:58:31 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 02:59:45 by bjesse           ###   ########.fr       */
+/*   Created: 2021/02/21 02:14:01 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 04:12:11 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hash.h"
+#include "ft_ssl_md5.h"
 
-void	copy_hash(t_hash *copy, t_hash *source)
+void	init_hash_flags(t_hash_flags *flags)
 {
-	return (copy->vtable->copy_hash(copy, source));
-}
-
-void	add_hash(t_hash *base, t_hash *to_add)
-{
-	return (base->vtable->add_hash(base, to_add));
-}
-
-char	*hash_to_string(t_hash *h)
-{
-	return (h->vtable->hash_to_string(h));
+	flags->p_flag = 0;
+	flags->q_flag = 0;
+	flags->r_flag = 0;
+	flags->s_flag = 0;
+	flags->printed_hash_from_input = 0;
+	flags->flags_parsed = 0;
 }

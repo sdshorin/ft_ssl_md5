@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha512_base.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/21 03:26:34 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 04:10:28 by bjesse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-uint64 sha512_k[80] = {
+uint64_t	g_sha512_k[80] = {
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f,
 	0xe9b5dba58189dbbc, 0x3956c25bf348b538, 0x59f111f1b605d019,
 	0x923f82a4af194f9b, 0xab1c5ed5da6d8118, 0xd807aa98a3030242,
@@ -31,33 +42,33 @@ uint64 sha512_k[80] = {
 	0x5fcb6fab3ad6faec, 0x6c44198c4a475817
 };
 
-char *sha512_hash_to_string(hash *hash_base)
+char	*sha512_hash_to_string(t_hash *hash_base)
 {
-    char *hash_str;
-    int i;
-	sha512_hash *hash;
+	char			*hash_str;
+	int				i;
+	t_sha512_hash	*hash;
 
-    i = 0;
-	hash = (sha512_hash*) hash_base;
-    hash_str = ft_memalloc(129);
+	i = 0;
+	hash = (t_sha512_hash*)hash_base;
+	hash_str = ft_memalloc(129);
 	if (!hash_str)
 		exit(1);
-     uint64_to_hash(hash_base, hash_str, hash->h0);
-     uint64_to_hash(hash_base, hash_str + 16, hash->h1);
-     uint64_to_hash(hash_base, hash_str + 32, hash->h2);
-     uint64_to_hash(hash_base, hash_str + 48, hash->h3);
-     uint64_to_hash(hash_base, hash_str + 64, hash->h4);
-     uint64_to_hash(hash_base, hash_str + 80, hash->h5);
-     uint64_to_hash(hash_base, hash_str + 96, hash->h6);
-     uint64_to_hash(hash_base, hash_str + 112, hash->h7);
-    return hash_str;
+	uint64_to_hash(hash_base, hash_str, hash->h0);
+	uint64_to_hash(hash_base, hash_str + 16, hash->h1);
+	uint64_to_hash(hash_base, hash_str + 32, hash->h2);
+	uint64_to_hash(hash_base, hash_str + 48, hash->h3);
+	uint64_to_hash(hash_base, hash_str + 64, hash->h4);
+	uint64_to_hash(hash_base, hash_str + 80, hash->h5);
+	uint64_to_hash(hash_base, hash_str + 96, hash->h6);
+	uint64_to_hash(hash_base, hash_str + 112, hash->h7);
+	return (hash_str);
 }
 
-void sha512_prepare_block(uint64 *block, void *data)
+void	sha512_prepare_block(uint64_t *block, void *data)
 {
-	int i;
-	uint64 s0;
-	uint64 s1;
+	int			i;
+	uint64_t	s0;
+	uint64_t	s1;
 
 	i = 0;
 	ft_memmove((void*)block, data, 128);
@@ -65,21 +76,24 @@ void sha512_prepare_block(uint64 *block, void *data)
 		swipe_endian_64(&block[i++]);
 	while (i < 80)
 	{
-		s0 = ROTATER64(block[i - 15], 1) ^ ROTATER64(block[i - 15], 8) ^ (block[i - 15] >> 7);
-		s1 = ROTATER64(block[i - 2], 19) ^ ROTATER64(block[i - 2], 61) ^ (block[i - 2] >> 6);
+		s0 = ROTATER64(block[i - 15], 1) ^ ROTATER64(block[i - 15], 8)
+			^ (block[i - 15] >> 7);
+		s1 = ROTATER64(block[i - 2], 19) ^ ROTATER64(block[i - 2], 61)
+			^ (block[i - 2] >> 6);
 		block[i] = block[i - 16] + s0 + block[i - 7] + s1;
 		i++;
 	}
 }
 
-void sha512_round(hash *hash_base, uint64 *memory, int i)
+void	sha512_round(t_hash *hash_base, uint64_t *memory, int i)
 {
-	sha512_hash *hash;
-	uint64 temp1;
-	uint64 temp2;
+	t_sha512_hash	*hash;
+	uint64_t		temp1;
+	uint64_t		temp2;
 
-	hash = (sha512_hash*)hash_base;
-	temp1 = hash->h7 + S1_512(hash->h4) + CH(hash->h4, hash->h5, hash->h6) + memory[i] + sha512_k[i];
+	hash = (t_sha512_hash*)hash_base;
+	temp1 = hash->h7 + S1_512(hash->h4) + CH(hash->h4, hash->h5, hash->h6) +
+		memory[i] + g_sha512_k[i];
 	temp2 = S0_512(hash->h0) + MAJ(hash->h0, hash->h1, hash->h2);
 	hash->h7 = hash->h6;
 	hash->h6 = hash->h5;
@@ -91,13 +105,13 @@ void sha512_round(hash *hash_base, uint64 *memory, int i)
 	hash->h0 = temp1 + temp2;
 }
 
-void sha512_copy_hash(hash* hash_base, hash *source_base)
+void	sha512_copy_hash(t_hash *hash_base, t_hash *source_base)
 {
-	sha512_hash *hash_copy;
-	sha512_hash *source;
+	t_sha512_hash	*hash_copy;
+	t_sha512_hash	*source;
 
-	hash_copy = (sha512_hash*)hash_base;
-	source = (sha512_hash*)source_base;
+	hash_copy = (t_sha512_hash*)hash_base;
+	source = (t_sha512_hash*)source_base;
 	hash_copy->h0 = source->h0;
 	hash_copy->h1 = source->h1;
 	hash_copy->h2 = source->h2;
@@ -108,13 +122,13 @@ void sha512_copy_hash(hash* hash_base, hash *source_base)
 	hash_copy->h7 = source->h7;
 }
 
-void sha512_add_hash(hash *hash_base, hash *hash_to_add)
+void	sha512_add_hash(t_hash *hash_base, t_hash *hash_to_add)
 {
-	sha512_hash *hash;
-	sha512_hash *to_add;
+	t_sha512_hash *hash;
+	t_sha512_hash *to_add;
 
-	hash = (sha512_hash*)hash_base;
-	to_add = (sha512_hash*)hash_to_add;
+	hash = (t_sha512_hash*)hash_base;
+	to_add = (t_sha512_hash*)hash_to_add;
 	hash->h0 += to_add->h0;
 	hash->h1 += to_add->h1;
 	hash->h2 += to_add->h2;

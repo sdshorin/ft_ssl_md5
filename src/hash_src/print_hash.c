@@ -1,8 +1,21 @@
-# include "ft_ssl_md5.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_hash.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/21 03:22:37 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 04:12:22 by bjesse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void print_hash_type(char *type)
+#include "ft_ssl_md5.h"
+
+void	print_hash_type(char *type)
 {
 	char c;
+
 	while (*type)
 	{
 		c = *type;
@@ -13,7 +26,7 @@ void print_hash_type(char *type)
 	}
 }
 
-void print_source(char *source, int is_file)
+void	print_source(char *source, int is_file)
 {
 	if (!is_file)
 		write(1, "\"", 1);
@@ -22,7 +35,7 @@ void print_source(char *source, int is_file)
 		write(1, "\"", 1);
 }
 
-void print_hash(char* hash, char *source, hash_flags *flags, int is_file)
+void	print_hash(char *hash, char *source, t_hash_flags *flags, int is_file)
 {
 	if (!flags->q_flag && !flags->r_flag)
 	{

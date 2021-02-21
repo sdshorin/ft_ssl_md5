@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hash_from_source.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/21 02:51:58 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 04:15:33 by bjesse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "ft_ssl_md5.h"
+#include "ft_ssl_md5.h"
 
-int is_hash_command(char *command)
+int		is_hash_command(char *command)
 {
 	if (!ft_strcmp(command, "md5"))
 		return (1);
@@ -18,10 +29,10 @@ int is_hash_command(char *command)
 	return (0);
 }
 
-void print_hash_from_string(char *command, hash_flags *flags, char *str)
+void	print_hash_from_string(char *command, t_hash_flags *flags, char *str)
 {
-	hash *hash;
-	char *hash_str;
+	t_hash	*hash;
+	char	*hash_str;
 
 	hash = factory_get_hash(command);
 	hash_str = get_hash_from_string(hash, str);
@@ -30,11 +41,12 @@ void print_hash_from_string(char *command, hash_flags *flags, char *str)
 	free(hash_str);
 }
 
-void print_hash_from_file(char *command, hash_flags *flags, char *file_path)
+void	print_hash_from_file(char *command, t_hash_flags *flags,
+													char *file_path)
 {
-	int fd;
-	hash *hash;
-	char *hash_str;
+	int		fd;
+	t_hash	*hash;
+	char	*hash_str;
 
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0 || read(fd, NULL, 0) < 0)
@@ -50,7 +62,7 @@ void print_hash_from_file(char *command, hash_flags *flags, char *file_path)
 	free(hash_str);
 }
 
-char *read_string_from_input()
+char	*read_string_from_input(void)
 {
 	char *temp_str;
 	char *input_str;
@@ -74,11 +86,11 @@ char *read_string_from_input()
 	return (input_str);
 }
 
-void print_hash_from_input(char *command, hash_flags *flags)
+void	print_hash_from_input(char *command, t_hash_flags *flags)
 {
-	hash *hash;
-	char *input_str;
-	char *hash_str;
+	t_hash	*hash;
+	char	*input_str;
+	char	*hash_str;
 
 	input_str = read_string_from_input();
 	hash = factory_get_hash(command);

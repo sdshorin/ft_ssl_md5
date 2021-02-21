@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Exeptions.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/21 02:13:47 by bjesse            #+#    #+#             */
+/*   Updated: 2021/02/21 02:13:53 by bjesse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-void print_unexpected_arg(char* arg)
+void	print_unexpected_arg(char *arg)
 {
 	ft_putstr("ft_ssl: Error: ");
 	ft_putstr(arg);
@@ -13,13 +24,13 @@ void print_unexpected_arg(char* arg)
 	ft_putendl("-p, -q, -r, -s");
 }
 
-void exit_error_no_string()
+void	exit_error_no_string(void)
 {
 	ft_putendl("Error: no string after -s flag");
 	exit(1);
 }
 
-void exit_error_unknown_flag(char *flag)
+void	exit_error_unknown_flag(char *flag)
 {
 	ft_putstr("Error: unknown flag ");
 	ft_putendl(flag);

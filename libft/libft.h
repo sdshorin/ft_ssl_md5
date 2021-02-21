@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kpsylock <kpsylock@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 13:57:56 by kpsylock          #+#    #+#             */
-/*   Updated: 2019/11/02 19:05:39 by kpsylock         ###   ########.fr       */
+/*   Updated: 2021/02/21 03:55:50 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 // # define BUFF_SIZE 1
 
-typedef struct	s_list
+typedef	struct	s_list
 {
 	void			*content;
 	size_t			content_size;
