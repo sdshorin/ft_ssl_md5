@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 22:39:15 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 23:09:32 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/03/01 00:30:54 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ void	base64_encode_from_string(char *source, int fd_output)
 	len = ft_strlen(source);
 	while (len > BASE64_BLOCK_SIZE)
 	{
-		process_base64_block(source, fd_output);
+		process_base64_block((unsigned char*)source, fd_output);
 		source += BASE64_BLOCK_SIZE;
 		len -= BASE64_BLOCK_SIZE;
 	}
-	process_base64_last_block(source, len, fd_output);
+	process_base64_last_block((unsigned char*)source, len, fd_output);
 }
 
 
 void	base64_encode_from_file(int fd_source, int fd_output)
 {
-	char	buff[BASE64_BLOCK_SIZE];
+	unsigned char	buff[BASE64_BLOCK_SIZE];
 	int		ch_read;
 	int		i;
 

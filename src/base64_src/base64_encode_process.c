@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:58:43 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 23:32:52 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/03/01 00:37:47 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*g_base64_chars =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-void	process_base64_3_char(char *src, char *dest)
+void	process_base64_3_char(unsigned char *src, char *dest)
 {
 	dest[0] = g_base64_chars[(*src) >> 2];
 	dest[1] = g_base64_chars[((*src & 0x3) << 4) + (*(src + 1) >> 4)];
@@ -23,7 +23,7 @@ void	process_base64_3_char(char *src, char *dest)
 	dest[3] = g_base64_chars[*(src + 2) & 0x3F];
 }
 
-void	process_base64_last_chars(char *src, int len, char *dest)
+void	process_base64_last_chars(unsigned char *src, int len, char *dest)
 {
 	process_base64_3_char(src, dest);
 	if(len == 1)
@@ -35,7 +35,7 @@ void	process_base64_last_chars(char *src, int len, char *dest)
 		dest[3] = '=';
 }
 
-void	process_base64_block(char *source, int fd_output)
+void	process_base64_block(unsigned char *source, int fd_output)
 {
 	char	out[BASE64_BLOCK_SIZE/3*4];
 	int		source_pos;
@@ -49,7 +49,7 @@ void	process_base64_block(char *source, int fd_output)
 	write(fd_output, out, BASE64_BLOCK_SIZE/3*4);
 }
 
-void	process_base64_last_block(char *source, int len,int fd_output)
+void	process_base64_last_block(unsigned char *source, int len,int fd_output)
 {
 	char	out[BASE64_BLOCK_SIZE/3*4];
 	int		source_pos;

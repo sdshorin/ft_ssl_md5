@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:36:33 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 23:13:18 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/28 22:44:09 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		base64_get_fd(char *file_name, int to_write, int def)
 
 	if (!file_name)
 		return (def);
-	if (to_write)
+	if (!to_write)
 	{
 		fd = open(file_name, O_RDONLY);
 		if (fd < 0 || read(fd, NULL, 0) < 0)
@@ -102,8 +102,8 @@ void	exe_base64_command(int argc, char **argv)
 	if (flags.s_flag_completed)
 		return ;
 	source_fd = base64_get_fd(flags.source, 0, 0);
-	output_fd = base64_get_fd(flags.source, 1, 1);
-	if (flags.e_flag)
+	output_fd = base64_get_fd(flags.output, 1, 1);
+	if (flags.e_flag && !flags.d_flag)
 		base64_encode_from_file(source_fd, output_fd);
 	else
 		base64_decode_from_file(source_fd, output_fd);

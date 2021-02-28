@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 23:12:24 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/03/01 00:38:23 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void			print_hash_from_input(char *command, t_hash_flags *flags);
 
 void			print_unexpected_arg();
 void			exit_error_no_string();
+void			exit_error_bad_input();
+
 void			exit_error_unknown_flag(char *flag);
 void			exit_error_bad_file(char *file_name);
 
@@ -47,6 +49,7 @@ void			exit_error_bad_file(char *file_name);
 void			init_hash_flags(t_hash_flags *flags);
 
 void			exe_hash_command(int argc, char **argv);
+void			ft_swipe(unsigned char *a, unsigned char *b);
 
 
 
@@ -62,14 +65,12 @@ typedef struct	s_base64_flags {
 
 int				is_base64_command(char *command);
 
-void			process_base64_block(char *source, int fd_output);
-void			process_base64_last_block(char *source, int len,int fd_output);
+void			process_base64_block(unsigned char *source, int fd_output);
+void			process_base64_last_block(unsigned char *source, int len,int fd_output);
 void			exe_base64_command(int argc, char **argv);
 void			base64_decode_from_file(int fd_source, int fd_output);
 void			base64_encode_from_file(int fd_source, int fd_output);
 void			base64_encode_from_string(char *source, int fd_output);
-void			process_base64_block(char *source, int fd_output);
-void			process_base64_last_block(char *source, int len,int fd_output);
 
 
 #endif

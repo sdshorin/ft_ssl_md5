@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:13:47 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 23:12:31 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/28 22:30:09 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ void	exit_error_bad_file(char *file_name)
 {
 	ft_putstr("Cannot open file ");
 	ft_putendl(file_name);
+	exit(1);
+}
+
+void	exit_error_bad_input()
+{
+	ft_putstr("Bad input");
 	exit(1);
 }
 
