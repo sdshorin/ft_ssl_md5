@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:51:58 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 22:50:42 by bjesse           ###   ########.fr       */
+/*   Updated: 2021/02/27 14:16:20 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	print_hash_from_string(char *command, t_hash_flags *flags, char *str)
 	hash = factory_get_hash_obj(command);
 	hash_str = get_hash_from_string(hash, str);
 	print_hash(hash_str, str, flags, 0);
+	free(hash->backup);
 	free(hash);
 	free(hash_str);
 }
@@ -58,6 +59,7 @@ void	print_hash_from_file(char *command, t_hash_flags *flags,
 	hash = factory_get_hash_obj(command);
 	hash_str = get_hash_from_file(hash, fd);
 	print_hash(hash_str, file_path, flags, 1);
+	free(hash->backup);
 	free(hash);
 	free(hash_str);
 	close(fd);
@@ -101,6 +103,7 @@ void	print_hash_from_input(char *command, t_hash_flags *flags)
 	else if (flags->p_flag)
 		ft_putendl(input_str);
 	ft_putendl(hash_str);
+	free(hash->backup);
 	free(hash);
 	free(hash_str);
 	free(input_str);
