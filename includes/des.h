@@ -29,3 +29,5 @@ struct s_des_flag {
 	char			*i_vector;
 	char			*command;
 };
+
+#define DES_ROT_KEY(x, rot) ((x << rot) | (x >> (28 - rot)))
