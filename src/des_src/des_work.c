@@ -4,7 +4,9 @@
 
 #include "ft_ssl_md5.h"
 
-int	g_premutation_1[64] = {
+#include <stdio.h>
+
+int	g_block_start_p[64] = {
 58, 50, 42, 34, 26, 18, 10, 2,
 60, 52, 44, 36, 28, 20, 12, 4,
 62, 54, 46, 38, 30, 22, 14, 6,
@@ -14,6 +16,18 @@ int	g_premutation_1[64] = {
 61, 53, 45, 37, 29, 21, 13, 5,
 63, 55, 47, 39, 31, 23, 15, 7,
 };
+
+int	g_block_end_p[64] = {
+	40, 8, 48, 16, 56, 24, 64, 32,
+	39, 7, 47, 15, 55, 23, 63, 31,
+	38, 6, 46, 14, 54, 22, 62, 30,
+	37, 5, 45, 13, 53, 21, 61, 29,
+	36, 4, 44, 12, 52, 20, 60, 28,
+	35, 3, 43, 11, 51, 19, 59, 27,
+	34, 2, 42, 10, 50, 18, 58, 26,
+	33, 1, 41, 9, 49, 17, 57, 25
+};
+
 
 int	g_p_box_extend[48] = {
 32, 1, 2, 3, 4, 5,
@@ -79,7 +93,7 @@ int		g_s_boxes[8][4][16] = {
 {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}}
 };
 
-int		g_key_delete_check_bits[56] = {
+int		g_key_init_premutation[56] = {
 	57, 49, 41, 33, 25, 17, 9,
 	1, 58, 50, 42, 34, 26, 18,
 	10, 2, 59, 51, 43, 35, 27,
@@ -105,7 +119,7 @@ int		g_des_key_rot[16] = {
 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
 };
 
-void permutation(uint64_t *block, int *premut_table, int size)
+uint64_t permutation(uint64_t block, int *premut_table, int size)
 {
 	uint64_t data;
 	int i;
@@ -114,24 +128,36 @@ void permutation(uint64_t *block, int *premut_table, int size)
 	data = 0;
 	while (i < size)
 	{
-		data |= ((*block) & (0x1<<premut_table[i]))<<i;
+		data |= ((block >> (premut_table[i] - 1)) & 0x01) << i;
 		i++;
 	}
-	*block = data;
+	return data;
 }
 
 uint64_t des_ecb_round_s_boxes(uint64_t data)
 {
 	int i;
 	uint64_t result;
-	unsigned char vector;
+	unsigned char six_bit_block;
+	unsigned char a;
+	unsigned char b;
 
 	i = 0;
 	result = 0;
 	while (i < 8)
 	{
-		vector = (data >> (6 * i)) & 0x3F;
-		result |= ((uint64_t)g_s_boxes[i][((vector >> 4) & 0x2) + (vector & 0x1)][(vector>>1) & 0xF])<<(i*4);
+		six_bit_block = (data >> (6 * i)) & 0x3F;
+		reverse_byte(&six_bit_block);
+		six_bit_block = six_bit_block >> 2;
+		print_binary_32((uint32_t)six_bit_block);
+		a = (six_bit_block & 0x1) + (six_bit_block >> 5) * 2;
+		b = (six_bit_block & 0x1e) >> 1;
+		printf("six_bit_block: %d, a = %d, b = %d\n", six_bit_block, a, b);
+		unsigned char s_result = g_s_boxes[i][a][b];
+		reverse_byte(&s_result);
+		s_result = s_result >> 4;
+		printf("s_result for i=%d: %d\n", i, s_result);
+		result |= ((uint64_t)s_result)<<(i*4);
 		i++;
 	}
 	return (result);
@@ -142,88 +168,161 @@ uint32_t des_ecb_round(uint32_t L, uint32_t R, t_des_env *env, int n)
 	uint64_t data;
 
 	data = R;
-	permutation(&data, g_p_box_extend, 48);
+	data = permutation(data, g_p_box_extend, 48);
 	data ^= env->round_key[n];
+	printf("after xor:");
+	print_binary(data);
 	data = des_ecb_round_s_boxes(data);
-	permutation(&data, g_p_box, 32);
+	printf("after s-box:");
+	print_binary(data);
+	data = permutation(data, g_p_box, 32);
+	printf("after s-block premutation:");
+	print_binary(data);
 	return (((uint32_t)data)^L);
 }
 
-void 	process_des_ecb_block(t_des_env *env, uint64_t *block)
+uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t *block)
 {
 	int i;
 	uint32_t L;
 	uint32_t R;
 	uint32_t temp;
+	uint64_t result;
 
 
 	i = 0;
-	permutation(block, g_premutation_1, 64);
+	swipe_endian_bytes((unsigned char*)block, 8);
+	*block = permutation(*block, g_block_start_p, 64);
 	L = *(uint32_t*)(block);
 	R = *((uint32_t*)(block) + 1);
 	while (i < 16)
 	{
 		temp = des_ecb_round(L, R, env, i);
-		R = L;
-		L = temp;
+		L = R;
+		R = temp;
+		i += 1;
 	}
-	des_print_block(L, R, env);
+	result = (uint64_t)R | (((uint64_t)L) << 32);
+	result = permutation(result, g_block_end_p, 64);
+	printf("Result: ");
+	print_binary(result);
+	swipe_endian_bytes((unsigned char*)&result, 8);
+	return result;
 }
 
-void des_create_subkeys(t_des_env *env)
+void des_create_keys(t_des_env *env)
 {
 	uint32_t c;
 	uint32_t d;
 	uint64_t temp;
 	int i;
 
-	des_check_key();
+	// des_check_key();
 	i = 0;
 	temp = *(uint64_t*)env->key;
-	permutation(&temp, g_key_delete_check_bits, 56);
-	c = (uint32_t)temp;
-	d = (uint32_t)(temp>>32);
+	print_binary(temp);
+	swipe_endian_bytes((unsigned char*)&temp, 8);
+	print_binary(temp);
+	temp = permutation(temp, g_key_init_premutation, 56);
+	print_binary(temp);
+	c = ((uint32_t)temp << 4) >> 4;
+	print_binary_32(c);
+	d = (uint32_t)(temp>>28);
+	print_binary_32(d);
 	while (i < 16)
 	{
-		c = DES_ROT_KEY(c, g_des_key_rot[i]);
-		d = DES_ROT_KEY(d, g_des_key_rot[i]);
+		c = (DES_ROT_KEY(c, g_des_key_rot[i]) << 4) >> 4;
+		printf("c%d: ", i + 1);
+		print_binary_32(c);
+		d = (DES_ROT_KEY(d, g_des_key_rot[i]) << 4) >> 4;
+		printf("d%d: ", i + 1);
+		print_binary_32(d);
 		temp = (uint64_t)c | (((uint64_t)d) << 28);
-		permutation(&temp, g_key_compress, 56);
+		temp = permutation(temp, g_key_compress, 56);
 		env->round_key[i] = temp;
+		printf("key %d: ", i + 1);
+		print_binary(temp);
 		i++;
 	}
 }
 
 
-void	des_create_keys(t_des_env *env)
+void	des_init_keys(t_des_env *env)
 {
-	if (env->key)
-	{
-		des_decode_key();
-		des_create_subkeys(env);
-		return ;
-	}
-	des_get_salt(env);
-	des_get_pass(env);
-	des_comput_key(env);
-	des_create_subkeys(env);
+	env->key = (unsigned char *)"IEOFIT#1";
+	// if (env->key)
+	// {
+	// 	des_decode_key();
+	// 	des_create_subkeys(env);
+	// 	return ;
+	// }
+	// des_get_salt(env);
+	// des_get_pass(env);
+	// des_comput_key(env);
+	des_create_keys(env);
 }
 
 
 void des_ecb(t_des_env *env)
 {
-	unsigned char	buff[8];
+	unsigned char	buff[9];
 	int		ch_read;
 	int		i;
+	uint64_t result;
 
-	des_create_keys(env);
-	while ((ch_read = read(env->fd_in, buff, 8))
-											== 8)
-		process_des_ecb_block(env, (uint64_t*)buff);
-	if (ch_read > 0)
-		process_des_ecb_block(env, des_ecb_create_last_block(buff, ch_read));
+	des_init_keys(env);
+	ft_strcpy((char *)buff, "IEOFIT#1");
+	result = process_des_ecb_block(env, (uint64_t*)&buff);
+	des_print_block(result, env);
+	// while ((ch_read = read(env->fd_in, buff, 8))
+	// 										== 8)
+	// 	process_des_ecb_block(env, (uint64_t*)buff);
+	// if (ch_read > 0)
+	// 	process_des_ecb_block(env, des_ecb_create_last_block(buff, ch_read));
 }
 
+
+void des_print_block(uint64_t encrypted_block, t_des_env *env)
+{
+	unsigned char *encrypted_bytes;
+	int i;
+
+	i = 0;
+	encrypted_bytes = (unsigned char *)&encrypted_block;
+	while (i<8){
+		printf("%02X%s", encrypted_bytes[i], ( i + 1 ) % 16 == 0 ? "\r\n" : " " );
+		i++;
+
+	}
+	printf("\n");
+	printf("\n");
+}
+
+// struct s_des_env {
+// 	unsigned char	a;
+// 	unsigned char	d;
+// 	unsigned char	*key;
+// 	unsigned char	*pass;
+// 	unsigned char	*salt;
+// 	int				fd_in;
+// 	int				fd_out;
+// 	uint64_t		round_key[16];
+
+// struct s_des_flag {
+// 	unsigned char	a;
+// 	unsigned char	d;
+// 	char			*input_file;
+// 	char			*output_file;
+// 	char			*key;
+// 	char			*pass;
+// 	char			*salt;
+// 	char			*i_vector;
+// 	char			*command;
+
+void des_init_env(t_des_env *env, t_des_flags *flags)
+{
+
+}
 
 void des_work(t_des_flags *flags)
 {

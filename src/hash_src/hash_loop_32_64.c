@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:59:53 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:09:58 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/04 20:36:40 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		create_last_block_32(t_hash *hash, void **data, int block_size)
 	ft_memmove(filled_data, *data, block_size);
 	*(unsigned char*)(filled_data + block_size) = 0x80;
 	if (hash->last_block_size_big_endian)
-		swipe_endian_64(&hash->data_sum_size);
+		reverse_byte_order_64(&hash->data_sum_size);
 	ft_memmove(filled_data + block_size + zero_append_size + 1,
 		(void*)&hash->data_sum_size, 8);
 	*data = filled_data;
@@ -66,7 +66,7 @@ int		create_last_block_64(t_hash *hash, void **data, int block_size)
 	ft_memmove(filled_data, *data, block_size);
 	*(unsigned char*)(filled_data + block_size) = 0x80;
 	if (hash->last_block_size_big_endian)
-		swipe_endian_64(&hash->data_sum_size);
+		reverse_byte_order_64(&hash->data_sum_size);
 	ft_memmove(filled_data + block_size + zero_append_size + 1,
 		(void*)&hash->data_sum_size, 8);
 	*data = filled_data;

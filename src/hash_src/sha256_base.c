@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:09:32 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:10:13 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/06 00:18:28 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	sha256_prepare_block(uint32_t *block, void *data)
 	i = 0;
 	ft_memmove((void*)block, data, 64);
 	while (i < 16)
-		swipe_endian_32(&block[i++]);
+		reverse_byte_order_32(&block[i++]); // byteS_order!!
 	while (i < 64)
 	{
 		s0 = ROTATER(block[i - 15], 7) ^

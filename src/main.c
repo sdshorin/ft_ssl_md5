@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:13:23 by bjesse            #+#    #+#             */
-/*   Updated: 2021/03/14 00:45:07 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/05 23:48:35 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int		main(int argc, char **argv)
 		exe_base64_command(argc - 1, argv + 1);
 	else if (is_des_command(argv[1]))
 		exe_des_command(argc - 1, argv + 1);
+	else if (is_test_command(argv[1]))
+		tests();
 	else
 		print_unexpected_arg(argv[1]);
 }

@@ -1,7 +1,6 @@
 
 # include "libft.h"
 
-
 typedef struct s_des_env t_des_env;
 
 struct s_des_env {
@@ -30,4 +29,12 @@ struct s_des_flag {
 	char			*command;
 };
 
-#define DES_ROT_KEY(x, rot) ((x << rot) | (x >> (28 - rot)))
+#define DES_ROT_KEY(x, rot) ((x >> rot) | (x << (28 - rot)))
+
+
+int		is_des_command(char *command);
+void	exe_des_command(int argc, char **argv);
+void des_print_block(uint64_t encrypted_block, t_des_env *env);
+
+
+void des_work(t_des_flags *flags);

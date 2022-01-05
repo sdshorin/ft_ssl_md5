@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2021/03/14 19:10:26 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/04 20:26:46 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <fcntl.h>
 # include "hash.h"
 # include "des.h"
+# include "utils.h"
 
 typedef struct	s_hash_flags {
 	unsigned char	p_flag;

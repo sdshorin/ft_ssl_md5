@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:38:42 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:11:06 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/04 20:39:03 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,8 @@ t_hash			*md5_create();
 
 void			uint32_to_hash(t_hash *hash, char *dest, uint32_t num);
 void			uint64_to_hash(t_hash *hash, char *dest, uint64_t reg);
-void			swipe_endian_64(uint64_t *all_data_size);
-void			swipe_endian_32(uint32_t *all_data_size);
+void			reverse_byte_order_64(uint64_t *all_data_size);
+void			reverse_byte_order_32(uint32_t *all_data_size);
 
 char			*get_hash_from_string(t_hash *hash, char *str);
 char			*get_hash_from_file(t_hash *hash, int fd);

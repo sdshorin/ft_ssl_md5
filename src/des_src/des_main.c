@@ -2,6 +2,14 @@
 #include "ft_ssl_md5.h"
 
 
+int		is_des_command(char *command)
+{
+	if (!ft_strcmp(command, "des"))
+		return (1);
+	// else if (!ft_strcmp(command, "sha256"))
+	// 	return (1);
+	return (0);
+}
 
 
 void des_parse_security_flags(char **argv, t_des_flags *flags)
@@ -15,7 +23,7 @@ void des_parse_security_flags(char **argv, t_des_flags *flags)
 		else if (!ft_strcmp("-v", *argv))
 			flags->i_vector = *(argv + 1);
 		else
-			flags->salt = ***((char***)0); // assert(false) todo: delete
+			flags->salt = **((char***)0); // assert(false) todo: delete
 }
 
 void des_parse_flags(t_des_flags *flags, int argc, char **argv)
@@ -32,7 +40,7 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 		else if (!ft_strcmp("-e", *argv))
 			flags->d = 0;
 		else if (++i == argc)
-			exit_error_des(*argv);
+			exit_error_unknown_flag(*argv);
 		else if (!ft_strcmp("-i", *argv))
 			flags->input_file = *(++argv);
 		else if (!ft_strcmp("-o", *argv))
@@ -45,7 +53,6 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 		i++;
 		argv++;
 	}
-	return (i);
 }
 
 
