@@ -13,7 +13,7 @@ void reverse_byte(unsigned char *byte);
 int		is_test_command(char *command);
 void tests();
 // TODO: вынести в des
-uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t *block);
+uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t block);
 void des_create_keys(t_des_env *env);
 
 

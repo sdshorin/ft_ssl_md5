@@ -11,11 +11,35 @@ int		is_des_command(char *command)
 	return (0);
 }
 
+unsigned char hex_to_num(char hex)
+{
+	if (hex >= '0' && hex <= '9')
+		return hex - '0';
+	if (hex>= 'A' && hex <= 'F')
+		return hex - 'A' + 10;
+	if (hex >= 'a' && hex <= 'f')
+		return hex - 'a' + 10;
+	return 0; // to do: handle errors
+}
+
+void des_parse_key(unsigned char *dest, char *source)
+{
+	int i;
+
+	ft_bzero(dest, 8);
+	i = 0;
+	while (i < 8)
+	{
+		dest[i] = hex_to_num(source[i * 2]) << 4;
+		dest[i] |= hex_to_num(source[i * 2 + 1]);
+		i++;
+	}
+}
 
 void des_parse_security_flags(char **argv, t_des_flags *flags)
 {
 		if (!ft_strcmp("-k", *argv))
-			flags->key = *(argv + 1);
+			des_parse_key(flags->key, *(argv + 1));
 		else if (!ft_strcmp("-p", *argv))
 			flags->pass = *(argv + 1);
 		else if (!ft_strcmp("-s", *argv))

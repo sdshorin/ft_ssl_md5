@@ -6,14 +6,15 @@ typedef struct s_des_env t_des_env;
 struct s_des_env {
 	unsigned char	a;
 	unsigned char	d;
-	unsigned char	*key;
+	unsigned char	key[8];
 	unsigned char	*pass;
 	unsigned char	*salt;
 	int				fd_in;
 	int				fd_out;
 	uint64_t		round_key[16];
-} ;
+	ssize_t	(*read)(int fd, void *buff, size_t size);
 
+} ;
 
 typedef struct s_des_flag t_des_flags;
 
@@ -22,7 +23,7 @@ struct s_des_flag {
 	unsigned char	d;
 	char			*input_file;
 	char			*output_file;
-	char			*key;
+	unsigned char			key[8];
 	char			*pass;
 	char			*salt;
 	char			*i_vector;
@@ -35,6 +36,7 @@ struct s_des_flag {
 int		is_des_command(char *command);
 void	exe_des_command(int argc, char **argv);
 void des_print_block(uint64_t encrypted_block, t_des_env *env);
+void	des_encrypt_stream(t_des_env *env);
 
 
 void des_work(t_des_flags *flags);

@@ -149,14 +149,14 @@ uint64_t des_ecb_round_s_boxes(uint64_t data)
 		six_bit_block = (data >> (6 * i)) & 0x3F;
 		reverse_byte(&six_bit_block);
 		six_bit_block = six_bit_block >> 2;
-		print_binary_32((uint32_t)six_bit_block);
+		// print_binary_32((uint32_t)six_bit_block);
 		a = (six_bit_block & 0x1) + (six_bit_block >> 5) * 2;
 		b = (six_bit_block & 0x1e) >> 1;
-		printf("six_bit_block: %d, a = %d, b = %d\n", six_bit_block, a, b);
+		// printf("six_bit_block: %d, a = %d, b = %d\n", six_bit_block, a, b);
 		unsigned char s_result = g_s_boxes[i][a][b];
 		reverse_byte(&s_result);
 		s_result = s_result >> 4;
-		printf("s_result for i=%d: %d\n", i, s_result);
+		// printf("s_result for i=%d: %d\n", i, s_result);
 		result |= ((uint64_t)s_result)<<(i*4);
 		i++;
 	}
@@ -170,18 +170,18 @@ uint32_t des_ecb_round(uint32_t L, uint32_t R, t_des_env *env, int n)
 	data = R;
 	data = permutation(data, g_p_box_extend, 48);
 	data ^= env->round_key[n];
-	printf("after xor:");
-	print_binary(data);
+	// printf("after xor:");
+	// print_binary(data);
 	data = des_ecb_round_s_boxes(data);
-	printf("after s-box:");
-	print_binary(data);
+	// printf("after s-box:");
+	// print_binary(data);
 	data = permutation(data, g_p_box, 32);
-	printf("after s-block premutation:");
-	print_binary(data);
+	// printf("after s-block premutation:");
+	// print_binary(data);
 	return (((uint32_t)data)^L);
 }
 
-uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t *block)
+uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t block)
 {
 	int i;
 	uint32_t L;
@@ -191,10 +191,10 @@ uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t *block)
 
 
 	i = 0;
-	swipe_endian_bytes((unsigned char*)block, 8);
-	*block = permutation(*block, g_block_start_p, 64);
-	L = *(uint32_t*)(block);
-	R = *((uint32_t*)(block) + 1);
+	swipe_endian_bytes((unsigned char*)&block, 8);
+	block = permutation(block, g_block_start_p, 64);
+	L = *(uint32_t*)(&block);
+	R = *((uint32_t*)(&block) + 1);
 	while (i < 16)
 	{
 		temp = des_ecb_round(L, R, env, i);
@@ -204,8 +204,8 @@ uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t *block)
 	}
 	result = (uint64_t)R | (((uint64_t)L) << 32);
 	result = permutation(result, g_block_end_p, 64);
-	printf("Result: ");
-	print_binary(result);
+	// printf("Result: ");
+	// print_binary(result);
 	swipe_endian_bytes((unsigned char*)&result, 8);
 	return result;
 }
@@ -220,28 +220,28 @@ void des_create_keys(t_des_env *env)
 	// des_check_key();
 	i = 0;
 	temp = *(uint64_t*)env->key;
-	print_binary(temp);
+	// print_binary(temp);
 	swipe_endian_bytes((unsigned char*)&temp, 8);
-	print_binary(temp);
+	// print_binary(temp);
 	temp = permutation(temp, g_key_init_premutation, 56);
-	print_binary(temp);
+	// print_binary(temp);
 	c = ((uint32_t)temp << 4) >> 4;
-	print_binary_32(c);
+	// print_binary_32(c);
 	d = (uint32_t)(temp>>28);
-	print_binary_32(d);
+	// print_binary_32(d);
 	while (i < 16)
 	{
 		c = (DES_ROT_KEY(c, g_des_key_rot[i]) << 4) >> 4;
-		printf("c%d: ", i + 1);
-		print_binary_32(c);
+		// printf("c%d: ", i + 1);
+		// print_binary_32(c);
 		d = (DES_ROT_KEY(d, g_des_key_rot[i]) << 4) >> 4;
-		printf("d%d: ", i + 1);
-		print_binary_32(d);
+		// printf("d%d: ", i + 1);
+		// print_binary_32(d);
 		temp = (uint64_t)c | (((uint64_t)d) << 28);
 		temp = permutation(temp, g_key_compress, 56);
 		env->round_key[i] = temp;
-		printf("key %d: ", i + 1);
-		print_binary(temp);
+		// printf("key %d: ", i + 1);
+		// print_binary(temp);
 		i++;
 	}
 }
@@ -249,7 +249,8 @@ void des_create_keys(t_des_env *env)
 
 void	des_init_keys(t_des_env *env)
 {
-	env->key = (unsigned char *)"IEOFIT#1";
+	// ft_memcpy(env->key, "IEOFIT#1", 8);
+	// env->key = (unsigned char *)"IEOFIT#1";
 	// if (env->key)
 	// {
 	// 	des_decode_key();
@@ -263,40 +264,23 @@ void	des_init_keys(t_des_env *env)
 }
 
 
-void des_ecb(t_des_env *env)
-{
-	unsigned char	buff[9];
-	int		ch_read;
-	int		i;
-	uint64_t result;
-
-	des_init_keys(env);
-	ft_strcpy((char *)buff, "IEOFIT#1");
-	result = process_des_ecb_block(env, (uint64_t*)&buff);
-	des_print_block(result, env);
-	// while ((ch_read = read(env->fd_in, buff, 8))
-	// 										== 8)
-	// 	process_des_ecb_block(env, (uint64_t*)buff);
-	// if (ch_read > 0)
-	// 	process_des_ecb_block(env, des_ecb_create_last_block(buff, ch_read));
-}
 
 
-void des_print_block(uint64_t encrypted_block, t_des_env *env)
-{
-	unsigned char *encrypted_bytes;
-	int i;
+// void des_print_block(uint64_t encrypted_block, t_des_env *env)
+// {
+// 	unsigned char *encrypted_bytes;
+// 	int i;
 
-	i = 0;
-	encrypted_bytes = (unsigned char *)&encrypted_block;
-	while (i<8){
-		printf("%02X%s", encrypted_bytes[i], ( i + 1 ) % 16 == 0 ? "\r\n" : " " );
-		i++;
+// 	i = 0;
+// 	encrypted_bytes = (unsigned char *)&encrypted_block;
+// 	while (i<8){
+// 		printf("%02X%s", encrypted_bytes[i], ( i + 1 ) % 16 == 0 ? "\r\n" : " " );
+// 		i++;
 
-	}
-	printf("\n");
-	printf("\n");
-}
+// 	}
+// 	printf("\n");
+// 	printf("\n");
+// }
 
 // struct s_des_env {
 // 	unsigned char	a;
@@ -319,9 +303,46 @@ void des_print_block(uint64_t encrypted_block, t_des_env *env)
 // 	char			*i_vector;
 // 	char			*command;
 
+#define READ_VIRTUAL -1
+#define SET_VIRTUAL_STRING -2
+#define FREE_VIRTUAL_STRING -3
+
+ssize_t	read_wrapper(int fd, void *buff, size_t size)
+{
+	static char *virtual_input;
+	static size_t bytes_read;
+	static size_t input_len;
+	int				current_read;
+
+	if (fd >= 0)
+		return read(fd, buff, size);
+	else if (fd == SET_VIRTUAL_STRING)
+	{
+		virtual_input = buff;
+		bytes_read = 0;
+		input_len = size;
+	}
+	else if (fd == FREE_VIRTUAL_STRING)
+		free(virtual_input);
+	else
+	{
+		if (bytes_read >= input_len)
+			return 0;
+		current_read = ft_min(size, input_len - bytes_read);
+		ft_memcpy(buff, virtual_input, current_read);
+		bytes_read += current_read;
+		return current_read;
+	}
+	return 0;
+}
+
+
 void des_init_env(t_des_env *env, t_des_flags *flags)
 {
-
+	env->fd_in = 0;
+	env->fd_out = 1;
+	env->read = read_wrapper;
+	ft_memcpy(env->key, flags->key, 8);
 }
 
 void des_work(t_des_flags *flags)
@@ -329,6 +350,104 @@ void des_work(t_des_flags *flags)
 	t_des_env env;
 
 	des_init_env(&env, flags);
+	des_init_keys(&env);
 	if (1)
-		des_ecb(&env);
+		des_encrypt_stream(&env);
 }
+
+// void des_ecb(t_des_env *env)
+// {
+// 	unsigned char	buff[9];
+// 	int		ch_read;
+// 	int		i;
+// 	uint64_t result;
+
+// 	ft_strcpy((char *)buff, "IEOFIT#1");
+// 	result = process_des_ecb_block(env, (uint64_t*)&buff);
+// 	// while ((ch_read = read(env->fd_in, buff, 8))
+// 	// 										== 8)
+// 	// 	process_des_ecb_block(env, (uint64_t*)buff);
+// 	// if (ch_read > 0)
+// 	// 	process_des_ecb_block(env, des_ecb_create_last_block(buff, ch_read));
+// }
+void des_process_stream_block(t_des_env *env, unsigned char *buff)
+{
+	char	out_buff[BASE64_BLOCK_SIZE/3*4];
+	int i;
+	uint64_t encrypted_8_byte;
+
+	i = 0;
+	while (i * 8 < BASE64_BLOCK_SIZE)
+	{
+		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
+		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
+		i += 1;
+	}
+	process_base64_block(buff, out_buff);
+	write(env->fd_out, out_buff, BASE64_BLOCK_SIZE/3*4);
+}
+
+size_t des_add_padding(unsigned char *buff, size_t size)
+{
+	int i;
+	unsigned char padding_byte;
+
+	padding_byte = 8 - size % 8;
+	i = (int)padding_byte;
+	while (i > 0)
+	{
+		buff[size - 1 + i] = padding_byte;
+		i--;
+	}
+	return size + padding_byte;
+}
+
+void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t size)
+{
+	char	out_buff[(BASE64_BLOCK_SIZE + 9)/3*4];
+	int i;
+	uint64_t encrypted_8_byte;
+
+	i = 0;
+	size = des_add_padding(buff, size);
+	while (i * 8 < size)
+	{
+		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
+		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
+		i += 1;
+	}
+	if (size > BASE64_BLOCK_SIZE)
+	{
+		process_base64_block(buff, out_buff);
+		write(env->fd_out, out_buff, BASE64_BLOCK_SIZE/3*4);
+		ft_bzero(out_buff, (BASE64_BLOCK_SIZE + 9)/3*4);
+		ft_memcpy(buff, buff + BASE64_BLOCK_SIZE, size - BASE64_BLOCK_SIZE);
+		size -= BASE64_BLOCK_SIZE;
+		ft_bzero(buff + size, BASE64_BLOCK_SIZE);
+	}
+	process_base64_last_block(buff, size, out_buff);
+	ft_putendl_fd(out_buff, env->fd_out);
+}
+
+
+void	des_encrypt_stream(t_des_env *env)
+{
+	unsigned char	in_buff[BASE64_BLOCK_SIZE + 8];
+	int		ch_read;
+	int		i;
+
+	while ((ch_read = env->read(env->fd_in, in_buff, BASE64_BLOCK_SIZE))
+											== BASE64_BLOCK_SIZE)
+		des_process_stream_block(env, in_buff);
+	i = ch_read;
+	while(i < BASE64_BLOCK_SIZE + 8)
+		in_buff[i++] = '\0';
+	des_process_last_stream_block(env, in_buff, ch_read);
+
+	// ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
+	// process_base64_last_block(buff, ch_read, out_buff);
+	// ft_putendl_fd(out_buff, fd_output);
+}
+
+
+

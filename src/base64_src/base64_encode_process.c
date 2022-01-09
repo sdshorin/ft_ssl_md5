@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:58:43 by bjesse            #+#    #+#             */
-/*   Updated: 2021/03/01 00:37:47 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/08 00:07:28 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,34 +35,31 @@ void	process_base64_last_chars(unsigned char *src, int len, char *dest)
 		dest[3] = '=';
 }
 
-void	process_base64_block(unsigned char *source, int fd_output)
+void	process_base64_block(unsigned char *source, char *out_buff)
 {
-	char	out[BASE64_BLOCK_SIZE/3*4];
 	int		source_pos;
 
 	source_pos = 0;
 	while (source_pos < BASE64_BLOCK_SIZE)
 	{
-		process_base64_3_char(source + source_pos, out + source_pos / 3 * 4);
+		process_base64_3_char(source + source_pos, out_buff + source_pos / 3 * 4);
 		source_pos += 3;
 	}
-	write(fd_output, out, BASE64_BLOCK_SIZE/3*4);
 }
 
-void	process_base64_last_block(unsigned char *source, int len,int fd_output)
+void	process_base64_last_block(unsigned char *source, int len, char *out_buff)
 {
-	char	out[BASE64_BLOCK_SIZE/3*4];
 	int		source_pos;
 
 	source_pos = 0;
-	ft_bzero(out, BASE64_BLOCK_SIZE/3*4);
+	ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
 	while (source_pos <= len - 3)
 	{
-		process_base64_3_char(source + source_pos, out + source_pos / 3 * 4);
+		process_base64_3_char(source + source_pos, out_buff + source_pos / 3 * 4);
 		source_pos += 3;
 	}
 	if (len % 3 > 0)
 		process_base64_last_chars(source + source_pos, len % 3,
-													out + source_pos / 3 * 4);
-	ft_putendl_fd(out, fd_output);
+													out_buff + source_pos / 3 * 4);
+
 }
