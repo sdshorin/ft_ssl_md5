@@ -4,8 +4,8 @@
 typedef struct s_des_env t_des_env;
 
 struct s_des_env {
-	unsigned char	a;
-	unsigned char	d;
+	unsigned char	use_base64;
+	unsigned char	decrypt;
 	unsigned char	key[8];
 	unsigned char	*pass;
 	unsigned char	*salt;
@@ -13,14 +13,15 @@ struct s_des_env {
 	int				fd_out;
 	uint64_t		round_key[16];
 	ssize_t	(*read)(int fd, void *buff, size_t size);
+	ssize_t	(*write)(int fd, const void *buff, size_t size);
 
 } ;
 
 typedef struct s_des_flag t_des_flags;
 
 struct s_des_flag {
-	unsigned char	a;
-	unsigned char	d;
+	unsigned char	use_base64;
+	unsigned char	decrypt;
 	char			*input_file;
 	char			*output_file;
 	unsigned char			key[8];

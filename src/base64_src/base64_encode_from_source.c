@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 22:39:15 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/08 00:07:52 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/13 00:29:55 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	base64_encode_from_string(char *source, int fd_output)
 	}
 	ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
 	process_base64_last_block((unsigned char*)source, len, out_buff);
-	ft_putendl_fd(out_buff, fd_output);
+	ft_putendl_fd(out_buff, fd_output); // wtf! А если нет нулевого байта?
 }
 
 
@@ -47,5 +47,5 @@ void	base64_encode_from_file(int fd_source, int fd_output)
 		buff[i++] = '\0';
 	ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
 	process_base64_last_block(buff, ch_read, out_buff);
-	ft_putendl_fd(out_buff, fd_output);
+	ft_putendl_fd(out_buff, fd_output);  // wtf! А если нет нулевого байта?
 }

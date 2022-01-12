@@ -58,11 +58,11 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 	while (i < argc)
 	{
 		if (!ft_strcmp("-a", *argv))
-			flags->a = 1;
+			flags->use_base64 = 1;
 		else if (!ft_strcmp("-d", *argv))
-			flags->d = 1;
+			flags->decrypt = 1;
 		else if (!ft_strcmp("-e", *argv))
-			flags->d = 0;
+			flags->decrypt = 0;
 		else if (++i == argc)
 			exit_error_unknown_flag(*argv);
 		else if (!ft_strcmp("-i", *argv))

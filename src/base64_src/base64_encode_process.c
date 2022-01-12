@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:58:43 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/08 00:07:28 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/13 00:32:41 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,18 @@ void	process_base64_3_char(unsigned char *src, char *dest)
 	dest[3] = g_base64_chars[*(src + 2) & 0x3F];
 }
 
-void	process_base64_last_chars(unsigned char *src, int len, char *dest)
+size_t	process_base64_last_chars(unsigned char *src, int len, char *dest)
 {
 	process_base64_3_char(src, dest);
 	if(len == 1)
 	{
 		dest[2] = '=';
 		dest[3] = '=';
+		return 2;
 	}
 	else
 		dest[3] = '=';
+	return 1;
 }
 
 void	process_base64_block(unsigned char *source, char *out_buff)
@@ -47,19 +49,23 @@ void	process_base64_block(unsigned char *source, char *out_buff)
 	}
 }
 
-void	process_base64_last_block(unsigned char *source, int len, char *out_buff)
+size_t	process_base64_last_block(unsigned char *source, int len, char *out_buff)
 {
 	int		source_pos;
+	size_t out_pos;
 
 	source_pos = 0;
-	ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
+	out_pos = 0;
+	// ft_bzero(out_buff, BASE64_BLOCK_SIZE/3*4);
 	while (source_pos <= len - 3)
 	{
-		process_base64_3_char(source + source_pos, out_buff + source_pos / 3 * 4);
+		process_base64_3_char(source + source_pos, out_buff + out_pos);
 		source_pos += 3;
+		out_pos += 4;
 	}
 	if (len % 3 > 0)
-		process_base64_last_chars(source + source_pos, len % 3,
-													out_buff + source_pos / 3 * 4);
+		out_pos += process_base64_last_chars(source + source_pos, len % 3,
+													out_buff + out_pos);
+	return out_pos;
 
 }

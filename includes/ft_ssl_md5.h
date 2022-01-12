@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/09 16:17:43 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/13 00:30:07 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,15 @@ typedef struct	s_base64_flags {
 int				is_base64_command(char *command);
 
 void			process_base64_block(unsigned char *source, char *out_buff);
-void			process_base64_last_block(unsigned char *source, int len, char *out_buff);
+size_t			process_base64_last_block(unsigned char *source, int len, char *out_buff);
 void			exe_base64_command(int argc, char **argv);
 void			base64_decode_from_file(int fd_source, int fd_output);
 void			base64_encode_from_file(int fd_source, int fd_output);
 void			base64_encode_from_string(char *source, int fd_output);
+
+int read_base64(int fd_source, char *buff, size_t buff_size);
+int decode_base64_block(char *buff, char *decoded_buff, size_t buff_size);
+
 
 
 #endif
