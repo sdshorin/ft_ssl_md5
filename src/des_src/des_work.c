@@ -402,6 +402,97 @@ ssize_t write_base64(int fd, const void *buff, size_t len)
 	return written_bytes;
 }
 
+void des_get_pass(char *pass)
+{
+	char pass_first[_PASSWORD_LEN + 1];
+	char pass_second[_PASSWORD_LEN + 1];
+
+
+	ft_strcpy(pass_first, getpass("enter des encryption password:"));
+	ft_strcpy(pass_second, getpass("Verifying - enter des-ecb encryption password:"));
+	if (ft_strcmp(pass_first, pass_second))
+		exit_error("Verify failure\nbad password read");
+	ft_strcpy(pass, pass_first);
+
+}
+
+void des_get_salt(unsigned char *salt)
+{
+	int fd;
+	char c;
+	int i;
+
+	i = 0;
+	fd = open("/dev/urandom", O_RDONLY);
+	if (fd < 0)
+		exit_error("Can't open random stream");
+	while (i < 8)
+	{
+		if (read(fd, &c, 1) != 1)
+			exit_error("Can't read random bytes");
+		if (' ' < c && c < 127)
+			salt[i++] = c;
+	}
+	// ft_memcpy(salt, "!V(R)l_@", 8);
+}
+
+
+void	uint64_to_hex(uint64_t reg)
+{
+	int				i;
+	char			*hex_char;
+	unsigned char	*bytes;
+	int				n;
+	char dest[17];
+
+	i = 0;
+	hex_char = "0123456789abcdef";
+	bytes = (unsigned char*)&reg;
+	while (i < 8)
+	{
+		n = i;
+		// if (hash->invert_bytes_in_string)
+		// 	n = 7 - i;
+		dest[i * 2] = hex_char[bytes[n] >> 4];
+		dest[i * 2 + 1] = hex_char[bytes[n] & 0x0F];
+		i++;
+	}
+	dest[16] = 0;
+	printf("hex: %s\n", dest);
+}
+
+
+
+void des_make_key(t_des_env *env, t_des_flags *flags)
+{
+	char salted_pass[_PASSWORD_LEN + 8 + 1];
+	size_t salted_len;
+	t_hash			*hash_obj;
+	char *hash;
+
+	if (!flags->pass_inited)
+		des_get_pass(flags->pass);
+	salted_len = ft_strlen(flags->pass);
+	ft_memcpy(salted_pass, flags->pass, salted_len);
+	if (!flags->salt_inited)
+		des_get_salt(flags->salt);
+	printf("salt: "); uint64_to_hex(*(uint64_t*)flags->salt);
+	ft_memcpy(salted_pass + salted_len, flags->salt, 8);
+	salted_len += 8;
+	salted_pass[salted_len] = 0;
+	printf("salted: %s\n", salted_pass);
+	hash_obj = factory_get_hash_obj("md5");
+	hash = get_hash_from_string(hash_obj, salted_pass);
+	des_parse_hex(env->key, hash);
+	reverse_byte_order_64((uint64_t*)env->key);
+	printf("key: ");  uint64_to_hex(*(uint64_t*)env->key);
+	des_parse_hex(env->i_vector, hash + 16);
+	reverse_byte_order_64((uint64_t*)env->i_vector);
+	printf("i_vector: ");  uint64_to_hex(*(uint64_t*)env->i_vector);
+	free(hash);
+	free(hash_obj);
+}
+
 void des_init_env(t_des_env *env, t_des_flags *flags)
 {
 	env->fd_in = 0;
@@ -418,7 +509,13 @@ void des_init_env(t_des_env *env, t_des_flags *flags)
 		env->read = read_wrapper;
 	else
 		env->read = read;
-	ft_memcpy(env->key, flags->key, 8);
+
+	if (flags->key_inited)
+		ft_memcpy(env->key, flags->key, 8);
+	else
+		des_make_key(env, flags);
+	if (flags->iv_inited)
+		ft_memcpy(env->i_vector, flags->i_vector, 8);
 }
 
 void des_work(t_des_flags *flags)

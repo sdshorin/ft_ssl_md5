@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:13:47 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/28 22:30:09 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 14:31:08 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ void	exit_error_bad_file(char *file_name)
 void	exit_error_bad_input()
 {
 	ft_putstr("Bad input");
+	exit(1);
+}
+
+void exit_error(char *err)
+{
+	ft_putstr(err);
 	exit(1);
 }
 

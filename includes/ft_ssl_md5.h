@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/13 00:30:07 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 14:31:20 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void			print_hash_from_input(char *command, t_hash_flags *flags);
 void			print_unexpected_arg();
 void			exit_error_no_string();
 void			exit_error_bad_input();
-
+void exit_error(char *err);
 void			exit_error_unknown_flag(char *flag);
 void			exit_error_bad_file(char *file_name);
 

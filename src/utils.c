@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:17:03 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/05 22:33:55 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 16:30:42 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void reverse_byte(unsigned char *byte)
 	*byte = result;
 
 }
-// swap_endian
+// swap_endian - reverse_bytes
 void swipe_endian_bytes(unsigned char *all_data, int size)
 {
 	while (size)

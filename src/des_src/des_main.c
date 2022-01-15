@@ -22,10 +22,12 @@ unsigned char hex_to_num(char hex)
 	return 0; // to do: handle errors
 }
 
-void des_parse_key(unsigned char *dest, char *source)
+void des_parse_hex(unsigned char *dest, char *source)
 {
 	int i;
 
+	if (ft_strlen(source) < 16)
+		exit_error("invalid param");
 	ft_bzero(dest, 8);
 	i = 0;
 	while (i < 8)
@@ -36,18 +38,39 @@ void des_parse_key(unsigned char *dest, char *source)
 	}
 }
 
+
+void check_flag_param(char *str)
+{
+	if(!str)
+		exit_error("empty flag");
+}
+
 void des_parse_security_flags(char **argv, t_des_flags *flags)
 {
 		if (!ft_strcmp("-k", *argv))
-			des_parse_key(flags->key, *(argv + 1));
+		{
+			check_flag_param(*(argv + 1));
+			des_parse_hex(flags->key, *(argv + 1));
+			flags->key_inited = 1;
+		}
 		else if (!ft_strcmp("-p", *argv))
-			flags->pass = *(argv + 1);
+		{
+			check_flag_param(*(argv + 1));
+			ft_strncpy(flags->pass, *(argv + 1), _PASSWORD_LEN + 1);
+			flags->pass_inited = 1;
+		}
 		else if (!ft_strcmp("-s", *argv))
-			flags->salt = *(argv + 1);
+		{
+			check_flag_param(*(argv + 1));
+			des_parse_hex(flags->salt, *(argv + 1));
+			flags->salt_inited = 1;
+		}
 		else if (!ft_strcmp("-v", *argv))
-			flags->i_vector = *(argv + 1);
-		else
-			flags->salt = **((char***)0); // assert(false) todo: delete
+		{
+			check_flag_param(*(argv + 1));
+			des_parse_hex(flags->i_vector, *(argv + 1));
+			flags->iv_inited = 1;
+		}
 }
 
 void des_parse_flags(t_des_flags *flags, int argc, char **argv)
