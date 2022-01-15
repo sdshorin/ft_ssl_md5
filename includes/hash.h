@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:38:42 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/04 20:39:03 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 18:38:28 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,6 @@ void			reverse_byte_order_32(uint32_t *all_data_size);
 
 char			*get_hash_from_string(t_hash *hash, char *str);
 char			*get_hash_from_file(t_hash *hash, int fd);
+char			*get_hash_from_mem(t_hash *hash, char *str, int len);
 
 #endif

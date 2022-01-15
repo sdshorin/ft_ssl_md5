@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:03:28 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 03:04:25 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 19:56:26 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ char	*get_hash_from_string(t_hash *hash, char *str)
 {
 	int len;
 
-	len = ft_strlen(str);
+	return get_hash_from_mem(hash, str, ft_strlen(str));
+}
+
+char	*get_hash_from_mem(t_hash *hash, char *str, int len)
+{
 	while (len - hash->block_b > 0)
 	{
 		proceed_block(hash, (void*)str);

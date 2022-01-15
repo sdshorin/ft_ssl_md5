@@ -474,29 +474,26 @@ void des_make_key(t_des_env *env, t_des_flags *flags)
 		des_get_pass(flags->pass);
 	salted_len = ft_strlen(flags->pass);
 	ft_memcpy(salted_pass, flags->pass, salted_len);
-	if (!flags->salt_inited)
-		des_get_salt(flags->salt);
-	printf("salt: "); uint64_to_hex(*(uint64_t*)flags->salt);
 	ft_memcpy(salted_pass + salted_len, flags->salt, 8);
 	salted_len += 8;
 	salted_pass[salted_len] = 0;
 	printf("salted: %s\n", salted_pass);
 	hash_obj = factory_get_hash_obj("md5");
-	hash = get_hash_from_string(hash_obj, salted_pass);
+	hash = get_hash_from_mem(hash_obj, salted_pass, salted_len);
 	des_parse_hex(env->key, hash);
-	reverse_byte_order_64((uint64_t*)env->key);
-	printf("key: ");  uint64_to_hex(*(uint64_t*)env->key);
+	// reverse_byte_order_64((uint64_t*)env->key);
 	des_parse_hex(env->i_vector, hash + 16);
 	reverse_byte_order_64((uint64_t*)env->i_vector);
-	printf("i_vector: ");  uint64_to_hex(*(uint64_t*)env->i_vector);
 	free(hash);
 	free(hash_obj);
 }
 
 void des_init_env(t_des_env *env, t_des_flags *flags)
 {
-	env->fd_in = 0;
-	env->fd_out = 1;
+	env->fd_in = 0; // open all here
+	// env->fd_in = 1; //open("test_with_salt", O_RDONLY); // open all here TODO
+	env->fd_out = 1; //open("good_file", O_WRONLY);
+
 	env->use_base64 = flags->use_base64;
 	env->decrypt = flags->decrypt;
 	if (env->use_base64 && !env->decrypt)
@@ -510,19 +507,81 @@ void des_init_env(t_des_env *env, t_des_flags *flags)
 	else
 		env->read = read;
 
-	if (flags->key_inited)
-		ft_memcpy(env->key, flags->key, 8);
-	else
-		des_make_key(env, flags);
-	if (flags->iv_inited)
-		ft_memcpy(env->i_vector, flags->i_vector, 8);
 }
 
+void read_salt_from_file(t_des_env *env, t_des_flags *flags)
+{
+	char base64_buff[25];
+	char decoded_buff[17];
+	int i;
+
+	if (flags->use_base64)
+	{
+		i = read_base64(env->fd_in, base64_buff, 22);
+		if (i != 22)
+			exit_error_bad_input();
+
+		base64_buff[22] = '=';
+		base64_buff[23] = '=';
+		base64_buff[24] = 0;
+		base64_buff[21] = (base64_buff[21] >> 4) << 4;
+		i = decode_base64_block(base64_buff, decoded_buff, 24);
+	}
+	else
+	{
+		i = read(env->fd_in, decoded_buff, 16);
+	}
+	if (i != 16)
+		exit_error("file invalid");
+	decoded_buff[16] = 0;
+	if (ft_strncmp("Salted__", decoded_buff, 8))
+		exit_error("file invalid");
+	ft_memcpy(flags->salt, decoded_buff + 8, 8);
+
+}
+
+void print_salt_to_file(t_des_env *env, t_des_flags *flags)
+{
+	write(env->fd_out, "Salted__", 8);
+	write(env->fd_out, flags->salt, 8);
+}
+
+void des_init_salt(t_des_env *env, t_des_flags *flags)
+{
+
+	if (!flags->key_inited)
+	{
+		if (flags->decrypt)
+			read_salt_from_file(env, flags);
+		else
+		{
+			if (!flags->salt_inited)
+				des_get_salt(flags->salt);
+			print_salt_to_file(env, flags);
+		}
+	}
+}
 void des_work(t_des_flags *flags)
 {
 	t_des_env env;
 
+
 	des_init_env(&env, flags);
+	des_init_salt(&env, flags);
+
+	if (flags->key_inited)
+		ft_memcpy(env.key, flags->key, 8);
+	else
+		des_make_key(&env, flags);
+	if (flags->iv_inited) // ?
+		ft_memcpy(env.i_vector, flags->i_vector, 8);
+	if (flags->verbpose)
+	{
+		printf("salt: "); uint64_to_hex(*(uint64_t*)flags->salt);
+		printf("key: ");  uint64_to_hex(*(uint64_t*)env.key);
+		printf("i_vector: ");  uint64_to_hex(*(uint64_t*)env.i_vector);
+
+	}
 	des_init_keys(&env);
 	if (1)
 		des_encrypt_stream(&env);

@@ -36,6 +36,7 @@ struct s_des_flag {
 	unsigned char			salt_inited;
 	unsigned char			i_vector[8];
 	unsigned char			iv_inited;
+	unsigned char			verbpose;
 	char			*command;
 };
 

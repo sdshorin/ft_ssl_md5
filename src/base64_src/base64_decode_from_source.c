@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 22:53:30 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/13 00:20:56 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/01/15 20:06:40 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ int read_base64(int fd_source, char *buff, size_t buff_size)
 	int j;
 	int ch_read;
 
-	if (buff_size % 3)
-		return -1;
 	i = 0;
 	while (buff_size - i > 0 && (ch_read = read(fd_source,
 		read_buff, ft_min(buff_size - i, BASE64_BLOCK_SIZE))))

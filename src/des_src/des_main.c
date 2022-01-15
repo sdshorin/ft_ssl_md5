@@ -82,6 +82,8 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 	{
 		if (!ft_strcmp("-a", *argv))
 			flags->use_base64 = 1;
+		else if (!ft_strcmp("-V", *argv))
+			flags->verbpose = 1;
 		else if (!ft_strcmp("-d", *argv))
 			flags->decrypt = 1;
 		else if (!ft_strcmp("-e", *argv))
