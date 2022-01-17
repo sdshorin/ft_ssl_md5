@@ -321,14 +321,35 @@ void	des_init_keys(t_des_env *env)
 #define SET_VIRTUAL_STRING -2
 #define FREE_VIRTUAL_STRING -3
 
-int assert_false()
+int assert_false(int line)
 {
-	ft_putstr("Error in code, assert false\n");
+	ft_putstr("Error in code, assert false on line");
+	ft_putnbr(line);
+	ft_putchar('\n');
 	exit(1);
 	return 0;
 }
 
 
+ssize_t nostop_read(int fd, void *out_buff, size_t buff_size)
+{
+	char	read_buff[BASE64_BLOCK_SIZE];
+	int i;
+	int j;
+	int ch_read;
+
+	i = 0;
+	while (buff_size - i > 0 && (ch_read = read(fd,
+		read_buff, ft_min(buff_size - i, BASE64_BLOCK_SIZE))))
+	{
+		if (ch_read == -1)
+			return (ch_read);
+		j = 0;
+		while (j < ch_read)
+			((char*)out_buff)[i++] = read_buff[j++];
+	}
+	return (i);
+}
 ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 {
 	char	buff[BASE64_BLOCK_SIZE];
@@ -337,7 +358,7 @@ ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 	int		i;
 
 	if (size != BASE64_BLOCK_SIZE)
-		return assert_false();
+		return assert_false(__LINE__);
 	ch_read = read_base64(fd, buff, BASE64_BLOCK_SIZE);
 	if (ch_read < 0)
 		exit_error_bad_input();
@@ -488,11 +509,34 @@ void des_make_key(t_des_env *env, t_des_flags *flags)
 	free(hash_obj);
 }
 
+
+int open_file(char *path, int mode)
+{
+	int fd;
+
+	fd = open(path, mode);
+	if (fd < 0)
+		exit_error_bad_file(path);
+	if (mode & O_RDONLY && read(fd, NULL, 0) < 0)
+		exit_error_bad_file(path);
+	if (mode & O_WRONLY && write(fd, "", 0) < 0)
+		exit_error_bad_file(path);
+	return (fd);
+}
+
 void des_init_env(t_des_env *env, t_des_flags *flags)
 {
-	env->fd_in = 0; // open all here
+	if (flags->input_file)
+		env->fd_in = open_file(flags->input_file, O_RDONLY);
+	else
+		env->fd_in = 0;
+	if (flags->output_file)
+		env->fd_out = open_file(flags->output_file, O_WRONLY | O_CREAT | O_TRUNC);
+	else
+		env->fd_out = 1;
+	// env->fd_in = 0; // open all here
 	// env->fd_in = 1; //open("test_with_salt", O_RDONLY); // open all here TODO
-	env->fd_out = 1; //open("good_file", O_WRONLY);
+	// env->fd_out = 1; //open("good_file", O_WRONLY);
 
 	env->use_base64 = flags->use_base64;
 	env->decrypt = flags->decrypt;
@@ -505,7 +549,7 @@ void des_init_env(t_des_env *env, t_des_flags *flags)
 	else if (0)
 		env->read = read_wrapper;
 	else
-		env->read = read;
+		env->read = nostop_read;
 
 }
 
@@ -528,16 +572,14 @@ void read_salt_from_file(t_des_env *env, t_des_flags *flags)
 		i = decode_base64_block(base64_buff, decoded_buff, 24);
 	}
 	else
-	{
 		i = read(env->fd_in, decoded_buff, 16);
-	}
 	if (i != 16)
 		exit_error("file invalid");
 	decoded_buff[16] = 0;
 	if (ft_strncmp("Salted__", decoded_buff, 8))
 		exit_error("file invalid");
 	ft_memcpy(flags->salt, decoded_buff + 8, 8);
-
+	env->data_offset = 16;
 }
 
 void print_salt_to_file(t_des_env *env, t_des_flags *flags)
@@ -546,13 +588,20 @@ void print_salt_to_file(t_des_env *env, t_des_flags *flags)
 	write(env->fd_out, flags->salt, 8);
 }
 
+
+
+
 void des_init_salt(t_des_env *env, t_des_flags *flags)
 {
 
 	if (!flags->key_inited)
 	{
 		if (flags->decrypt)
+		{
 			read_salt_from_file(env, flags);
+			close(env->fd_in);
+			env->fd_in = open_file(flags->input_file, O_RDONLY);
+		}
 		else
 		{
 			if (!flags->salt_inited)
@@ -565,7 +614,7 @@ void des_work(t_des_flags *flags)
 {
 	t_des_env env;
 
-
+	ft_bzero((void*)&env, sizeof(t_des_env));
 	des_init_env(&env, flags);
 	des_init_salt(&env, flags);
 
@@ -608,16 +657,24 @@ void des_process_stream_block(t_des_env *env, unsigned char *buff)
 {
 	// char	out_buff[BASE64_BLOCK_SIZE/3*4];
 	int i;
+	int byte_offset;
 	uint64_t encrypted_8_byte;
 
 	i = 0;
+	byte_offset = 0;
+	if (env->data_offset > 0)
+	{
+		byte_offset = ft_min(env->data_offset, BASE64_BLOCK_SIZE);
+		env->data_offset -= byte_offset;
+	}
+	i = byte_offset / 8;
 	while (i * 8 < BASE64_BLOCK_SIZE)
 	{
 		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
 		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
 		i += 1;
 	}
-	env->write(env->fd_out, buff, BASE64_BLOCK_SIZE);
+	env->write(env->fd_out, buff + byte_offset, BASE64_BLOCK_SIZE - byte_offset);
 }
 
 size_t des_add_padding(unsigned char *buff, size_t size)

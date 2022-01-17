@@ -15,6 +15,7 @@ struct s_des_env {
 	unsigned char	*salt;
 	int				fd_in;
 	int				fd_out;
+	int				data_offset;
 	uint64_t		round_key[16];
 	ssize_t	(*read)(int fd, void *buff, size_t size);
 	ssize_t	(*write)(int fd, const void *buff, size_t size);

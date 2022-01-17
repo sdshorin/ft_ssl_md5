@@ -73,6 +73,15 @@ void des_parse_security_flags(char **argv, t_des_flags *flags)
 		}
 }
 
+void des_parse_files_flags(char **argv, t_des_flags *flags)
+{
+	check_flag_param(*(argv + 1));
+	if (!ft_strcmp("-i", *argv))
+		flags->input_file = *(argv + 1);
+	else if (!ft_strcmp("-o", *argv))
+		flags->output_file = *(argv + 1);
+}
+
 void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 {
 	int i;
@@ -90,10 +99,8 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 			flags->decrypt = 0;
 		else if (++i == argc)
 			exit_error_unknown_flag(*argv);
-		else if (!ft_strcmp("-i", *argv))
-			flags->input_file = *(++argv);
-		else if (!ft_strcmp("-o", *argv))
-			flags->output_file = *(++argv);
+		else if (!ft_strcmp("-i", *argv) || !ft_strcmp("-o", *argv))
+			des_parse_files_flags(argv++, flags);
 		else if (!ft_strcmp("-k", *argv) || !ft_strcmp("-p", *argv) ||
 					!ft_strcmp("-s", *argv) || !ft_strcmp("-v", *argv))
 			des_parse_security_flags(argv++, flags);
