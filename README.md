@@ -1,6 +1,6 @@
 # ft_ssl_md5
 
-### Hashes: md5 sha256 sha224 sha512 sha384 sha512/256
+### Hashes: md5, sha256, sha224, sha512, sha384, sha512/256
 
 ### Enconding/Decoding base64, des
 
