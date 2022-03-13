@@ -4,11 +4,11 @@
 
 ### Enconding/Decoding base64, des
 
-Project from (42 School)[https://en.wikipedia.org/wiki/42_(school)/].
+Project from 42 School: https://en.wikipedia.org/wiki/42_(school)
 
-(Subject: hash) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_md5.en.pdf/]
+Subject: hash https://github.com/fpetras/42-subjects/blob/master/ft_ssl_md5.en.pdf/
 
-(Subject: base64, des) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_des.en.pdf/]
+Subject: base64, des https://github.com/fpetras/42-subjects/blob/master/ft_ssl_des.en.pdf/
 
 
 
@@ -24,6 +24,7 @@ Project from (42 School)[https://en.wikipedia.org/wiki/42_(school)/].
 # Examples: 
 
 ### HASH
+__________________
 - -q, quet mode
 - -s, hash from string
 
@@ -43,6 +44,7 @@ SHA384 (file.txt) = 7d17e90b83269decaf0564095bd733243f3caa74ff035cbb9157e3bdec49
 ```
 
 ### BASE64
+__________________
 
 - -d, decode mode
 - -e, encode mode (default) 
@@ -64,7 +66,8 @@ The quick brown fox jumps over the lazy dog
 ```
 
 ### DES (in devepment)
-(wiki link)[https://en.wikipedia.org/wiki/Data_Encryption_Standard/]
+____________________
+wiki link: https://en.wikipedia.org/wiki/Data_Encryption_Standard/
 
 ```
 > echo "one deep secret" | ./ft_ssl des-cbc -a -k 6162636461626364 -v 0011223344556677
