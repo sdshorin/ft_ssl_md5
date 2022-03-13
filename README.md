@@ -4,11 +4,11 @@
 
 ### Enconding/Decoding base64, des
 
-Project from (42 School)[https://en.wikipedia.org/wiki/42_(school)].
+Project from (42 School)[https://en.wikipedia.org/wiki/42_(school)/].
 
-(Subject: hash) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_md5.en.pdf]
+(Subject: hash) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_md5.en.pdf/]
 
-(Subject: base64, des) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_des.en.pdf]
+(Subject: base64, des) [https://github.com/fpetras/42-subjects/blob/master/ft_ssl_des.en.pdf/]
 
 
 
@@ -64,7 +64,7 @@ The quick brown fox jumps over the lazy dog
 ```
 
 ### DES (in devepment)
-(wiki link)[https://en.wikipedia.org/wiki/Data_Encryption_Standard]
+(wiki link)[https://en.wikipedia.org/wiki/Data_Encryption_Standard/]
 
 ```
 > echo "one deep secret" | ./ft_ssl des-cbc -a -k 6162636461626364 -v 0011223344556677
