@@ -26,15 +26,16 @@ void des_parse_hex(unsigned char *dest, char *source)
 {
 	int i;
 
-	if (ft_strlen(source) < 16)
-		exit_error("invalid param");
 	ft_bzero(dest, 8);
 	i = 0;
 	while (i < 8)
 	{
+		if (!source[i * 2] || !source[i * 2 + 1]) {
+			break;
+		}
 		dest[i] = hex_to_num(source[i * 2]) << 4;
 		dest[i] |= hex_to_num(source[i * 2 + 1]);
-		i++;
+		++i;
 	}
 }
 

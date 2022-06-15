@@ -509,17 +509,18 @@ void des_make_key(t_des_env *env, t_des_flags *flags)
 	if (!flags->pass_inited)
 		des_get_pass(flags->pass);
 	salted_len = ft_strlen(flags->pass);
+	ft_bzero(salted_pass, _PASSWORD_LEN + 8 + 1);
 	ft_memcpy(salted_pass, flags->pass, salted_len);
 	ft_memcpy(salted_pass + salted_len, flags->salt, 8);
 	salted_len += 8;
 	salted_pass[salted_len] = 0;
 	// printf("salted: %s\n", salted_pass);
-	hash_obj = factory_get_hash_obj("md5");
+	hash_obj = factory_get_hash_obj("sha256");
 	hash = get_hash_from_mem(hash_obj, salted_pass, salted_len);
 	des_parse_hex(env->key, hash);
 	// reverse_byte_order_64((uint64_t*)env->key);
 	des_parse_hex(env->i_vector, hash + 16);
-	reverse_byte_order_64((uint64_t*)env->i_vector);
+	// reverse_byte_order_64((uint64_t*)env->i_vector);
 	free(hash);
 	free(hash_obj);
 }
