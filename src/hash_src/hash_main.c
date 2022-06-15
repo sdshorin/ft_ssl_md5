@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:03:28 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/15 19:56:26 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/16 01:58:52 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	proceed_last_block(t_hash *hash, void *data, int block_size)
 
 char	*get_hash_from_string(t_hash *hash, char *str)
 {
-	int len;
 
 	return get_hash_from_mem(hash, str, ft_strlen(str));
 }

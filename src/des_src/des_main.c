@@ -6,6 +6,10 @@ int		is_des_command(char *command)
 {
 	if (!ft_strcmp(command, "des"))
 		return (1);
+	if (!ft_strcmp(command, "des-ecb"))
+		return (1);
+	if (!ft_strcmp(command, "des-cbc"))
+		return (1);
 	// else if (!ft_strcmp(command, "sha256"))
 	// 	return (1);
 	return (0);
@@ -116,7 +120,7 @@ void des_parse_flags(t_des_flags *flags, int argc, char **argv)
 void	exe_des_command(int argc, char **argv)
 {
 	t_des_flags		flags;
-	char			*command;
+
 
 	ft_bzero((void*)&flags, sizeof(t_des_flags));
 	flags.command = *argv;

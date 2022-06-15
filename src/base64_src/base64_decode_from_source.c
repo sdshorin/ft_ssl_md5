@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 22:53:30 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/15 20:06:40 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/16 01:53:31 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		decode_base64_4char(char *str, char *decoded_buff)
 
 int		_decode_base64_block(char *buff, char *decoded_buff, size_t buff_size)
 {
-	int i;
+	size_t i;
 	int decoded_bytes;
 	size_t decoded_len;
 

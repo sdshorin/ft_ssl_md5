@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:17:03 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/15 16:30:42 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/16 01:52:26 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	reverse_byte_order_32(uint32_t *all_data)
 void print_binary(uint64_t num)
 {
 
-	unsigned int a = 20;
+	// unsigned int a = 20;
 	//unsigned char b = 1;
 	//int c = *b;
 	//int d = *(b + 3);

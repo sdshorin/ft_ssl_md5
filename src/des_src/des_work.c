@@ -210,6 +210,30 @@ uint64_t 	process_des_ecb_block(t_des_env *env, uint64_t block)
 	return result;
 }
 
+
+uint64_t 	process_des_block(t_des_env *env, uint64_t crypto_8_byte) {
+	uint64_t temp_iv ;
+
+	if (!env->decrypt && env->mode & DES_CBC_MODE) {
+		crypto_8_byte ^= env->i_vector;
+	}
+	if (env->decrypt && env->mode & DES_CBC_MODE) {
+		temp_iv = crypto_8_byte;
+	}
+	crypto_8_byte = process_des_ecb_block(env, crypto_8_byte);
+	if (!env->decrypt && env->mode & DES_CBC_MODE) {
+		env->i_vector = crypto_8_byte;
+	}
+	if (env->decrypt && env->mode & DES_CBC_MODE) {
+		crypto_8_byte ^= env->i_vector;
+		env->i_vector = temp_iv;
+	}
+	return crypto_8_byte;
+}
+
+
+
+
 void des_create_keys(t_des_env *env)
 {
 	uint32_t c;
@@ -249,32 +273,9 @@ void des_create_keys(t_des_env *env)
 
 void	des_init_keys(t_des_env *env)
 {
-	int i;
-	uint64_t temp;
 
-	// ft_memcpy(env->key, "IEOFIT#1", 8);
-	// env->key = (unsigned char *)"IEOFIT#1";
-	// if (env->key)
-	// {
-	// 	des_decode_key();
-	// 	des_create_subkeys(env);
-	// 	return ;
-	// }
-	// des_get_salt(env);
-	// des_get_pass(env);
-	// des_comput_key(env);
+
 	des_create_keys(env);
-	if (env->decrypt)
-	{
-		i = 0;
-		while (i < 8)
-		{
-			temp = env->key[i];
-			env->key[i] = env->key[15 - i];
-			env->key[15 - i] = temp;
-			i++;
-		}
-	}
 }
 
 
@@ -352,7 +353,7 @@ ssize_t nostop_read(int fd, void *out_buff, size_t buff_size)
 }
 
 void add_to_static_buff(t_read_buff *static_buff, char* decoded_buff, ssize_t size) {
-	int point_to_insert = static_buff->size;
+
 	static_buff->size += size;
 	ft_memmove(static_buff->data, decoded_buff, size);
 }
@@ -375,7 +376,7 @@ ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 
 	if (size > BASE_DES_BLOCK_SIZE)
 		return assert_false(__LINE__);
-	if (static_buff.size < size) {
+	if (static_buff.size < (int)size) {
 		ch_read = read_base64(fd, buff, BASE64_BLOCK_SIZE);
 		if (ch_read < 0)
 			exit_error_bad_input();
@@ -435,6 +436,7 @@ ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 }
 
 ssize_t write_wrapper(int fd, const void *buff, size_t len, int flag) {
+	flag = -flag;
 	return write(fd, buff, len);
 }
 
@@ -519,7 +521,8 @@ void des_make_key(t_des_env *env, t_des_flags *flags)
 	hash = get_hash_from_mem(hash_obj, salted_pass, salted_len);
 	des_parse_hex(env->key, hash);
 	// reverse_byte_order_64((uint64_t*)env->key);
-	des_parse_hex(env->i_vector, hash + 16);
+	des_parse_hex((unsigned char*)&env->i_vector, hash + 16);
+
 	// reverse_byte_order_64((uint64_t*)env->i_vector);
 	free(hash);
 	free(hash_obj);
@@ -565,12 +568,16 @@ void des_init_env(t_des_env *env, t_des_flags *flags)
 
 	else
 		env->read = nostop_read;
+	env->mode = 0;
+	if (!ft_strcmp(flags->command, "des-cbc")) {
+		env->mode |= DES_CBC_MODE;
+	}
 
 }
 
 void read_salt(t_des_env *env, t_des_flags *flags)
 {
-	char base64_buff[25];
+
 	char decoded_buff[17];
 	int i;
 
@@ -634,18 +641,19 @@ void des_work(t_des_flags *flags)
 		ft_memcpy(env.key, flags->key, 8);
 	else
 		des_make_key(&env, flags);
-	if (flags->iv_inited) // ?
-		ft_memcpy(env.i_vector, flags->i_vector, 8);
+	if (flags->iv_inited)
+		ft_memcpy((unsigned char*) &env.i_vector, flags->i_vector, 8);
+	else if (env.mode & DES_CBC_MODE && !env.i_vector)
+		exit_error("Miss -v param\n");
 	if (flags->verbpose)
 	{
 		printf("salt: "); uint64_to_hex(*(uint64_t*)flags->salt);
 		printf("key: ");  uint64_to_hex(*(uint64_t*)env.key);
-		printf("i_vector: ");  uint64_to_hex(*(uint64_t*)env.i_vector);
+		printf("i_vector: ");  uint64_to_hex(env.i_vector);
 
 	}
 	des_init_keys(&env);
-	if (1)
-		des_encrypt_stream(&env);
+	des_stream(&env);
 }
 
 // void des_ecb(t_des_env *env)
@@ -667,15 +675,14 @@ void des_work(t_des_flags *flags)
 
 void des_process_stream_block(t_des_env *env, unsigned char *buff)
 {
-	// char	out_buff[BASE64_BLOCK_SIZE/3*4];
 	int i;
-	int byte_offset;
+
 	uint64_t encrypted_8_byte;
 
 	i = 0;
 	while (i * 8 < BASE_DES_BLOCK_SIZE)
 	{
-		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
+		encrypted_8_byte = process_des_block(env, *(uint64_t*)(buff + i * 8));
 		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
 		i += 1;
 	}
@@ -728,9 +735,9 @@ void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t s
 	{
 		size = des_add_padding(buff, size);
 	}
-	while (i * 8 < size)
+	while (i * 8 < (int)size)
 	{
-		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
+		encrypted_8_byte = process_des_block(env, *(uint64_t*)(buff + i * 8));
 		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
 		i += 1;
 	}
@@ -755,7 +762,7 @@ void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t s
 }
 
 
-void	des_encrypt_stream(t_des_env *env)
+void	des_stream(t_des_env *env)
 {
 	unsigned char	current[BASE_DES_BLOCK_SIZE + 8];
 	unsigned char	next_block[BASE_DES_BLOCK_SIZE + 8];

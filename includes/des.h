@@ -6,16 +6,19 @@
 
 typedef struct s_des_env t_des_env;
 
+#define DES_CBC_MODE 1
+
 struct s_des_env {
 	unsigned char	use_base64;
 	unsigned char	decrypt;
 	unsigned char	key[8];
-	unsigned char			i_vector[8];
+	uint64_t		i_vector;
 	unsigned char	*pass;
 	unsigned char	*salt;
 	int				fd_in;
 	int				fd_out;
 	int				data_offset;
+	int				mode;
 	uint64_t		round_key[16];
 	ssize_t	(*read)(int fd, void *buff, size_t size);
 	ssize_t	(*write)(int fd, const void *buff, size_t size, int flags);
@@ -51,7 +54,7 @@ struct s_des_flag {
 int		is_des_command(char *command);
 void	exe_des_command(int argc, char **argv);
 void des_print_block(uint64_t encrypted_block, t_des_env *env);
-void	des_encrypt_stream(t_des_env *env);
+void	des_stream(t_des_env *env);
 void des_parse_hex(unsigned char *dest, char *source);
 
 
