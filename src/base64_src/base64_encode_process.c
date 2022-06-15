@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:58:43 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/13 00:32:41 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/15 14:31:47 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ size_t	process_base64_last_chars(unsigned char *src, int len, char *dest)
 	{
 		dest[2] = '=';
 		dest[3] = '=';
-		return 2;
 	}
 	else
 		dest[3] = '=';
-	return 1;
+	return 4;
 }
 
 void	process_base64_block(unsigned char *source, char *out_buff)

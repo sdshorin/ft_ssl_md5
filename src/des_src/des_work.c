@@ -412,11 +412,6 @@ ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 		if (flag & NEED_NEXT_LINE)
 			written_bytes += write(fd, "\n", 1);
 	}
-	if (flag & LAST_BLOCK) {
-		while (written_bytes % 4)
-			written_bytes += write(fd, "=", 1);
-		written_bytes += write(fd, "\n", 1);
-	}
 	return written_bytes;
 }
 
@@ -724,7 +719,7 @@ void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t s
 		size = des_remove_padding(buff, size);
 	}
 
-	env->write(env->fd_out, buff, size, LAST_BLOCK);
+	env->write(env->fd_out, buff, size, LAST_BLOCK | NEED_NEXT_LINE);
 	// env->write()
 	// if (size > BASE64_BLOCK_SIZE)
 	// {
