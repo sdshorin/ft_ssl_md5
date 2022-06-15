@@ -390,7 +390,19 @@ ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 	// return (i);
 }
 
+ssize_t write_lines(int fd, const void *buff, size_t len, size_t block_size) {
+	size_t written_bytes;
 
+	written_bytes = 0;
+	while (len > 0) {
+		int write_size = ft_min(len, block_size);
+		written_bytes += write(fd, buff, write_size);
+		buff += write_size;
+		len -= write_size;
+		written_bytes += write(fd, "\n", 1);
+	}
+	return written_bytes;
+}
 ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 {
 	char out_buff[BASE64_BLOCK_SIZE/3*4];
@@ -401,16 +413,23 @@ ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 	while (len > BASE64_BLOCK_SIZE)
 	{
 		process_base64_block((unsigned char *)buff, out_buff);
-		written_bytes += write(fd, out_buff, BASE64_BLOCK_SIZE/3*4);
+		if (flag & NEED_NEXT_LINE)
+			written_bytes += write_lines(fd, out_buff, BASE64_BLOCK_SIZE/3*4, 64);
+		else
+			written_bytes += write(fd, out_buff, BASE64_BLOCK_SIZE/3*4);
 		len -= BASE64_BLOCK_SIZE;
 		buff += BASE64_BLOCK_SIZE;
+		if (flag & NEED_NEXT_LINE)
+			written_bytes += write(fd, "\n", 1);
 	}
 	if (len > 0)
 	{
 		last_block_size = process_base64_last_block((unsigned char *)buff, len, out_buff);
-		written_bytes += write(fd, out_buff, last_block_size);
+		// written_bytes += write(fd, out_buff, last_block_size);
 		if (flag & NEED_NEXT_LINE)
-			written_bytes += write(fd, "\n", 1);
+			written_bytes += write_lines(fd, out_buff, last_block_size, 64);
+		else
+			written_bytes += write(fd, out_buff, last_block_size);
 	}
 	return written_bytes;
 }
@@ -659,7 +678,7 @@ void des_process_stream_block(t_des_env *env, unsigned char *buff)
 		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
 		i += 1;
 	}
-	env->write(env->fd_out, buff, BASE_DES_BLOCK_SIZE, 0);
+	env->write(env->fd_out, buff, BASE_DES_BLOCK_SIZE, NEED_NEXT_LINE);
 }
 
 size_t des_add_padding(unsigned char *buff, size_t size)
