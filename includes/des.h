@@ -18,7 +18,7 @@ struct s_des_env {
 	int				data_offset;
 	uint64_t		round_key[16];
 	ssize_t	(*read)(int fd, void *buff, size_t size);
-	ssize_t	(*write)(int fd, const void *buff, size_t size);
+	ssize_t	(*write)(int fd, const void *buff, size_t size, int flags);
 
 } ;
 
@@ -42,6 +42,10 @@ struct s_des_flag {
 };
 
 #define DES_ROT_KEY(x, rot) ((x >> rot) | (x << (28 - rot)))
+
+
+#define LAST_BLOCK 1
+#define NEED_NEXT_LINE 2
 
 
 int		is_des_command(char *command);

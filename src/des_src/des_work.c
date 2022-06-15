@@ -350,57 +350,48 @@ ssize_t nostop_read(int fd, void *out_buff, size_t buff_size)
 	}
 	return (i);
 }
+
+void add_to_static_buff(t_read_buff *static_buff, char* decoded_buff, ssize_t size) {
+	int point_to_insert = static_buff->size;
+	static_buff->size += size;
+	ft_memmove(static_buff->data, decoded_buff, size);
+}
+
+ssize_t read_from_static_buff(t_read_buff *static_buff, char* des_buff, ssize_t size) {
+	size = ft_min(size, static_buff->size);
+	ft_memmove(des_buff, static_buff->data, size);
+	ft_memmove(static_buff->data, static_buff->data + size, size);
+	static_buff->size -= size;
+	return size;
+}
+
 ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 {
+	static t_read_buff static_buff;
 	char	buff[BASE64_BLOCK_SIZE];
-	char	decoded_buff[BASE64_BLOCK_SIZE / 4 * 3];
+	char	decoded_buff[BASE_DES_BLOCK_SIZE];
 	int		ch_read;
 	int		i;
 
-	if (size != BASE64_BLOCK_SIZE)
+	if (size > BASE_DES_BLOCK_SIZE)
 		return assert_false(__LINE__);
-	ch_read = read_base64(fd, buff, BASE64_BLOCK_SIZE);
-	if (ch_read < 0)
-		exit_error_bad_input();
-	i = ch_read;
-	while(i < BASE64_BLOCK_SIZE)
-		buff[i++] = '=';
-	i = decode_base64_block(buff, decoded_buff, BASE64_BLOCK_SIZE);
-	ft_memcpy(out_buff, decoded_buff, i);
-	return (i);
-}
-
-ssize_t	read_wrapper(int fd, void *buff, size_t size)
-{
-	static char *virtual_input;
-	static size_t bytes_read;
-	static size_t input_len;
-	int				current_read;
-
-	if (fd >= 0)
-		return read(fd, buff, size);
-	else if (fd == SET_VIRTUAL_STRING)
-	{
-		virtual_input = buff;
-		bytes_read = 0;
-		input_len = size;
+	if (static_buff.size < size) {
+		ch_read = read_base64(fd, buff, BASE64_BLOCK_SIZE);
+		if (ch_read < 0)
+			exit_error_bad_input();
+		i = ch_read;
+		while(i < BASE64_BLOCK_SIZE)
+			buff[i++] = '=';
+		i = decode_base64_block(buff, decoded_buff, BASE64_BLOCK_SIZE);
+		add_to_static_buff(&static_buff, decoded_buff, i);
 	}
-	else if (fd == FREE_VIRTUAL_STRING)
-		free(virtual_input);
-	else
-	{
-		if (bytes_read >= input_len)
-			return 0;
-		current_read = ft_min(size, input_len - bytes_read);
-		ft_memcpy(buff, virtual_input, current_read);
-		bytes_read += current_read;
-		return current_read;
-	}
-	return 0;
+	return read_from_static_buff(&static_buff, out_buff, size);
+	// // ft_memcpy(out_buff, decoded_buff, i);
+	// return (i);
 }
 
 
-ssize_t write_base64(int fd, const void *buff, size_t len)
+ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 {
 	char out_buff[BASE64_BLOCK_SIZE/3*4];
 	size_t last_block_size;
@@ -418,9 +409,19 @@ ssize_t write_base64(int fd, const void *buff, size_t len)
 	{
 		last_block_size = process_base64_last_block((unsigned char *)buff, len, out_buff);
 		written_bytes += write(fd, out_buff, last_block_size);
+		if (flag & NEED_NEXT_LINE)
+			written_bytes += write(fd, "\n", 1);
+	}
+	if (flag & LAST_BLOCK) {
+		while (written_bytes % 4)
+			written_bytes += write(fd, "=", 1);
 		written_bytes += write(fd, "\n", 1);
 	}
 	return written_bytes;
+}
+
+ssize_t write_wrapper(int fd, const void *buff, size_t len, int flag) {
+	return write(fd, buff, len);
 }
 
 void des_get_pass(char *pass)
@@ -543,36 +544,35 @@ void des_init_env(t_des_env *env, t_des_flags *flags)
 	if (env->use_base64 && !env->decrypt)
 		env->write = write_base64;
 	else
-		env->write = write;
+		env->write = write_wrapper;
 	if (env->use_base64 && env->decrypt)
 		env->read = read_wrapper_decode_base_64;
-	else if (0)
-		env->read = read_wrapper;
+
 	else
 		env->read = nostop_read;
 
 }
 
-void read_salt_from_file(t_des_env *env, t_des_flags *flags)
+void read_salt(t_des_env *env, t_des_flags *flags)
 {
 	char base64_buff[25];
 	char decoded_buff[17];
 	int i;
 
-	if (flags->use_base64)
-	{
-		i = read_base64(env->fd_in, base64_buff, 22);
-		if (i != 22)
-			exit_error_bad_input();
+	// if (flags->use_base64)
+	// {
+	// 	i = read_base64(env->fd_in, base64_buff, 22);
+	// 	if (i != 22)
+	// 		exit_error_bad_input();
 
-		base64_buff[22] = '=';
-		base64_buff[23] = '=';
-		base64_buff[24] = 0;
-		base64_buff[21] = (base64_buff[21] >> 4) << 4;
-		i = decode_base64_block(base64_buff, decoded_buff, 24);
-	}
-	else
-		i = read(env->fd_in, decoded_buff, 16);
+	// 	base64_buff[22] = '=';
+	// 	base64_buff[23] = '=';
+	// 	base64_buff[24] = 0;
+	// 	base64_buff[21] = (base64_buff[21] >> 4) << 4;
+	// 	i = decode_base64_block(base64_buff, decoded_buff, 24);
+	// }
+	// else
+	i = env->read(env->fd_in, decoded_buff, 16);
 	if (i != 16)
 		exit_error("file invalid");
 	decoded_buff[16] = 0;
@@ -597,9 +597,7 @@ void des_init_salt(t_des_env *env, t_des_flags *flags)
 	{
 		if (flags->decrypt)
 		{
-			read_salt_from_file(env, flags);
-			close(env->fd_in);
-			env->fd_in = open_file(flags->input_file, O_RDONLY);
+			read_salt(env, flags);
 		}
 		else
 		{
@@ -660,20 +658,13 @@ void des_process_stream_block(t_des_env *env, unsigned char *buff)
 	uint64_t encrypted_8_byte;
 
 	i = 0;
-	byte_offset = 0;
-	if (env->data_offset > 0)
-	{
-		byte_offset = ft_min(env->data_offset, BASE64_BLOCK_SIZE);
-		env->data_offset -= byte_offset;
-	}
-	i = byte_offset / 8;
-	while (i * 8 < BASE64_BLOCK_SIZE)
+	while (i * 8 < BASE_DES_BLOCK_SIZE)
 	{
 		encrypted_8_byte = process_des_ecb_block(env, *(uint64_t*)(buff + i * 8));
 		ft_memcpy(buff + i * 8, (void*)&encrypted_8_byte, 8);
 		i += 1;
 	}
-	env->write(env->fd_out, buff + byte_offset, BASE64_BLOCK_SIZE - byte_offset);
+	env->write(env->fd_out, buff, BASE_DES_BLOCK_SIZE, 0);
 }
 
 size_t des_add_padding(unsigned char *buff, size_t size)
@@ -733,7 +724,7 @@ void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t s
 		size = des_remove_padding(buff, size);
 	}
 
-	env->write(env->fd_out, buff, size);
+	env->write(env->fd_out, buff, size, LAST_BLOCK);
 	// env->write()
 	// if (size > BASE64_BLOCK_SIZE)
 	// {
@@ -751,27 +742,28 @@ void des_process_last_stream_block(t_des_env *env, unsigned char *buff, size_t s
 
 void	des_encrypt_stream(t_des_env *env)
 {
-	unsigned char	current[BASE64_BLOCK_SIZE + 8];
-	unsigned char	next_block[BASE64_BLOCK_SIZE + 8];
+	unsigned char	current[BASE_DES_BLOCK_SIZE + 8];
+	unsigned char	next_block[BASE_DES_BLOCK_SIZE + 8];
 	int		current_read;
 	int		next_read;
 	int		i;
 
 
-	current_read = env->read(env->fd_in, current, BASE64_BLOCK_SIZE);
-	next_read = env->read(env->fd_in, next_block, BASE64_BLOCK_SIZE);
-	while (next_read > 0) // && current_read == BASE64_BLOCK_SIZE)
+
+	current_read = env->read(env->fd_in, current, BASE_DES_BLOCK_SIZE);
+	next_read = env->read(env->fd_in, next_block, BASE_DES_BLOCK_SIZE);
+	while (next_read > 0) // && current_read == BASE_DES_BLOCK_SIZE)
 	{
 		des_process_stream_block(env, current);
 		ft_memcpy(current, next_block, next_read);
 		current_read = next_read;
-		next_read = env->read(env->fd_in, next_block, BASE64_BLOCK_SIZE);
+		next_read = env->read(env->fd_in, next_block, BASE_DES_BLOCK_SIZE);
 	}
 	// while ((ch_read = env->read(env->fd_in, in_buff, BASE64_BLOCK_SIZE))
 	// 										== BASE64_BLOCK_SIZE)
 		// des_process_stream_block(env, in_buff);
 	i = current_read;
-	while(i < BASE64_BLOCK_SIZE + 8)
+	while(i < BASE_DES_BLOCK_SIZE + 8)
 		current[i++] = '\0';
 	des_process_last_stream_block(env, current, current_read);
 

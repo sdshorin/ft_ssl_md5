@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/15 14:31:20 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/15 12:18:06 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@ typedef struct	s_base64_flags {
 }				t_base64_flags;
 
 # define BASE64_BLOCK_SIZE 64 * 3
+
+# define BASE_DES_BLOCK_SIZE BASE64_BLOCK_SIZE / 4 * 3
+
+typedef struct s_read_buff {
+	char data[BASE_DES_BLOCK_SIZE * 3];
+	int size;
+} t_read_buff;
 
 int				is_base64_command(char *command);
 
