@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   md5_base.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:04:40 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 03:38:18 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:31:19 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-int		md5_get_data_num(int round_num)
+int	md5_get_data_num(int round_num)
 {
 	if (round_num < 16)
 		return (round_num);
@@ -28,7 +28,7 @@ char	*md5_hash_to_string(t_hash *md5_p)
 	char		*hash_str;
 	t_md5_hash	*md5;
 
-	md5 = (t_md5_hash*)md5_p;
+	md5 = (t_md5_hash *)md5_p;
 	hash_str = ft_memalloc(33);
 	if (!hash_str)
 		exit(1);
@@ -41,11 +41,11 @@ char	*md5_hash_to_string(t_hash *md5_p)
 
 void	md5_add_hash(t_hash *hash_base, t_hash *hash_to_add)
 {
-	t_md5_hash *hash;
-	t_md5_hash *to_add;
+	t_md5_hash	*hash;
+	t_md5_hash	*to_add;
 
-	hash = (t_md5_hash*)hash_base;
-	to_add = (t_md5_hash*)hash_to_add;
+	hash = (t_md5_hash *)hash_base;
+	to_add = (t_md5_hash *)hash_to_add;
 	hash->a += to_add->a;
 	hash->b += to_add->b;
 	hash->c += to_add->c;
@@ -54,11 +54,11 @@ void	md5_add_hash(t_hash *hash_base, t_hash *hash_to_add)
 
 void	md5_copy_hash(t_hash *hash_base, t_hash *source_base)
 {
-	t_md5_hash *hash_copy;
-	t_md5_hash *source;
+	t_md5_hash	*hash_copy;
+	t_md5_hash	*source;
 
-	hash_copy = (t_md5_hash*)hash_base;
-	source = (t_md5_hash*)source_base;
+	hash_copy = (t_md5_hash *)hash_base;
+	source = (t_md5_hash *)source_base;
 	hash_copy->a = source->a;
 	hash_copy->b = source->b;
 	hash_copy->c = source->c;
@@ -70,7 +70,7 @@ void	md5_round(t_hash *hash, uint32_t *memory, int round_num)
 	t_md5_hash	*round;
 	int			s;
 
-	round = (t_md5_hash*)hash;
+	round = (t_md5_hash *)hash;
 	s = md5_get_byte_rotation(round_num);
 	if (round_num < 16)
 		round->a += F(round->b, round->c, round->d);

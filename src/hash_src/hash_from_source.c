@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   hash_from_source.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:51:58 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/27 14:16:20 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:19:26 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-int		is_hash_command(char *command)
+int	is_hash_command(char *command)
 {
 	if (!ft_strcmp(command, "md5"))
 		return (1);
@@ -67,9 +67,9 @@ void	print_hash_from_file(char *command, t_hash_flags *flags,
 
 char	*read_string_from_input(void)
 {
-	char *temp_str;
-	char *input_str;
-	char buffer[129];
+	char	*temp_str;
+	char	*input_str;
+	char	buffer[129];
 
 	input_str = 0;
 	ft_bzero(buffer, 129);

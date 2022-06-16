@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sha512_base.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:26:34 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/04 20:37:09 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:21:28 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*sha512_hash_to_string(t_hash *hash_base)
 	t_sha512_hash	*hash;
 
 	i = 0;
-	hash = (t_sha512_hash*)hash_base;
+	hash = (t_sha512_hash *)hash_base;
 	hash_str = ft_memalloc(129);
 	if (!hash_str)
 		exit(1);
@@ -71,7 +71,7 @@ void	sha512_prepare_block(uint64_t *block, void *data)
 	uint64_t	s1;
 
 	i = 0;
-	ft_memmove((void*)block, data, 128);
+	ft_memmove((void *)block, data, 128);
 	while (i < 16)
 		reverse_byte_order_64(&block[i++]);
 	while (i < 80)
@@ -91,9 +91,9 @@ void	sha512_round(t_hash *hash_base, uint64_t *memory, int i)
 	uint64_t		temp1;
 	uint64_t		temp2;
 
-	hash = (t_sha512_hash*)hash_base;
-	temp1 = hash->h7 + S1_512(hash->h4) + CH(hash->h4, hash->h5, hash->h6) +
-		memory[i] + g_sha512_k[i];
+	hash = (t_sha512_hash *)hash_base;
+	temp1 = hash->h7 + S1_512(hash->h4) + CH(hash->h4, hash->h5, hash->h6)
+		+ memory[i] + g_sha512_k[i];
 	temp2 = S0_512(hash->h0) + MAJ(hash->h0, hash->h1, hash->h2);
 	hash->h7 = hash->h6;
 	hash->h6 = hash->h5;
@@ -110,8 +110,8 @@ void	sha512_copy_hash(t_hash *hash_base, t_hash *source_base)
 	t_sha512_hash	*hash_copy;
 	t_sha512_hash	*source;
 
-	hash_copy = (t_sha512_hash*)hash_base;
-	source = (t_sha512_hash*)source_base;
+	hash_copy = (t_sha512_hash *)hash_base;
+	source = (t_sha512_hash *)source_base;
 	hash_copy->h0 = source->h0;
 	hash_copy->h1 = source->h1;
 	hash_copy->h2 = source->h2;
@@ -124,11 +124,11 @@ void	sha512_copy_hash(t_hash *hash_base, t_hash *source_base)
 
 void	sha512_add_hash(t_hash *hash_base, t_hash *hash_to_add)
 {
-	t_sha512_hash *hash;
-	t_sha512_hash *to_add;
+	t_sha512_hash	*hash;
+	t_sha512_hash	*to_add;
 
-	hash = (t_sha512_hash*)hash_base;
-	to_add = (t_sha512_hash*)hash_to_add;
+	hash = (t_sha512_hash *)hash_base;
+	to_add = (t_sha512_hash *)hash_to_add;
 	hash->h0 += to_add->h0;
 	hash->h1 += to_add->h1;
 	hash->h2 += to_add->h2;

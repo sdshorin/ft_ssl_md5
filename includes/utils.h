@@ -3,9 +3,7 @@
 # include "libft.h"
 
 void	reverse_byte_order_64(uint64_t *all_data_size);
-void print_binary(uint64_t num);
 void swipe_endian_bytes(unsigned char *all_data, int size);
-void print_binary_32(uint32_t num);
 void reverse_byte(unsigned char *byte);
 
 

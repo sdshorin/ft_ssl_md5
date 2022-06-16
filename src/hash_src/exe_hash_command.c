@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_hash_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:36:33 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 21:38:22 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:14:48 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	init_hash_flags(t_hash_flags *flags)
 	flags->flags_parsed = 0;
 }
 
-
 void	print_hash_from_command_line_p(char *command, t_hash_flags *flags)
 {
 	flags->p_flag = 1;
@@ -30,10 +29,10 @@ void	print_hash_from_command_line_p(char *command, t_hash_flags *flags)
 	print_hash_from_input(command, flags);
 }
 
-int		work_with_flags(char *command, t_hash_flags *flags, int argc,
+int	work_with_flags(char *command, t_hash_flags *flags, int argc,
 															char **argv)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < argc && **argv == '-')
@@ -47,11 +46,11 @@ int		work_with_flags(char *command, t_hash_flags *flags, int argc,
 		else if (!ft_strcmp("-s", *argv))
 			if (++i == argc)
 				exit_error_no_string();
-			else
-			{
-				print_hash_from_string(command, flags, *(++argv));
-				flags->printed_hash_from_input = 1;
-			}
+		else
+		{
+			print_hash_from_string(command, flags, *(++argv));
+			flags->printed_hash_from_input = 1;
+		}
 		else
 			exit_error_unknown_flag(*argv);
 		i++;

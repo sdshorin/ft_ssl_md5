@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sha256_base.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:09:32 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/06 00:18:28 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:25:59 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*sha256_hash_to_string(t_hash *hash_base)
 	t_sha256_hash	*hash;
 
 	i = 0;
-	hash = (t_sha256_hash*)hash_base;
+	hash = (t_sha256_hash *)hash_base;
 	hash_str = ft_memalloc(65);
 	if (!hash_str)
 		exit(1);
@@ -41,15 +41,15 @@ void	sha256_prepare_block(uint32_t *block, void *data)
 	uint32_t	s1;
 
 	i = 0;
-	ft_memmove((void*)block, data, 64);
+	ft_memmove((void *)block, data, 64);
 	while (i < 16)
-		reverse_byte_order_32(&block[i++]); // byteS_order!!
+		reverse_byte_order_32(&block[i++]);
 	while (i < 64)
 	{
-		s0 = ROTATER(block[i - 15], 7) ^
-			ROTATER(block[i - 15], 18) ^ (block[i - 15] >> 3);
-		s1 = ROTATER(block[i - 2], 17) ^
-			ROTATER(block[i - 2], 19) ^ (block[i - 2] >> 10);
+		s0 = ROTATER(block[i - 15], 7)
+			^ ROTATER(block[i - 15], 18) ^ (block[i - 15] >> 3);
+		s1 = ROTATER(block[i - 2], 17)
+			^ ROTATER(block[i - 2], 19) ^ (block[i - 2] >> 10);
 		block[i] = block[i - 16] + s0 + block[i - 7] + s1;
 		i++;
 	}
@@ -61,9 +61,9 @@ void	sha256_round(t_hash *hash_base, uint32_t *memory, int i)
 	uint32_t		temp1;
 	uint32_t		temp2;
 
-	hash = (t_sha256_hash*)hash_base;
-	temp1 = hash->h7 + S1(hash->h4) + CH(hash->h4, hash->h5, hash->h6) +
-		memory[i] + sha256_get_k(i);
+	hash = (t_sha256_hash *)hash_base;
+	temp1 = hash->h7 + S1(hash->h4) + CH(hash->h4, hash->h5, hash->h6)
+		+ memory[i] + sha256_get_k(i);
 	temp2 = S0(hash->h0) + MAJ(hash->h0, hash->h1, hash->h2);
 	hash->h7 = hash->h6;
 	hash->h6 = hash->h5;
@@ -77,11 +77,11 @@ void	sha256_round(t_hash *hash_base, uint32_t *memory, int i)
 
 void	sha256_copy_hash(t_hash *hash_base, t_hash *source_base)
 {
-	t_sha256_hash *hash_copy;
-	t_sha256_hash *source;
+	t_sha256_hash	*hash_copy;
+	t_sha256_hash	*source;
 
-	hash_copy = (t_sha256_hash*)hash_base;
-	source = (t_sha256_hash*)source_base;
+	hash_copy = (t_sha256_hash *)hash_base;
+	source = (t_sha256_hash *)source_base;
 	hash_copy->h0 = source->h0;
 	hash_copy->h1 = source->h1;
 	hash_copy->h2 = source->h2;
@@ -94,11 +94,11 @@ void	sha256_copy_hash(t_hash *hash_base, t_hash *source_base)
 
 void	sha256_add_hash(t_hash *hash_base, t_hash *hash_to_add)
 {
-	t_sha256_hash *hash;
-	t_sha256_hash *to_add;
+	t_sha256_hash	*hash;
+	t_sha256_hash	*to_add;
 
-	hash = (t_sha256_hash*)hash_base;
-	to_add = (t_sha256_hash*)hash_to_add;
+	hash = (t_sha256_hash *)hash_base;
+	to_add = (t_sha256_hash *)hash_to_add;
 	hash->h0 += to_add->h0;
 	hash->h1 += to_add->h1;
 	hash->h2 += to_add->h2;

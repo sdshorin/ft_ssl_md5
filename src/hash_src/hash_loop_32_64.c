@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   hash_loop_32_64.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:59:53 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/04 20:36:40 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:23:14 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-int		create_last_block_32(t_hash *hash, void **data, int block_size)
+int	create_last_block_32(t_hash *hash, void **data, int block_size)
 {
 	void	*filled_data;
 	int		zero_append_size;
@@ -24,7 +24,7 @@ int		create_last_block_32(t_hash *hash, void **data, int block_size)
 	if (!filled_data)
 		exit(1);
 	ft_memmove(filled_data, *data, block_size);
-	*(unsigned char*)(filled_data + block_size) = 0x80;
+	*(unsigned char *)(filled_data + block_size) = 0x80;
 	if (hash->last_block_size_big_endian)
 		reverse_byte_order_64(&hash->data_sum_size);
 	ft_memmove(filled_data + block_size + zero_append_size + 1,
@@ -48,11 +48,11 @@ void	v_process_block_32(t_hash *hash, void *data)
 	}
 	else
 		while (i < 64)
-			round_32(hash, (uint32_t*)data, i++);
+			round_32(hash, (uint32_t *)data, i++);
 	add_hash(hash, hash->backup);
 }
 
-int		create_last_block_64(t_hash *hash, void **data, int block_size)
+int	create_last_block_64(t_hash *hash, void **data, int block_size)
 {
 	void	*filled_data;
 	int		zero_append_size;
@@ -64,7 +64,7 @@ int		create_last_block_64(t_hash *hash, void **data, int block_size)
 	if (!filled_data)
 		exit(1);
 	ft_memmove(filled_data, *data, block_size);
-	*(unsigned char*)(filled_data + block_size) = 0x80;
+	*(unsigned char *)(filled_data + block_size) = 0x80;
 	if (hash->last_block_size_big_endian)
 		reverse_byte_order_64(&hash->data_sum_size);
 	ft_memmove(filled_data + block_size + zero_append_size + 1,
@@ -88,6 +88,6 @@ void	v_process_block_64(t_hash *hash, void *data)
 	}
 	else
 		while (i < 80)
-			round_64(hash, (uint64_t*)data, i++);
+			round_64(hash, (uint64_t *)data, i++);
 	add_hash(hash, hash->backup);
 }

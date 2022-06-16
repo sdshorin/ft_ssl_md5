@@ -25,7 +25,8 @@ base64_encode_process.c exe_base64_command.c base64_utils.c
 DES_LIST = des_main.c des_work.c des_round.c des_io.c des_keys.c des_init.c \
 des_tools.c des_flags_utils.c
 
-SRCS_LIST = main.c utils.c exeptions.c tests.c
+SRCS_LIST = main.c utils.c exeptions.c tests.c print_expected_args.c utils_2.c \
+utils_3.c
 HEADERS_LIST = ft_ssl_md5.h hash.h des.h utils.h
 
 SRCS = $(addprefix $(SRC_DIR),$(SRCS_LIST)) \

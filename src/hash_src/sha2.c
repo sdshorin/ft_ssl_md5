@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sha2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:23:25 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:09:41 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:19:52 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*sha512_256_hash_to_string(t_hash *hash_base)
 	t_sha512_hash	*hash;
 
 	i = 0;
-	hash = (t_sha512_hash*)hash_base;
+	hash = (t_sha512_hash *)hash_base;
 	hash_str = ft_memalloc(65);
 	if (!hash_str)
 		exit(1);
@@ -37,7 +37,7 @@ char	*sha384_hash_to_string(t_hash *hash_base)
 	t_sha512_hash	*hash;
 
 	i = 0;
-	hash = (t_sha512_hash*)hash_base;
+	hash = (t_sha512_hash *)hash_base;
 	hash_str = ft_memalloc(97);
 	if (!hash_str)
 		exit(1);
@@ -57,7 +57,7 @@ char	*sha224_hash_to_string(t_hash *hash_base)
 	t_sha256_hash	*hash;
 
 	i = 0;
-	hash = (t_sha256_hash*)hash_base;
+	hash = (t_sha256_hash *)hash_base;
 	hash_str = ft_memalloc(57);
 	if (!hash_str)
 		exit(1);

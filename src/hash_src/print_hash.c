@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_hash.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:22:37 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 04:12:22 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:22:25 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_hash_type(char *type)
 {
-	char c;
+	char	c;
 
 	while (*type)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   factory_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:27:09 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/21 03:53:29 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:18:37 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,20 @@
 t_virtual_table	g_vtable_sha384 = {
 	0, sha512_round, 0, sha512_prepare_block, sha512_copy_hash,
 	sha512_add_hash, sha384_hash_to_string, 0, v_process_block_64,
-	0, create_last_block_64};
-t_hash			g_base_sha384 = {&g_vtable_sha384, 0,
-	TYPE_SHA_384, 1, 1, 1, 128, 0 };
+	0, create_last_block_64
+};
+t_hash			g_base_sha384 = {
+	&g_vtable_sha384, 0,
+	TYPE_SHA_384, 1, 1, 1, 128, 0
+};
 
-t_hash			*sha384_create(void)
+t_hash	*sha384_create(void)
 {
-	t_sha512_hash						*sha2;
-	t_sha512_hash						*backup;
+	t_sha512_hash	*sha2;
+	t_sha512_hash	*backup;
 
-	sha2 = (t_sha512_hash*)malloc(sizeof(t_sha512_hash));
-	backup = (t_sha512_hash*)malloc(sizeof(t_sha512_hash));
+	sha2 = (t_sha512_hash *)malloc(sizeof(t_sha512_hash));
+	backup = (t_sha512_hash *)malloc(sizeof(t_sha512_hash));
 	if (!sha2 || !backup)
 		exit(1);
 	ft_memcpy(&sha2->base, &g_base_sha384, sizeof(g_base_sha384));
@@ -38,7 +41,7 @@ t_hash			*sha384_create(void)
 	sha2->h5 = 0x8EB44A8768581511;
 	sha2->h6 = 0xDB0C2E0D64F98FA7;
 	sha2->h7 = 0x47B5481DBEFA4FA4;
-	sha2->base.backup = (t_hash*)backup;
+	sha2->base.backup = (t_hash *)backup;
 	return (&sha2->base);
 }
 
@@ -47,15 +50,17 @@ t_virtual_table	g_vtable = {
 	sha512_add_hash, sha512_256_hash_to_string, 0, v_process_block_64,
 	0, create_last_block_64
 };
-t_hash			g_base = { &g_vtable, 0, TYPE_SHA_512_256, 1, 1, 1, 128, 0 };
+t_hash			g_base = {
+	&g_vtable, 0, TYPE_SHA_512_256, 1, 1, 1, 128, 0
+};
 
-t_hash			*sha512_256_create(void)
+t_hash	*sha512_256_create(void)
 {
-	t_sha512_hash						*sha2;
-	t_sha512_hash						*backup;
+	t_sha512_hash	*sha2;
+	t_sha512_hash	*backup;
 
-	sha2 = (t_sha512_hash*)malloc(sizeof(t_sha512_hash));
-	backup = (t_sha512_hash*)malloc(sizeof(t_sha512_hash));
+	sha2 = (t_sha512_hash *)malloc(sizeof(t_sha512_hash));
+	backup = (t_sha512_hash *)malloc(sizeof(t_sha512_hash));
 	if (!sha2 || !backup)
 		exit(1);
 	ft_memcpy(&sha2->base, &g_base, sizeof(g_base));
@@ -68,6 +73,6 @@ t_hash			*sha512_256_create(void)
 	sha2->h5 = 0xBE5E1E2553863992;
 	sha2->h6 = 0x2B0199FC2C85B8AA;
 	sha2->h7 = 0x0EB72DDC81C52CA2;
-	sha2->base.backup = (t_hash*)backup;
+	sha2->base.backup = (t_hash *)backup;
 	return (&sha2->base);
 }
