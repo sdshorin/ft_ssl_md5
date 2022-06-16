@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:17:03 by bjesse            #+#    #+#             */
-/*   Updated: 2022/06/16 23:00:44 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/16 23:45:26 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,56 @@ ssize_t write_lines(int fd, const void *buff, size_t len, size_t block_size) {
 	}
 	return written_bytes;
 }
+
+
+int assert_false(int line)
+{
+	ft_putstr("Error in code, assert false on line");
+	ft_putnbr(line);
+	ft_putchar('\n');
+	exit(1);
+	return 0;
+}
+
+
+
+
+
+int open_file(char *path, int mode)
+{
+	int fd;
+
+	fd = open(path, mode);
+	if (fd < 0)
+		exit_error_bad_file(path);
+	if (mode & O_RDONLY && read(fd, NULL, 0) < 0)
+		exit_error_bad_file(path);
+	if (mode & O_WRONLY && write(fd, "", 0) < 0)
+		exit_error_bad_file(path);
+	return (fd);
+}
+
+void	uint64_to_hex(uint64_t reg)
+{
+	int				i;
+	char			*hex_char;
+	unsigned char	*bytes;
+	int				n;
+	char dest[17];
+
+	i = 0;
+	hex_char = "0123456789abcdef";
+	bytes = (unsigned char*)&reg;
+	while (i < 8)
+	{
+		n = i;
+		dest[i * 2] = hex_char[bytes[n] >> 4];
+		dest[i * 2 + 1] = hex_char[bytes[n] & 0x0F];
+		i++;
+	}
+	dest[16] = 0;
+	printf("hex: %s\n", dest);
+}
+
 
 
