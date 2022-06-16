@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   des_keys.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/17 00:31:26 by sergey            #+#    #+#             */
+/*   Updated: 2022/06/17 00:33:25 by sergey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl_md5.h"
 
 int		g_key_init_premutation[56] = {
@@ -11,11 +23,9 @@ int		g_key_init_premutation[56] = {
 	21, 13, 5, 28, 20, 12, 4
 };
 
-
 int		g_des_key_rot[16] = {
-1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
+	1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
 };
-
 
 int		g_key_compress[56] = {
 	14, 17, 11, 24, 1, 5,
@@ -28,21 +38,19 @@ int		g_key_compress[56] = {
 	46, 42, 50, 36, 29, 32
 };
 
-
-
-void des_create_keys(t_des_env *env)
+void	des_create_keys(t_des_env *env)
 {
-	uint32_t c;
-	uint32_t d;
-	uint64_t temp;
-	int i;
+	uint32_t	c;
+	uint32_t	d;
+	uint64_t	temp;
+	int			i;
 
 	i = 0;
-	temp = *(uint64_t*)env->key;
-	swipe_endian_bytes((unsigned char*)&temp, 8);
+	temp = *(uint64_t *)env->key;
+	swipe_endian_bytes((unsigned char *)&temp, 8);
 	temp = permutation(temp, g_key_init_premutation, 56);
 	c = ((uint32_t)temp << 4) >> 4;
-	d = (uint32_t)(temp>>28);
+	d = (uint32_t)(temp >> 28);
 	while (i < 16)
 	{
 		c = (DES_ROT_KEY(c, g_des_key_rot[i]) << 4) >> 4;
@@ -54,26 +62,24 @@ void des_create_keys(t_des_env *env)
 	}
 }
 
-
-void des_get_pass(char *pass)
+void	des_get_pass(char *pass)
 {
-	char pass_first[_PASSWORD_LEN + 1];
-	char pass_second[_PASSWORD_LEN + 1];
-
+	char	pass_first[_PASSWORD_LEN + 1];
+	char	pass_second[_PASSWORD_LEN + 1];
 
 	ft_strcpy(pass_first, getpass("enter des encryption password:"));
-	ft_strcpy(pass_second, getpass("Verifying - enter des-ecb encryption password:"));
+	ft_strcpy(pass_second, getpass(
+			"Verifying - enter des-ecb encryption password:"));
 	if (ft_strcmp(pass_first, pass_second))
 		exit_error("Verify failure\nbad password read");
 	ft_strcpy(pass, pass_first);
-
 }
 
-void des_get_salt(unsigned char *salt)
+void	des_get_salt(unsigned char *salt)
 {
-	int fd;
-	char c;
-	int i;
+	int		fd;
+	char	c;
+	int		i;
 
 	i = 0;
 	fd = open("/dev/urandom", O_RDONLY);
@@ -88,16 +94,12 @@ void des_get_salt(unsigned char *salt)
 	}
 }
 
-
-
-
-
-void des_make_key(t_des_env *env, t_des_flags *flags)
+void	des_make_key(t_des_env *env, t_des_flags *flags)
 {
-	char salted_pass[_PASSWORD_LEN + 8 + 1];
-	size_t salted_len;
-	t_hash			*hash_obj;
-	char *hash;
+	char	salted_pass[_PASSWORD_LEN + 8 + 1];
+	size_t	salted_len;
+	t_hash	*hash_obj;
+	char	*hash;
 
 	if (!flags->pass_inited)
 		des_get_pass(flags->pass);
@@ -110,8 +112,7 @@ void des_make_key(t_des_env *env, t_des_flags *flags)
 	hash_obj = factory_get_hash_obj("sha256");
 	hash = get_hash_from_mem(hash_obj, salted_pass, salted_len);
 	des_parse_hex(env->key, hash);
-	des_parse_hex((unsigned char*)&env->i_vector, hash + 16);
-
+	des_parse_hex((unsigned char *)&env->i_vector, hash + 16);
 	free(hash);
 	free(hash_obj);
 }

@@ -80,6 +80,10 @@ size_t des_remove_padding(unsigned char *buff, size_t size);
 uint64_t permutation(uint64_t block, int *premut_table, int size);
 void print_salt_to_file(t_des_env *env, t_des_flags *flags);
 
+/*des_flags_utils.c*/
+void	des_parse_security_flags(char **argv, t_des_flags *flags);
+void	des_parse_files_flags(char **argv, t_des_flags *flags);
+
 
 
 void	des_stream(t_des_env *env);

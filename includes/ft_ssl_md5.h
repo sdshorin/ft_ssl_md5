@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ssl_md5.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 04:11:13 by bjesse            #+#    #+#             */
-/*   Updated: 2022/06/15 12:18:06 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 00:24:44 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,12 @@ void			base64_encode_from_string(char *source, int fd_output);
 int read_base64(int fd_source, char *buff, size_t buff_size);
 int decode_base64_block(char *buff, char *decoded_buff, size_t buff_size);
 
+
+void	add_to_static_buff(t_read_buff *static_buff, char *decoded_buff,
+		ssize_t size);
+
+ssize_t	read_from_static_buff(t_read_buff *static_buff, char *des_buff,
+		ssize_t size);
 
 
 #endif

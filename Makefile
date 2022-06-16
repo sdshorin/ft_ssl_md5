@@ -22,7 +22,8 @@ hash_interface_32_64_2.c print_hash.c hash_main.c sha2.c exe_hash_command.c
 BASE64_LIST = base64_decode_from_source.c base64_encode_from_source.c \
 base64_encode_process.c exe_base64_command.c
 
-DES_LIST = des_main.c des_work.c des_round.c des_io.c des_keys.c des_init.c des_tools.c
+DES_LIST = des_main.c des_work.c des_round.c des_io.c des_keys.c des_init.c \
+des_tools.c des_flags_utils.c
 
 SRCS_LIST = main.c utils.c exeptions.c tests.c
 HEADERS_LIST = ft_ssl_md5.h hash.h des.h utils.h

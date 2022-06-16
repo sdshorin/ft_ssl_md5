@@ -19,4 +19,3 @@ void des_create_keys(t_des_env *env);
 void	uint64_to_hex(uint64_t reg);
 int assert_false(int line);
 int open_file(char *path, int mode);
-

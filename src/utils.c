@@ -6,7 +6,7 @@
 /*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:17:03 by bjesse            #+#    #+#             */
-/*   Updated: 2022/06/16 23:45:26 by sergey           ###   ########.fr       */
+/*   Updated: 2022/06/17 00:24:36 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,25 @@ void	uint64_to_hex(uint64_t reg)
 	}
 	dest[16] = 0;
 	printf("hex: %s\n", dest);
+}
+
+
+
+void	add_to_static_buff(t_read_buff *static_buff, char *decoded_buff,
+		ssize_t size)
+{
+	static_buff->size += size;
+	ft_memmove(static_buff->data, decoded_buff, size);
+}
+
+ssize_t	read_from_static_buff(t_read_buff *static_buff, char *des_buff,
+		ssize_t size)
+{
+	size = ft_min(size, static_buff->size);
+	ft_memmove(des_buff, static_buff->data, size);
+	ft_memmove(static_buff->data, static_buff->data + size, size);
+	static_buff->size -= size;
+	return (size);
 }
 
 
