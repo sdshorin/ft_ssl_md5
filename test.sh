@@ -1,4 +1,5 @@
 
+# echo "All your base are belong to us. You have no chance make your time." | ./ft_ssl base64 |./ft_ssl base64 -d
 
 # export DES_KEY="6162636461626364"
 # echo "foo bar" | ./ft_ssl des   -k $DES_KEY |  ./ft_ssl des -d   -k $DES_KEY
