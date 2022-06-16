@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   char_vector.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/14 15:55:54 by bjesse            #+#    #+#             */
-/*   Updated: 2019/09/14 15:56:03 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:15:30 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ void	free_c_vector(t_char_vector *c_vector)
 	free(c_vector->data);
 }
 
-int		init_c_vector(t_char_vector *c_vector)
+int	init_c_vector(t_char_vector *c_vector)
 {
 	c_vector->size = 0;
 	c_vector->capacity = 16;
-	c_vector->data = (char*)malloc(c_vector->capacity * sizeof(char));
+	c_vector->data = (char *)malloc(c_vector->capacity * sizeof(char));
 	if (!c_vector->data)
 		return (1);
 	return (0);
 }
 
-int		c_vector_push_back(t_char_vector *c_vector, char c)
+int	c_vector_push_back(t_char_vector *c_vector, char c)
 {
 	char	*new_data;
 
@@ -38,10 +38,10 @@ int		c_vector_push_back(t_char_vector *c_vector, char c)
 		return (0);
 	}
 	c_vector->capacity *= 2;
-	new_data = (char*)malloc(c_vector->capacity * sizeof(char));
+	new_data = (char *)malloc(c_vector->capacity * sizeof(char));
 	if (!new_data)
 		return (1);
-	ft_memcpy(new_data, c_vector->data,\
+	ft_memcpy(new_data, c_vector->data, \
 						(c_vector->capacity / 2) * sizeof(char));
 	free(c_vector->data);
 	c_vector->data = new_data;

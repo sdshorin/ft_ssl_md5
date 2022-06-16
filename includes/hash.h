@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 03:38:42 by bjesse            #+#    #+#             */
-/*   Updated: 2022/01/15 18:38:28 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:39:51 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 # define TYPE_SHA_384 4
 # define TYPE_SHA_512_256  5
 
-struct s_hash;
-struct s_virtual_table;
+struct	s_hash;
+struct	s_virtual_table;
 
-typedef struct	s_hash	{
+typedef struct s_hash {
 	const struct s_virtual_table *const	vtable;
 	uint64_t							data_sum_size;
 	uint32_t							type;
@@ -36,7 +36,7 @@ typedef struct	s_hash	{
 	struct s_hash						*backup;
 }				t_hash;
 
-typedef struct	s_virtual_table {
+typedef struct s_virtual_table {
 	void	(*round_32)(t_hash *hash, uint32_t *memory, int round_num);
 	void	(*round_64)(t_hash *hash, uint64_t *memory, int round_num);
 	void	(*prepare_block_32)(uint32_t *block, void *data);
@@ -54,7 +54,7 @@ void			v_process_block(t_hash *hash, void *data);
 int				create_last_block(t_hash *hash, void **data, int block_size);
 
 void			round_32(t_hash *h, uint32_t *memory, int round_num);
-void			round_64 (t_hash *h, uint64_t *memory, int round_num);
+void			round_64(t_hash *h, uint64_t *memory, int round_num);
 void			prepare_block_32(t_hash *h, uint32_t *block, void *data);
 void			copy_hash(t_hash *copy, t_hash *source);
 void			add_hash(t_hash *base, t_hash *to_add);
@@ -64,7 +64,7 @@ int				create_last_block_32(t_hash *hash, void **data, int block_size);
 void			v_process_block_32(t_hash *hash, void *data);
 void			proceed_block_32(t_hash *hash, void *data);
 void			proceed_last_block_32(t_hash *hash, void *data, int block_size);
-void			prepare_block_64 (t_hash *h, uint64_t *block, void *data);
+void			prepare_block_64(t_hash *h, uint64_t *block, void *data);
 
 int				create_last_block_64(t_hash *hash, void **data, int block_size);
 void			v_process_block_64(t_hash *hash, void *data);
@@ -75,7 +75,7 @@ void			v_process_block_64(t_hash *hash, void *data);
 # define H(x, y, z) (x ^ z ^ y)
 # define I(x, y, z) (y ^ (~z | x))
 
-typedef struct	s_md5_hash {
+typedef struct s_md5_hash {
 	t_hash		base;
 	uint32_t	a;
 	uint32_t	b;
@@ -91,7 +91,7 @@ int				md5_get_byte_rotation(int round_num);
 void			md5_rotate_reg(t_md5_hash *self);
 uint32_t		md5_get_t(int n);
 
-typedef struct	s_sha256_hash {
+typedef struct s_sha256_hash {
 	t_hash		base;
 	uint32_t	h0;
 	uint32_t	h1;
@@ -121,7 +121,7 @@ char			*sha224_hash_to_string(t_hash *hash);
 # define S1_512(e) (ROTATER64(e, 14) ^ ROTATER64(e, 18) ^ ROTATER64(e, 41))
 # define S0_512(a) (ROTATER64(a, 28) ^ ROTATER64(a, 34) ^ ROTATER64(a, 39))
 
-typedef struct	s_sha512_hash {
+typedef struct s_sha512_hash {
 	t_hash		base;
 	uint64_t	h0;
 	uint64_t	h1;
@@ -142,12 +142,12 @@ void			sha512_add_hash(t_hash *hash_base, t_hash *hash_to_add);
 char			*sha384_hash_to_string(t_hash *hash_base);
 char			*sha512_256_hash_to_string(t_hash *hash_base);
 
-t_hash			*sha512_256_create();
-t_hash			*sha384_create();
-t_hash			*sha512_create();
-t_hash			*sha256_create();
-t_hash			*sha224_create();
-t_hash			*md5_create();
+t_hash			*sha512_256_create(void);
+t_hash			*sha384_create(void);
+t_hash			*sha512_create(void);
+t_hash			*sha256_create(void);
+t_hash			*sha224_create(void);
+t_hash			*md5_create(void);
 
 void			uint32_to_hash(t_hash *hash, char *dest, uint32_t num);
 void			uint64_to_hash(t_hash *hash, char *dest, uint64_t reg);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/17 21:17:47 by bjesse            #+#    #+#             */
-/*   Updated: 2019/06/15 18:58:19 by cyuriko          ###   ########.fr       */
+/*   Updated: 2022/06/17 02:20:16 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ static size_t	answer_len(int n)
 	return (len);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	size_t	len;
 	char	*ans;
 	long	num;
 
 	len = answer_len(n);
-	ans = (char*)malloc(len + 1);
+	ans = (char *)malloc(len + 1);
 	if (!ans)
 		return (NULL);
 	ans[len] = '\0';

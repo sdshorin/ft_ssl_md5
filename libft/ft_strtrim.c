@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 21:00:01 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/17 21:27:18 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:18:40 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	space_counter(char const *s)
 	return (space_num + now_space);
 }
 
-char		*ft_strtrim(char const *s)
+char	*ft_strtrim(char const *s)
 {
 	int		len;
 	char	*ans;
@@ -46,7 +46,7 @@ char		*ft_strtrim(char const *s)
 	if (!s)
 		return (NULL);
 	len = ft_strlen(s) - space_counter(s);
-	ans = (char*)malloc(len + 1);
+	ans = (char *)malloc(len + 1);
 	if (!ans)
 		return (NULL);
 	while (*s == ' ' || *s == '\n' || *s == '\t')

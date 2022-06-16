@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 21:29:25 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/11 22:25:14 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:17:05 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ char	*ft_strnew(size_t size)
 	if (!ans)
 		return (NULL);
 	ft_memset(ans, 0, size + 1);
-	return ((char*)ans);
+	return ((char *)ans);
 }

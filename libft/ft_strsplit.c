@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 21:43:37 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/24 22:42:40 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:07:19 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int			words_counter(char const *s, char c)
+int	words_counter(char const *s, char c)
 {
 	int		counter;
 	char	prev;
@@ -43,7 +43,7 @@ static char	*copy_string(char const *s, char c)
 		consttemp++;
 		size++;
 	}
-	ans = (char*)malloc(size + 1);
+	ans = (char *)malloc(size + 1);
 	if (!ans)
 		return (NULL);
 	temp = ans;
@@ -53,7 +53,7 @@ static char	*copy_string(char const *s, char c)
 	return (ans);
 }
 
-char		**delete_str_array(char **ans)
+char	**delete_str_array(char **ans)
 {
 	char	**temp;
 
@@ -64,7 +64,7 @@ char		**delete_str_array(char **ans)
 	return (NULL);
 }
 
-char		**ft_strsplit(char const *s, char c)
+char	**ft_strsplit(char const *s, char c)
 {
 	int		words;
 	char	**ans;
@@ -73,7 +73,7 @@ char		**ft_strsplit(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = words_counter(s, c);
-	ans = (char**)malloc((words + 1) * sizeof(char*));
+	ans = (char **)malloc((words + 1) * sizeof(char *));
 	if (!ans)
 		return (NULL);
 	temp2 = ans;

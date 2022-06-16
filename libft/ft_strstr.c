@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strstr.c                                           :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 22:21:49 by bjesse            #+#    #+#             */
-/*   Updated: 2019/04/11 21:00:04 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:11:45 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	if (!*haystack && *needle)
 		return (NULL);
 	if (!*needle)
-		return ((char*)(void*)haystack);
+		return ((char *)(void *)haystack);
 	while (*haystack)
 	{
 		if (*haystack == *needle)
@@ -33,7 +33,7 @@ char	*ft_strstr(const char *haystack, const char *needle)
 				tempn++;
 			}
 			if (*tempn == '\0')
-				return ((char*)(void*)haystack);
+				return ((char *)(void *)haystack);
 		}
 		haystack++;
 	}

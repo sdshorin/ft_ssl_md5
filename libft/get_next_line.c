@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 21:18:38 by bjesse            #+#    #+#             */
-/*   Updated: 2019/06/15 18:58:19 by cyuriko          ###   ########.fr       */
+/*   Updated: 2022/06/17 02:13:55 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_fd_list	*new_t_fd_list(int fd)
 {
 	t_fd_list	*temp;
 
-	temp = (t_fd_list*)malloc(sizeof(t_fd_list));
+	temp = (t_fd_list *)malloc(sizeof(t_fd_list));
 	temp->fd = fd;
 	temp->str = ft_strnew(0);
 	temp->next = NULL;
@@ -25,9 +25,9 @@ static t_fd_list	*new_t_fd_list(int fd)
 	return (temp);
 }
 
-static int			del_list(t_fd_list **temp, t_fd_list **start_list)
+static int	del_list(t_fd_list **temp, t_fd_list **start_list)
 {
-	t_fd_list *next;
+	t_fd_list	*next;
 
 	if (*temp == *start_list)
 		*start_list = NULL;
@@ -44,7 +44,7 @@ static int			del_list(t_fd_list **temp, t_fd_list **start_list)
 
 static t_fd_list	*find_t_fd_list(const int fd, t_fd_list **start_list)
 {
-	t_fd_list			*temp;
+	t_fd_list	*temp;
 
 	temp = *start_list;
 	if (!*start_list)
@@ -61,7 +61,7 @@ static t_fd_list	*find_t_fd_list(const int fd, t_fd_list **start_list)
 	return (temp);
 }
 
-static int			read_to_list(t_fd_list *temp, t_fd_list **start_list)
+static int	read_to_list(t_fd_list *temp, t_fd_list **start_list)
 {
 	char			buff[BUFF_SIZE + 1];
 	char			*temp_str;
@@ -88,7 +88,7 @@ static int			read_to_list(t_fd_list *temp, t_fd_list **start_list)
 	return (1);
 }
 
-int					get_next_line(const int fd, char **line)
+int	get_next_line(const int fd, char **line)
 {
 	t_fd_list			*temp;
 	char				*temp_str;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quick_sort.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 23:08:00 by bjesse            #+#    #+#             */
-/*   Updated: 2019/11/02 23:08:10 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 02:05:33 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	quick_step(int *num, int first, int last)
 {
-	int i;
-	int j;
-	int temp;
+	int	i;
+	int	j;
+	int	temp;
 
 	i = first;
 	j = last;
@@ -36,10 +36,10 @@ static int	quick_step(int *num, int first, int last)
 	return (j);
 }
 
-void		ft_quick_sort(int *number, int first, int last)
+void	ft_quick_sort(int *number, int first, int last)
 {
-	int j;
-	int temp;
+	int	j;
+	int	temp;
 
 	if (first < last)
 	{
