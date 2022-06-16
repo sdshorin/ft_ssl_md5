@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   exe_base64_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: sergey <sergey@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:36:33 by bjesse            #+#    #+#             */
-/*   Updated: 2021/02/28 22:44:09 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/17 01:11:40 by sergey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl_md5.h"
 
-int		is_base64_command(char *command)
+int	is_base64_command(char *command)
 {
 	if (!ft_strcmp(command, "base64"))
 		return (1);
 	return (0);
 }
-
 
 void	init_base64_flags(t_base64_flags *flags)
 {
@@ -29,25 +28,15 @@ void	init_base64_flags(t_base64_flags *flags)
 	flags->s_flag_completed = 0;
 }
 
-
 void	print_base64_from_string(char *string, t_base64_flags *flags)
 {
 	base64_encode_from_string(string, 0);
 	flags->s_flag_completed = 1;
 }
 
-void	exit_error_base64(char *command)
+int	work_with_flags_base64(t_base64_flags *flags, int argc, char **argv)
 {
-	if (!ft_strcmp("-i", command) || !ft_strcmp("-o", command)
-									|| !ft_strcmp("-s", command))
-		exit_error_no_string();
-	else
-		exit_error_unknown_flag(command);
-}
-
-int		work_with_flags_base64(t_base64_flags *flags, int argc, char **argv)
-{
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < argc)
@@ -71,24 +60,7 @@ int		work_with_flags_base64(t_base64_flags *flags, int argc, char **argv)
 	}
 	return (i);
 }
-int		base64_get_fd(char *file_name, int to_write, int def)
-{
-	int		fd;
 
-	if (!file_name)
-		return (def);
-	if (!to_write)
-	{
-		fd = open(file_name, O_RDONLY);
-		if (fd < 0 || read(fd, NULL, 0) < 0)
-			exit_error_bad_file(file_name);
-		return (fd);
-	}
-	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC);
-	if (fd < 0 || write(fd, "", 0) < 0)
-		exit_error_bad_file(file_name);
-	return (fd);
-}
 void	exe_base64_command(int argc, char **argv)
 {
 	t_base64_flags	flags;
