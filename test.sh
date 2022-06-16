@@ -18,6 +18,59 @@
 
 # echo "Make sure they really tell you what is going on 'under the hood' when you use CBC mode, and how it is more secure than ECB" | openssl des-cbc  -provider legacy -provider default -K "BABE101010FACADE" -iv "77696E6B66616365" | ./ft_ssl des-cbc -k "BABE101010FACADE" -v "77696E6B66616365" -d
 
+echo "BASE64 TESTS"
+
+echo "test 1 input ft_ssl -> base64 -> openssl"
+control_phrace="echo toto"
+result=$(echo $control_phrace | ./ft_ssl base64 -e | openssl base64 -d)
+
+if echo $result | grep -q "$control_phrace"; then
+	echo "TEST OK"
+else
+	echo "ERROR"
+	exit 0
+fi
+
+echo "test 2 input openssl -> base64 -> ft_ssl"
+control_phrace="echo toto"
+result=$(echo $control_phrace | openssl base64 -e | ./ft_ssl base64 -d )
+
+if echo $result | grep -q "$control_phrace"; then
+	echo "TEST OK"
+else
+	echo "ERROR"
+	exit 0
+fi
+
+echo "test 3 big file openssl -> base64 -> ft_ssl"
+openssl rand -hex 2000 > test_big_file
+control_phrace=$(cat test_big_file)
+result=$( echo $control_phrace | openssl base64 -e | ./ft_ssl base64 -d )
+
+if [[ $control_phrace == $result ]]; then
+	echo "TEST OK"
+else
+	echo "ERROR"
+	exit 0
+fi
+
+
+echo "test 4 big file ft_ssl -> base64 -> openssl"
+openssl rand -hex 2000 > test_big_file
+control_phrace=$(cat test_big_file)
+result=$( echo $control_phrace | ./ft_ssl base64 -e | openssl base64 -d  )
+echo
+if [[ $control_phrace == $result ]]; then
+	echo "TEST OK"
+else
+	echo "ERROR"
+	exit 0
+fi
+
+echo ""
+echo "DES TESTS"
+echo ""
+
 echo "test 1 input ft_ssl -> openssl with key"
 control_phrace="one deep secret"
 result=$(echo $control_phrace | ./ft_ssl des -e -k 6162636461626364 | openssl des-ecb -provider legacy -provider default  -d -K 6162636461626364)

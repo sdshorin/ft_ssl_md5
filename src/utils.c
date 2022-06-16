@@ -6,7 +6,7 @@
 /*   By: bjesse <bjesse@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 02:17:03 by bjesse            #+#    #+#             */
-/*   Updated: 2022/06/16 01:52:26 by bjesse           ###   ########.fr       */
+/*   Updated: 2022/06/16 23:00:44 by bjesse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,21 @@ void print_binary_32(uint32_t num)
 			printf(".");
 	}
 	printf("\n");
+}
+
+
+ssize_t write_lines(int fd, const void *buff, size_t len, size_t block_size) {
+	size_t written_bytes;
+
+	written_bytes = 0;
+	while (len > 0) {
+		int write_size = ft_min(len, block_size);
+		written_bytes += write(fd, buff, write_size);
+		buff += write_size;
+		len -= write_size;
+		written_bytes += write(fd, "\n", 1);
+	}
+	return written_bytes;
 }
 
 

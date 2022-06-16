@@ -391,19 +391,8 @@ ssize_t read_wrapper_decode_base_64(int fd, void *out_buff, size_t size)
 	// return (i);
 }
 
-ssize_t write_lines(int fd, const void *buff, size_t len, size_t block_size) {
-	size_t written_bytes;
 
-	written_bytes = 0;
-	while (len > 0) {
-		int write_size = ft_min(len, block_size);
-		written_bytes += write(fd, buff, write_size);
-		buff += write_size;
-		len -= write_size;
-		written_bytes += write(fd, "\n", 1);
-	}
-	return written_bytes;
-}
+
 ssize_t write_base64(int fd, const void *buff, size_t len, int flag)
 {
 	char out_buff[BASE64_BLOCK_SIZE/3*4];

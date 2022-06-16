@@ -57,5 +57,6 @@ void des_print_block(uint64_t encrypted_block, t_des_env *env);
 void	des_stream(t_des_env *env);
 void des_parse_hex(unsigned char *dest, char *source);
 
+ssize_t write_lines(int fd, const void *buff, size_t len, size_t block_size);
 
 void des_work(t_des_flags *flags);
